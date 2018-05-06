@@ -4,7 +4,7 @@ import './App.css';
 import { combination } from './utils/random';
 import { getImageUrl } from './images';
 
-const TOTAL_IMGS = 84;
+const TOTAL_IMGS = 114;
 const IMGS_SHOULD_BE_PICKED = 5;
 
 class App extends Component {
