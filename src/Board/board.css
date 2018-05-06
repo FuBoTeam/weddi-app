@@ -38,6 +38,7 @@
   max-width: 100%;
   min-width: 100%;
   vertical-align: bottom;
+  filter: grayscale(70%);
 }
 
 .hidden {
