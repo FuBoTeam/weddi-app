@@ -5,8 +5,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      isValidate: false,
       form: {
+        isValidate: false,
         name: undefined,
         greetings: undefined,
         imgUrl: undefined,
