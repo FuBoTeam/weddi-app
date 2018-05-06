@@ -5,7 +5,7 @@ import App from './App';
 import Board from './Board';
 import registerServiceWorker from './registerServiceWorker';
 
-const component = document.location.pathname.toLowerCase().indexOf('board') > -1 ? <Board /> : <App />;
+const component = document.location.pathname.toLowerCase().indexOf('dashboard') > -1 ? <Board /> : <App />;
 
 ReactDOM.render(component, document.getElementById('root'));
 registerServiceWorker();
