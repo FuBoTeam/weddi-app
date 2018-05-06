@@ -1,12 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
 
+import { combination } from './utils/random';
 import { getImageUrl } from './images';
+
+const TOTAL_IMGS = 84;
+const IMGS_SHOULD_BE_PICKED = 5;
 
 class App extends Component {
   constructor() {
     super();
+    const imageKeys = combination(TOTAL_IMGS, IMGS_SHOULD_BE_PICKED);
     this.state = {
+      imageKeys,
       form: {
         isValidate: false,
         name: undefined,
@@ -16,7 +22,7 @@ class App extends Component {
     };
   }
   render() {
-    const images = [getImageUrl(13), getImageUrl(20), getImageUrl(50), getImageUrl(80), getImageUrl(1)];
+    const images = this.state.imageKeys.map(key => getImageUrl(key));
     const picRadios = images.map((url, i) => (
       <label key={i}>
         <input type="radio" name="imgUrl" value={url} required />
