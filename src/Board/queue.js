@@ -1,4 +1,4 @@
-export default class Quene {
+export default class Queue {
   constructor() {
     this.q = [];
   }

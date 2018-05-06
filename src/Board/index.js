@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import './board.css';
 import loadingIcon from '../images/loading.gif';
-import backgrounds, { users } from './utils';
+import { users } from './utils';
 import Dialog from './Dialog';
-import Quene from './quene';
+import Queue from './queue';
+import { combination } from '../utils/random';
+const backgrounds = combination(114, 40);
+const weddingImgUrl = (number) => `https://storage.googleapis.com/wedding_iota/${number}_small.jpg`;
 
 export default class Board extends Component {
   state = {
@@ -15,8 +18,8 @@ export default class Board extends Component {
   componentDidMount() {
     this.setState(({ isLoading }) => ({ isLoading: !isLoading }))
 
-    const newFeeds = new Quene();
-    const oldFeeds = new Quene();
+    const newFeeds = new Queue();
+    const oldFeeds = new Queue();
 
     users.forEach((user) => {
       newFeeds.push(user);
@@ -54,7 +57,7 @@ export default class Board extends Component {
         {
           backgrounds.map((background, index) => (
             <div key={index} className="pic-block">
-              <img src={background.url} alt="" />
+              <img src={weddingImgUrl(background)} alt="" />
             </div>
           ))
         }
