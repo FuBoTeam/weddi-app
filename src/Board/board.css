@@ -136,3 +136,14 @@
   margin: 10px 0 0;
   font-weight: 500;
 }
+
+@media screen and (max-width: 576px) {
+  .image-container .user-image {
+    width: 100%;
+    height: auto;
+  }
+
+  .dialog .message {
+    width: 100%;
+  }
+}
