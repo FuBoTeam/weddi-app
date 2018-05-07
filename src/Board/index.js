@@ -16,8 +16,6 @@ export default class Board extends Component {
   }
 
   componentDidMount() {
-    this.setState(({ isLoading }) => ({ isLoading: !isLoading }))
-
     const newFeeds = new Queue();
     const oldFeeds = new Queue();
 
@@ -25,9 +23,13 @@ export default class Board extends Component {
       newFeeds.push(user);
     });
 
-    setInterval(() => {
-      this.pickUpFeed(newFeeds, oldFeeds)
-    }, 5000);
+    window.onload = () => {
+      this.setState(({ isLoading }) => ({ isLoading: !isLoading }))
+
+      setInterval(() => {
+        this.pickUpFeed(newFeeds, oldFeeds);
+      }, 5000);
+    };
   }
 
   showDialog = (user) => {
@@ -56,7 +58,7 @@ export default class Board extends Component {
         <section className="pic-container">
         {
           backgrounds.map((background, index) => (
-            <div key={index} className="pic-block">
+            <div key={index} className={this.state.isLoading ? 'pic-block hidden' : 'pic-block'}>
               <img src={weddingImgUrl(background)} alt="" />
             </div>
           ))
