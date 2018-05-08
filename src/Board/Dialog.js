@@ -10,11 +10,11 @@ export default class Dialog extends Component {
       <div className={show ? 'dialog show-dialog' : 'dialog'}>
         <div className="modal-sm">
           <div className="image-container">
-            <img className="user-image" src={user.img_url} alt="images" />
+            <img className="user-image" src={user.imgUrl} alt="images" />
           </div>
           <div className="message">
             <h2>@ {user.name}</h2>
-            <p>{user.message}</p>
+            <p>{user.greetings}</p>
           </div>
         </div>
       </div>
