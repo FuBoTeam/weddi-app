@@ -2,13 +2,16 @@ import React, { Component } from 'react';
 import './board.css';
 import loadingIcon from '../images/loading.gif';
 import Dialog from './Dialog';
+
 import Queue from './queue';
+import { TOTAL_IMGS, BG_IMGS_SHOULD_BE_PICKED } from '../configs';
 import { combination } from '../utils/random';
+import { getImageUrl } from '../images';
+
 
 import Api from '../api';
 
-const backgrounds = combination(114, 40);
-const weddingImgUrl = (number) => `https://storage.googleapis.com/wedding_iota/${number}_small.jpg`;
+const backgrounds = combination(TOTAL_IMGS, BG_IMGS_SHOULD_BE_PICKED);
 
 export default class Board extends Component {
   state = {
@@ -59,7 +62,7 @@ export default class Board extends Component {
         {
           backgrounds.map((background, index) => (
             <div key={index} className={this.state.isLoading ? 'pic-block hidden' : 'pic-block'}>
-              <img src={weddingImgUrl(background)} alt="" />
+              <img src={getImageUrl(background)} alt="" />
             </div>
           ))
         }
