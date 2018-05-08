@@ -35,7 +35,9 @@ class App extends Component {
   onSubmitHandler(event) {
     event.preventDefault();
     if (this.isValid()) {
-      return Api.writePost(this.state.form);
+      return Api.writePost(this.state.form).then(() => {
+        document.location.href = `${document.location.href}?v=dashboard`;
+      });
     }
   }
 
