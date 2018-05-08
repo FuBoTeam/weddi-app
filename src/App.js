@@ -56,13 +56,13 @@ class App extends Component {
         checked = this.state.form.imgUrl === url;
       }
       const style = checked ?
-        { height: '150px', border: '1px solid' } :
-        { height: '150px', border: '1px solid transparent' };
+        { border: '3px solid white' } :
+        { border: '3px solid transparent', opacity: '0.5' };
       return (
         <label key={i}>
           <input style={{display: 'none'}} type="radio" name="imgUrl" value={url}
             onChange={this.onTextChangeHandler} required checked={checked} />
-          <img style={style} src={url} alt={url} />
+          <img className="img-choice" style={style} src={url} alt={url} />
         </label>
       );
     });
@@ -71,13 +71,14 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">Greetings</h1>
         </header>
-        <form onSubmit={this.onSubmitHandler}>
-          <label> Name <input type="text" name="name" onChange={this.onTextChangeHandler} required /></label>
-          <br />
-          <label> Greetings <textarea name="greetings" onChange={this.onTextChangeHandler} required /></label>
-          <br />
-          <div> Picture {picRadios}</div>
-          <input type="submit" value="Submit" />
+        <form className="App-form" onSubmit={this.onSubmitHandler}>
+          <label className="pick">Pick 1 Photo</label>
+          <div>{picRadios}</div>
+          <div className="App-message-block">
+            <label className="input"><h2>@</h2><input type="text" name="name" placeholder="Name" onChange={this.onTextChangeHandler} required /></label>
+            <label className="input"><textarea name="greetings" placeholder="Greetings" onChange={this.onTextChangeHandler} required /></label>
+          </div>
+          <input className="btn" type="submit" value="Submit" />
         </form>
       </div>
     );
