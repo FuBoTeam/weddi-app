@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -6,9 +6,14 @@ import Board from './Board';
 import Api from './api';
 import registerServiceWorker from './registerServiceWorker';
 
-Api.init();
+const Root = () => {
+  Api.init();
+  const url = new URL(document.location.href);
+  const view = url.searchParams.get('v');
+  const isDashboard = view === 'dashboard';
+  const Cmp = isDashboard ? Board : App;
+  return <Cmp />;
+};
 
-const component = document.location.pathname.toLowerCase().indexOf('dashboard') > -1 ? <Board /> : <App />;
-
-ReactDOM.render(component, document.getElementById('root'));
+ReactDOM.render(<Root />, document.getElementById('root'));
 registerServiceWorker();
