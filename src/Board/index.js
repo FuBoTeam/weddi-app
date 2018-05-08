@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import './board.css';
 import loadingIcon from '../images/loading.gif';
-import { users } from './utils';
 import Dialog from './Dialog';
 import Queue from './queue';
 import { combination } from '../utils/random';
+
+import Api from '../api';
+
 const backgrounds = combination(114, 40);
 const weddingImgUrl = (number) => `https://storage.googleapis.com/wedding_iota/${number}_small.jpg`;
 
@@ -19,9 +21,7 @@ export default class Board extends Component {
     const newFeeds = new Queue();
     const oldFeeds = new Queue();
 
-    users.forEach((user) => {
-      newFeeds.push(user);
-    });
+    Api.getPost((user) => newFeeds.push(user));
 
     window.onload = () => {
       this.setState(({ isLoading }) => ({ isLoading: !isLoading }))
@@ -34,7 +34,7 @@ export default class Board extends Component {
 
   showDialog = (user) => {
     this.setState(() => ({ modalDisplay: true, user }));
-    
+
     setTimeout(() => {
       this.setState(() => ({ modalDisplay: false }));
     }, 3000);
