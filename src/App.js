@@ -5,19 +5,24 @@ import { TOTAL_IMGS, FM_IMGS_SHOULD_BE_PICKED } from './configs';
 import { combination } from './utils/random';
 import { getImageUrl } from './images';
 
+import Api from './api';
+
 class App extends Component {
   constructor() {
     super();
     const imageKeys = combination(TOTAL_IMGS, FM_IMGS_SHOULD_BE_PICKED);
+    const defaultImgUrl = getImageUrl(imageKeys[0]);
     this.state = {
       imageKeys,
       form: {
         name: '',
         greetings: '',
-        imgUrl: ''
-      }
+        imgUrl: defaultImgUrl,
+      },
     };
     this.onTextChangeHandler = this.onTextChangeHandler.bind(this);
+    this.onSubmitHandler = this.onSubmitHandler.bind(this);
+    this.isValid = this.isValid.bind(this);
   }
 
   onTextChangeHandler(event) {
@@ -25,6 +30,18 @@ class App extends Component {
     const key = event.target.name;
     const value = event.target.value.trim();
     this.setState(state => ({...state, form: {...state.form, [key]: value}}));
+  }
+
+  onSubmitHandler(event) {
+    event.preventDefault();
+    if (this.isValid()) {
+      return Api.writePost(this.state.form);
+    }
+  }
+
+  isValid() {
+    const { name, greetings, imgUrl } = this.state.form;
+    return name.trim() !== '' && greetings.trim() !== '' && imgUrl.trim() !== '';
   }
 
   render() {
@@ -52,7 +69,7 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">Greetings</h1>
         </header>
-        <form>
+        <form onSubmit={this.onSubmitHandler}>
           <label> Name <input type="text" name="name" onChange={this.onTextChangeHandler} required /></label>
           <br />
           <label> Greetings <textarea name="greetings" onChange={this.onTextChangeHandler} required /></label>
