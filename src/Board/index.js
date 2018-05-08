@@ -36,7 +36,7 @@ export default class Board extends Component {
   }
 
   showDialog = (user) => {
-    this.setState(() => ({ modalDisplay: true, user }));
+    this.setState(() => ({ modalDisplay: true, user: Object.assign({}, user) }));
 
     setTimeout(() => {
       this.setState(() => ({ modalDisplay: false }));
