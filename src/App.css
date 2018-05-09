@@ -122,7 +122,7 @@
 
 .btn {
   padding: 10px 20px;
-  background: #099;
+  background: #FF8260;
   border: none;
   border-radius: 3px;
   color: white;
@@ -132,9 +132,17 @@
   outline: none;
   width: 100%;
   font-size: 16px;
+  box-shadow: none;
 }
 
 .btn:hover {
   opacity: .8;
   transition: opacity .5s;
+}
+
+.link {
+  color: white;
+  display: block;
+  text-align: center;
+  margin-top: 20px;
 }

@@ -96,6 +96,7 @@ class App extends Component {
                 <label className="input"><textarea name="greetings" placeholder="Greetings" onChange={this.onTextChangeHandler} required /></label>
               </div>
               <input className="btn" type="submit" value="Submit" />
+              <a className="link" href="?v=dashboard">Go Dashboard</a>
             </form>
           )
         }

@@ -137,6 +137,18 @@
   font-weight: 500;
 }
 
+.message-link {
+  position: fixed;
+  bottom: 50px;
+  left: 0;
+  display: inline-block;
+  padding: 15px;
+  background: #FF8260;
+  color: white;
+  text-decoration: none;
+  border-radius: 0 3px 3px 0;
+}
+
 @media screen and (max-width: 576px) {
   .image-container .user-image {
     width: 100%;
