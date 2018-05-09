@@ -4,6 +4,7 @@ import './App.css';
 import { TOTAL_IMGS, FM_IMGS_SHOULD_BE_PICKED } from './configs';
 import { combination } from './utils/random';
 import { getImageUrl } from './images';
+import Dialog from './Board/Dialog';
 
 import Api from './api';
 
@@ -20,6 +21,7 @@ class App extends Component {
         imgPicked: 0,
         imgUrl: defaultImgUrl,
       },
+      modalDisplay: false,
     };
     this.onTextChangeHandler = this.onTextChangeHandler.bind(this);
     this.onSubmitHandler = this.onSubmitHandler.bind(this);
@@ -39,7 +41,8 @@ class App extends Component {
     event.preventDefault();
     if (this.isValid()) {
       return Api.writePost(this.state.form).then(() => {
-        document.location.href = `${document.location.href}?v=dashboard`;
+        this.setState({ modalDisplay: true });
+        setTimeout(() => { this.setState({ modalDisplay: false }); }, 3000);
       });
     }
   }
@@ -64,9 +67,9 @@ class App extends Component {
     const picRadios = images.map((url, i) => {
       const checked = this.state.form.imgPicked === i;
       return (
-        <div class="fade" style={checked ? {display: 'block'} : {display: 'none'}}>
-          <div class="numbertext">{i + 1} / {FM_IMGS_SHOULD_BE_PICKED}</div>
-          <label key={i}>
+        <div key={i} className="fade" style={checked ? {display: 'block'} : {display: 'none'}}>
+          <div className="numbertext">{i + 1} / {FM_IMGS_SHOULD_BE_PICKED}</div>
+          <label>
             <input style={{display: 'none'}} type="radio" name="imgUrl" value={url}
               onChange={this.onTextChangeHandler} required checked={checked} />
             <img className="img-choice" style={{ border: '5px solid white' }} src={url} alt={url} />
@@ -79,21 +82,24 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">Greetings</h1>
         </header>
-        <form className="App-form" onSubmit={this.onSubmitHandler}>
-
-          <label className="pick">Pick 1 Photo</label>
-          <div class="slideshow-container">
-            {picRadios}
-            <a class="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</a>
-            <a class="next" onClick={() => this.plusImgIdx( 1)}>&#10095;</a>
-          </div>
-
-          <div className="App-message-block">
-            <label className="input"><h2>@</h2><input type="text" name="name" placeholder="Name" onChange={this.onTextChangeHandler} required /></label>
-            <label className="input"><textarea name="greetings" placeholder="Greetings" onChange={this.onTextChangeHandler} required /></label>
-          </div>
-          <input className="btn" type="submit" value="Submit" />
-        </form>
+        {
+          !this.state.modalDisplay && (
+            <form className="App-form" onSubmit={this.onSubmitHandler}>
+              <label className="pick">Pick 1 Photo</label>
+              <div className="slideshow-container">
+                {picRadios}
+                <a className="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</a>
+                <a className="next" onClick={() => this.plusImgIdx( 1)}>&#10095;</a>
+              </div>
+              <div className="App-message-block">
+                <label className="input"><h2>@</h2><input type="text" name="name" placeholder="Name" onChange={this.onTextChangeHandler} required /></label>
+                <label className="input"><textarea name="greetings" placeholder="Greetings" onChange={this.onTextChangeHandler} required /></label>
+              </div>
+              <input className="btn" type="submit" value="Submit" />
+            </form>
+          )
+        }
+        <Dialog user={this.state.form} show={this.state.modalDisplay} />
       </div>
     );
   }
