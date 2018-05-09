@@ -68,7 +68,7 @@ export default class Board extends Component {
         }
         </section>
         <Dialog user={this.state.user} show={this.state.modalDisplay} />
-        <a className="message-link" href="/">&lt;&lt; Leave a message</a>
+        <a className="message-link" href="?v=greetings">&lt;&lt; Leave a message</a>
       </div>
     );
   }
