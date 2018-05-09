@@ -148,6 +148,7 @@
   text-decoration: none;
   border-radius: 0 3px 3px 0;
   cursor: pointer;
+  font-family: 'Noto Sans Kannada', sans-serif;
 }
 
 @media screen and (max-width: 576px) {

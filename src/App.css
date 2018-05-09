@@ -1,7 +1,10 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskannada.css);
+
 .App {
   background: #222;
   text-align: center;
   min-height: 100%;
+  font-family: 'Noto Sans Kannada', sans-serif;
 }
 
 .App-header {
