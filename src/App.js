@@ -34,7 +34,7 @@ class App extends Component {
     event.preventDefault();
     const key = event.target.name;
     const value = event.target.value.trim();
-    this.setState(state => ({...state, form: {...state.form, [key]: value}}));
+    this.setState(({ form }) => ({form: {...form, [key]: value}}));
   }
 
   onSubmitHandler(event) {
@@ -49,7 +49,7 @@ class App extends Component {
 
   setImgIdx(imgPicked) {
     const imgUrl = getImageUrl(this.state.imageKeys[imgPicked]);
-    this.setState(state => ({...state, form: {...state.form, imgPicked, imgUrl}}));
+    this.setState(({ form }) => ({form: {...form, imgPicked, imgUrl}}));
   }
 
   plusImgIdx(i) {
