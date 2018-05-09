@@ -49,12 +49,7 @@ class App extends Component {
   render() {
     const images = this.state.imageKeys.map(key => getImageUrl(key));
     const picRadios = images.map((url, i) => {
-      let checked;
-      if (this.state.form.imgUrl === '') {
-        checked = i === 0;
-      } else {
-        checked = this.state.form.imgUrl === url;
-      }
+      const checked = this.state.form.imgUrl === url;
       const style = checked ?
         { border: '3px solid white' } :
         { border: '3px solid transparent', opacity: '0.5' };

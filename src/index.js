@@ -11,8 +11,8 @@ const Root = () => {
   const url = new URL(document.location.href);
   const view = url.searchParams.get('v');
   const isDashboard = view === 'dashboard';
-  const Cmp = isDashboard ? Board : App;
-  return <Cmp />;
+  const Component = isDashboard ? Board : App;
+  return <Component />;
 };
 
 ReactDOM.render(<Root />, document.getElementById('root'));

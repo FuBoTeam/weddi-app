@@ -4,11 +4,6 @@
   min-height: 100%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
 .App-header {
   padding: 20px;
   color: white;
@@ -87,9 +82,4 @@
 .btn:hover {
   opacity: .8;
   transition: opacity .5s;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
