@@ -41,7 +41,7 @@ const writePost = (postData) => {
 };
 
 const getPost = (callback) => {
-  const postRef = api.getDB().ref('posts').limitToLast(100);
+  const postRef = api.getDB().ref('posts').limitToLast(5);
   postRef.on('child_added', (data) => {
     callback(data.val());
   });
