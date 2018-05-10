@@ -42,7 +42,7 @@ class App extends Component {
     if (this.isValid()) {
       return Api.writePost(this.state.form).then(() => {
         this.setState({ modalDisplay: true });
-        setTimeout(() => { document.location.href = `${document.location.href}?v=dashboard`; }, 3000);
+        setTimeout(() => { document.location.href = `${document.location.origin}?v=dashboard`; }, 3000);
       });
     }
   }
