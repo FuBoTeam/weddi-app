@@ -2,7 +2,7 @@
   "name": "yach-wedding-board",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://fuboteam.github.io/yach-wedding-board/",
+  "homepage": "https://chyy.app/",
   "dependencies": {
     "firebase": "^4.13.1",
     "iota.crypto.js": "^0.4.2",
