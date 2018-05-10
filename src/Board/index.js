@@ -31,7 +31,7 @@ export default class Board extends Component {
 
       setInterval(() => {
         this.pickUpFeed(newFeeds, oldFeeds);
-      }, 5000);
+      }, 8000);
     };
   }
 
@@ -40,7 +40,7 @@ export default class Board extends Component {
 
     setTimeout(() => {
       this.setState(() => ({ modalDisplay: false }));
-    }, 3000);
+    }, 5000);
   }
 
   pickUpFeed = (newFeeds, oldFeeds) => {
