@@ -35,6 +35,7 @@ const writePost = (postData) => {
   const wrappedPostData = {
     ...postData,
     modifiedTime: new Date().toISOString(),
+    userAgent: navigator.userAgent,
     id: postId,
   };
   return api.getDB().ref(`posts/${postId}`).set(wrappedPostData);
