@@ -4,7 +4,7 @@ import 'firebase/database';
 const config = {
   apiKey: "AIzaSyBBySVkkck8ef9OyAcfjv9_IIe6oRFYIsA",
   authDomain: "my-project-wedding-iota-app.firebaseapp.com",
-  databaseURL: "https://my-project-wedding-iota-app.firebaseio.com",
+  databaseURL: "https://yych-wedding-app.firebaseio.com/",
   projectId: "my-project-wedding-iota-app",
   storageBucket: "my-project-wedding-iota-app.appspot.com",
   messagingSenderId: "640957122856"
