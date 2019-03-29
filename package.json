@@ -1,8 +1,8 @@
 {
-  "name": "yach-wedding-board",
+  "name": "weddi-app",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://chyy.app/",
+  "homepage": "https://www.weddi.app/",
   "dependencies": {
     "firebase": "^4.13.1",
     "iota.crypto.js": "^0.4.2",
