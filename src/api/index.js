@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 
-const config = {
+const chyy_config = {
   apiKey: "AIzaSyBBySVkkck8ef9OyAcfjv9_IIe6oRFYIsA",
   authDomain: "my-project-wedding-iota-app.firebaseapp.com",
   databaseURL: "https://yych-wedding-app.firebaseio.com/",
@@ -9,6 +9,8 @@ const config = {
   storageBucket: "my-project-wedding-iota-app.appspot.com",
   messagingSenderId: "640957122856"
 };
+
+const config = chyy_config;
 
 class apiBase {
   constructor () {

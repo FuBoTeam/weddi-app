@@ -1,4 +1,6 @@
-const IMG_ENDPOINT = `https://storage.googleapis.com/image.weddi.app/chyy/`;
+const CHYY_IMG_ENDPOINT = `https://storage.googleapis.com/image.weddi.app/chyy/`;
+
+const IMG_ENDPOINT = CHYY_IMG_ENDPOINT;
 
 const IMG_SIZE_S = '_small';
 const IMG_SIZE_M = '';
