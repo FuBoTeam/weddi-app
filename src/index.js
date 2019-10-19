@@ -7,17 +7,16 @@ import Board from './Board';
 import Api from './api';
 import registerServiceWorker from './registerServiceWorker';
 
+const Home = () => (<div>Weddi App</div>);
+
 const Root = () => {
   Api.init();
   return (
-    <Router>
+    <Router forceRefresh>
       <Switch>
-        <Route path="/greetings">
-          <App />
-        </Route>
-        <Route path="/">
-          <Board />
-        </Route>
+        <Route path="/:gnbId/greetings" component={App} />
+        <Route path="/:gnbId/" component={Board} />
+        <Route path="/" component={Home} />
       </Switch>
     </Router>
   );

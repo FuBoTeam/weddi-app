@@ -14,11 +14,12 @@ import Api from '../api';
 const backgrounds = combination(TOTAL_IMGS, BG_IMGS_SHOULD_BE_PICKED);
 
 export default class Board extends Component {
+  interval = null;
   state = {
     isLoading: true,
     modalDisplay: false,
     user: {},
-  }
+  };
 
   componentDidMount() {
     const newFeeds = new Queue();
@@ -29,10 +30,14 @@ export default class Board extends Component {
     window.onload = () => {
       this.setState(({ isLoading }) => ({ isLoading: !isLoading }))
 
-      setInterval(() => {
+      this.interval = setInterval(() => {
         this.pickUpFeed(newFeeds, oldFeeds);
       }, 8000);
     };
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   showDialog = (user) => {
@@ -68,7 +73,7 @@ export default class Board extends Component {
         }
         </section>
         <Dialog user={this.state.user} show={this.state.modalDisplay} />
-        <a className="message-link" href="/greetings">&lt;&lt; 留下你的祝福</a>
+        <a className="message-link" href={`${this.props.match.url}/greetings`}>&lt;&lt; 留下你的祝福</a>
       </div>
     );
   }
