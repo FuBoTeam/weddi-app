@@ -5,8 +5,6 @@
   "homepage": "https://www.weddi.app/",
   "dependencies": {
     "firebase": "^4.13.1",
-    "iota.crypto.js": "^0.4.2",
-    "iota.lib.js": "^0.4.7",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-scripts": "1.1.4"
