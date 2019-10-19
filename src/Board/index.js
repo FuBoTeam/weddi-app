@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import range from 'lodash/range';
 import './board.css';
 import loadingIcon from '../images/loading.gif';
 import Dialog from './Dialog';
 
 import Queue from './queue';
 import Configs from '../configs';
-import { combination } from '../utils/random';
+import { combinationList, permutationList } from '../utils/random';
 import { getImageUrl } from '../images';
 
 
@@ -18,10 +19,9 @@ export default class Board extends Component {
     modalDisplay: false,
     user: {},
   };
-  totalImgs = Configs.getImgConfig().totalImgs;
-  bgImgsShouldBePicked = Configs.getImgConfig().bgImgsShouldBePicked;
-  backgrounds = combination(this.totalImgs, this.bgImgsShouldBePicked);
-
+  allImgUrls = range(Configs.getImgConfig().totalImgs).map(k => getImageUrl(k));
+  bgImgUrls = combinationList(this.allImgUrls, Configs.getImgConfig().bgImgsShouldBePicked);
+  bgImgUrls = permutationList(this.bgImgUrls);
 
   componentDidMount() {
     const newFeeds = new Queue();
@@ -67,9 +67,9 @@ export default class Board extends Component {
         }
         <section className="pic-container">
         {
-          this.backgrounds.map((background, index) => (
+          this.bgImgUrls.map((bgImgUrl, index) => (
             <div key={index} className={this.state.isLoading ? 'pic-block hidden' : 'pic-block'}>
-              <img src={getImageUrl(background)} alt="" />
+              <img src={bgImgUrl} alt="" />
             </div>
           ))
         }

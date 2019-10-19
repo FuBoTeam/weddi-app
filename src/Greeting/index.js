@@ -1,36 +1,34 @@
 import React, { Component } from 'react';
+import range from 'lodash/range';
 import './greeting.css';
 
 import Configs from '../configs';
-import { combination } from '../utils/random';
+import { combinationList } from '../utils/random';
 import { getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';
 
 import Api from '../api';
 
 class Greeting extends Component {
-  constructor() {
-    super();
-    this.totalImgs = Configs.getImgConfig().totalImgs;
-    this.fmImgsShouldBePicked = Configs.getImgConfig().fmImgsShouldBePicked;
-    const imageKeys = combination(this.totalImgs, this.fmImgsShouldBePicked);
-    const defaultImgUrl = getImageUrl(imageKeys[0]);
-    this.state = {
-      imageKeys,
-      form: {
-        name: '',
-        greetings: '',
-        imgPicked: 0,
-        imgUrl: defaultImgUrl,
-      },
-      modalDisplay: false,
-    };
-    this.onTextChangeHandler = this.onTextChangeHandler.bind(this);
-    this.onSubmitHandler = this.onSubmitHandler.bind(this);
-    this.isValid = this.isValid.bind(this);
-    this.setImgIdx = this.setImgIdx.bind(this);
-    this.plusImgIdx = this.plusImgIdx.bind(this);
-  }
+  allImgUrls = range(Configs.getImgConfig().totalImgs).map(k => getImageUrl(k));
+  fmImgsShouldBePicked = Configs.getImgConfig().fmImgsShouldBePicked;
+  imgUrls = combinationList(this.allImgUrls, this.fmImgsShouldBePicked);
+
+  state = {
+    form: {
+      name: '',
+      greetings: '',
+      imgPicked: 0,
+      imgUrl: this.imgUrls[0],
+    },
+    modalDisplay: false,
+  };
+
+  onTextChangeHandler = this.onTextChangeHandler.bind(this);
+  onSubmitHandler = this.onSubmitHandler.bind(this);
+  isValid = this.isValid.bind(this);
+  setImgIdx = this.setImgIdx.bind(this);
+  plusImgIdx = this.plusImgIdx.bind(this);
 
   getUpperUrl() {
     const matchUrl = this.props.match.url;
@@ -57,7 +55,7 @@ class Greeting extends Component {
   }
 
   setImgIdx(imgPicked) {
-    const imgUrl = getImageUrl(this.state.imageKeys[imgPicked]);
+    const imgUrl = this.imgUrls[imgPicked];
     this.setState(({ form }) => ({form: {...form, imgPicked, imgUrl}}));
   }
 
@@ -72,8 +70,7 @@ class Greeting extends Component {
   }
 
   render() {
-    const images = this.state.imageKeys.map(key => getImageUrl(key));
-    const picRadios = images.map((url, i) => {
+    const picRadios = this.imgUrls.map((url, i) => {
       const checked = this.state.form.imgPicked === i;
       return (
         <div key={i} className="fade" style={checked ? {display: 'block'} : {display: 'none'}}>
