@@ -34,7 +34,6 @@ let config;
 const init = (gnbId) => {
   if (!config) {
     config = setConfigById(gnbId);
-    console.log('config', config)
   }
   return config;
 }
