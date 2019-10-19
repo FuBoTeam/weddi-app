@@ -4,7 +4,7 @@ import loadingIcon from '../images/loading.gif';
 import Dialog from './Dialog';
 
 import Queue from './queue';
-import { getTotalImgs, getBgImgsShouldBePicked } from '../configs';
+import Configs from '../configs';
 import { combination } from '../utils/random';
 import { getImageUrl } from '../images';
 
@@ -18,8 +18,8 @@ export default class Board extends Component {
     modalDisplay: false,
     user: {},
   };
-  totalImgs = getTotalImgs();
-  bgImgsShouldBePicked = getBgImgsShouldBePicked();
+  totalImgs = Configs.getImgConfig().totalImgs;
+  bgImgsShouldBePicked = Configs.getImgConfig().bgImgsShouldBePicked;
   backgrounds = combination(this.totalImgs, this.bgImgsShouldBePicked);
 
 

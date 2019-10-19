@@ -1,40 +1,11 @@
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 
-const CHYY_CONFIG = {
-  apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
-  authDomain: "weddi-app.firebaseapp.com",
-  databaseURL: "https://weddi-app.firebaseio.com/",
-  projectId: "weddi-app",
-  storageBucket: "weddi-app.appspot.com",
-  messagingSenderId: "324415165027",
-  appId: "1:324415165027:web:76b8291835ef32c5c75e56"
-};
-
-const TEST_CONFIG = {
-  apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
-  authDomain: "weddi-app.firebaseapp.com",
-  databaseURL: "https://weddi-app-test.firebaseio.com/",
-  projectId: "weddi-app",
-  storageBucket: "weddi-app.appspot.com",
-  messagingSenderId: "324415165027",
-  appId: "1:324415165027:web:76b8291835ef32c5c75e56"
-};
-
-const getDBConfigById = (gnbId) => {
-  switch(gnbId) {
-  case 'chyy':
-    return CHYY_CONFIG;
-  case 'tlty':
-    return TEST_CONFIG;
-  default:
-    return TEST_CONFIG;
-  }
-}
+import Configs from '../configs';
 
 class apiBase {
-  constructor (gnbId) {
-    this.app = firebase.initializeApp(getDBConfigById(gnbId));
+  constructor () {
+    this.app = firebase.initializeApp(Configs.getDBConfig());
     this.firebase = firebase;
     this.database = firebase.database();
   }
@@ -45,9 +16,9 @@ class apiBase {
 
 let api;
 
-const init = (gnbId) => {
+const init = () => {
   if (!api) {
-    api = new apiBase(gnbId);
+    api = new apiBase();
   }
   return api;
 };

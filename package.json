@@ -2,7 +2,7 @@
   "name": "weddi-app",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://www.weddi.app/",
+  "homepage": "https://weddi.app/",
   "dependencies": {
     "firebase": "^7.2.1",
     "react": "^16.3.2",

@@ -1,47 +1,93 @@
-const CHYY_TOTAL_IMGS = 114;
-const CHYY_BG_IMGS_SHOULD_BE_PICKED = 40;
-const CHYY_FM_IMGS_SHOULD_BE_PICKED = 5;
+const CHYY_CONFIG = {
+  doc: {
+    title: "<3 YaYun & ChinHui <3"
+  },
+  db: {
+    apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
+    authDomain: "weddi-app.firebaseapp.com",
+    databaseURL: "https://weddi-app.firebaseio.com/",
+    projectId: "weddi-app",
+    storageBucket: "weddi-app.appspot.com",
+    messagingSenderId: "324415165027",
+    appId: "1:324415165027:web:76b8291835ef32c5c75e56"
+  },
+  img: {
+    endpoint: "https://storage.googleapis.com/image.weddi.app/chyy/",
+    totalImgs: 114,
+    bgImgsShouldBePicked: 40,
+    fmImgsShouldBePicked: 5
+  }
+};
 
-const TLTY_TOTAL_IMGS = 30;
-const TLTY_BG_IMGS_SHOULD_BE_PICKED = 30;
-const TLTY_FM_IMGS_SHOULD_BE_PICKED = 5;
+const TLTY_CONFIG = {
+  doc: {
+    title: "<3 水母 & 印麥王 <3"
+  },
+  db: {
+    apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
+    authDomain: "weddi-app.firebaseapp.com",
+    databaseURL: "https://weddi-app-test.firebaseio.com/",
+    projectId: "weddi-app",
+    storageBucket: "weddi-app.appspot.com",
+    messagingSenderId: "324415165027",
+    appId: "1:324415165027:web:76b8291835ef32c5c75e56"
+  },
+  img: {
+    endpoint: "https://storage.googleapis.com/image.weddi.app/tlty/",
+    totalImgs: 30,
+    bgImgsShouldBePicked: 30,
+    fmImgsShouldBePicked: 5
+  }
+};
 
-const setConfigById = (gnbId) => {
-  switch(gnbId) {
-  case 'chyy':
-    return {
-      totalImgs: CHYY_TOTAL_IMGS,
-      bgImgsShouldBePicked: CHYY_BG_IMGS_SHOULD_BE_PICKED,
-      fmImgsShouldBePicked: CHYY_FM_IMGS_SHOULD_BE_PICKED,
-    };
-  case 'tlty':
-    return {
-      totalImgs: TLTY_TOTAL_IMGS,
-      bgImgsShouldBePicked: TLTY_BG_IMGS_SHOULD_BE_PICKED,
-      fmImgsShouldBePicked: TLTY_FM_IMGS_SHOULD_BE_PICKED,
-    };
-  default:
-    return {
-      totalImgs: CHYY_TOTAL_IMGS,
-      bgImgsShouldBePicked: CHYY_BG_IMGS_SHOULD_BE_PICKED,
-      fmImgsShouldBePicked: CHYY_FM_IMGS_SHOULD_BE_PICKED,
-    };
+const TEST_CONFIG = {
+  doc: {
+    title: "<3 Groom & Bride <3"
+  },
+  db: {
+    apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
+    authDomain: "weddi-app.firebaseapp.com",
+    databaseURL: "https://weddi-app-test.firebaseio.com/",
+    projectId: "weddi-app",
+    storageBucket: "weddi-app.appspot.com",
+    messagingSenderId: "324415165027",
+    appId: "1:324415165027:web:76b8291835ef32c5c75e56"
+  },
+  img: {
+    endpoint: "https://storage.googleapis.com/image.weddi.app/chyy/",
+    totalImgs: 114,
+    bgImgsShouldBePicked: 40,
+    fmImgsShouldBePicked: 5
+  }
+};
+
+const setConfigById = gnbId => {
+  switch (gnbId) {
+    case "chyy":
+      return CHYY_CONFIG;
+    case "tlty":
+      return TLTY_CONFIG;
+    default:
+      return TEST_CONFIG;
   }
 };
 
 let config;
 
-const init = (gnbId) => {
+const init = gnbId => {
   if (!config) {
     config = setConfigById(gnbId);
   }
   return config;
-}
+};
 
-export const getTotalImgs = () => config.totalImgs;
-export const getBgImgsShouldBePicked = () => config.bgImgsShouldBePicked;
-export const getFmImgsShouldBePicked = () => config.fmImgsShouldBePicked;
+const getDocConfig = () => config.doc;
+const getDBConfig = () => config.db;
+const getImgConfig = () => config.img;
 
 export default {
   init,
+  getDocConfig,
+  getDBConfig,
+  getImgConfig
 };

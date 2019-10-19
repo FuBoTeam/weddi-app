@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './greeting.css';
 
-import { getTotalImgs, getFmImgsShouldBePicked } from '../configs';
+import Configs from '../configs';
 import { combination } from '../utils/random';
 import { getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';
@@ -11,8 +11,8 @@ import Api from '../api';
 class Greeting extends Component {
   constructor() {
     super();
-    this.totalImgs = getTotalImgs();
-    this.fmImgsShouldBePicked = getFmImgsShouldBePicked();
+    this.totalImgs = Configs.getImgConfig().totalImgs;
+    this.fmImgsShouldBePicked = Configs.getImgConfig().fmImgsShouldBePicked;
     const imageKeys = combination(this.totalImgs, this.fmImgsShouldBePicked);
     const defaultImgUrl = getImageUrl(imageKeys[0]);
     this.state = {
