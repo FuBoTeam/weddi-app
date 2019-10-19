@@ -18,8 +18,8 @@ export default class Dialog extends Component {
     };
   }
 
-  componentWillReceiveProps({ user, show }) {
-    this.img.src = show ? user.imgUrl : '';
+  componentDidUpdate() {
+    this.img.src = this.props.show ? this.props.user.imgUrl : '';
   }
 
   render() {
