@@ -13,10 +13,10 @@ const App = ({ match }) => {
   Images.init(gnbId);
   const path = match.url;
   return (
-      <Switch>
-        <Route path={`${path}/greetings`} component={Greeting} />
-        <Route path={path} component={Board} />
-      </Switch>
+    <Switch>
+      <Route path={`${path}/greetings`} component={Greeting} />
+      <Route path={path} component={Board} />
+    </Switch>
   );
 };
 

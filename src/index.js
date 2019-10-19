@@ -9,7 +9,7 @@ const Home = () => (<div>Weddi App</div>);
 
 const Root = () => {
   return (
-    <Router forceRefresh>
+    <Router basename={process.env.PUBLIC_URL} forceRefresh>
       <Switch>
         <Route path="/:gnbId/" component={App} />
         <Route path="/" component={Home} />
