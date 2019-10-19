@@ -4,14 +4,12 @@ import loadingIcon from '../images/loading.gif';
 import Dialog from './Dialog';
 
 import Queue from './queue';
-import { TOTAL_IMGS, BG_IMGS_SHOULD_BE_PICKED } from '../configs';
+import { getTotalImgs, getBgImgsShouldBePicked } from '../configs';
 import { combination } from '../utils/random';
 import { getImageUrl } from '../images';
 
 
 import Api from '../api';
-
-const backgrounds = combination(TOTAL_IMGS, BG_IMGS_SHOULD_BE_PICKED);
 
 export default class Board extends Component {
   interval = null;
@@ -20,6 +18,10 @@ export default class Board extends Component {
     modalDisplay: false,
     user: {},
   };
+  totalImgs = getTotalImgs();
+  bgImgsShouldBePicked = getBgImgsShouldBePicked();
+  backgrounds = combination(this.totalImgs, this.bgImgsShouldBePicked);
+
 
   componentDidMount() {
     const newFeeds = new Queue();
@@ -65,7 +67,7 @@ export default class Board extends Component {
         }
         <section className="pic-container">
         {
-          backgrounds.map((background, index) => (
+          this.backgrounds.map((background, index) => (
             <div key={index} className={this.state.isLoading ? 'pic-block hidden' : 'pic-block'}>
               <img src={getImageUrl(background)} alt="" />
             </div>

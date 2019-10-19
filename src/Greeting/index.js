@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './greeting.css';
 
-import { TOTAL_IMGS, FM_IMGS_SHOULD_BE_PICKED } from '../configs';
+import { getTotalImgs, getFmImgsShouldBePicked } from '../configs';
 import { combination } from '../utils/random';
 import { getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';
@@ -11,7 +11,9 @@ import Api from '../api';
 class Greeting extends Component {
   constructor() {
     super();
-    const imageKeys = combination(TOTAL_IMGS, FM_IMGS_SHOULD_BE_PICKED);
+    this.totalImgs = getTotalImgs();
+    this.fmImgsShouldBePicked = getFmImgsShouldBePicked();
+    const imageKeys = combination(this.totalImgs, this.fmImgsShouldBePicked);
     const defaultImgUrl = getImageUrl(imageKeys[0]);
     this.state = {
       imageKeys,
@@ -60,7 +62,7 @@ class Greeting extends Component {
   }
 
   plusImgIdx(i) {
-    const nextIdx = (this.state.form.imgPicked + i + FM_IMGS_SHOULD_BE_PICKED) % FM_IMGS_SHOULD_BE_PICKED;
+    const nextIdx = (this.state.form.imgPicked + i + this.fmImgsShouldBePicked) % this.fmImgsShouldBePicked;
     this.setImgIdx(nextIdx);
   }
 
@@ -75,7 +77,7 @@ class Greeting extends Component {
       const checked = this.state.form.imgPicked === i;
       return (
         <div key={i} className="fade" style={checked ? {display: 'block'} : {display: 'none'}}>
-          <div className="numbertext">{i + 1} / {FM_IMGS_SHOULD_BE_PICKED}</div>
+          <div className="numbertext">{i + 1} / {this.fmImgsShouldBePicked}</div>
           <label>
             <input style={{display: 'none'}} type="radio" name="imgUrl" value={url}
               onChange={this.onTextChangeHandler} required checked={checked} />
