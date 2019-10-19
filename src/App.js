@@ -42,7 +42,7 @@ class App extends Component {
     if (this.isValid()) {
       return Api.writePost(this.state.form).then(() => {
         this.setState({ modalDisplay: true });
-        setTimeout(() => { document.location.href = `${document.location.origin}?v=dashboard`; }, 3000);
+        setTimeout(() => { document.location.href = `${document.location.origin}/`; }, 3000);
       });
     }
   }
@@ -96,7 +96,7 @@ class App extends Component {
                 <label className="input"><textarea name="greetings" placeholder="祝賀詞" onChange={this.onTextChangeHandler} required /></label>
               </div>
               <input className="btn" type="submit" value="留言" />
-              <a className="link" href="?v=dashboard">去照片牆瞧瞧</a>
+              <a className="link" href="/">去照片牆瞧瞧</a>
             </form>
           )
         }

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import Board from './Board';
@@ -8,11 +9,18 @@ import registerServiceWorker from './registerServiceWorker';
 
 const Root = () => {
   Api.init();
-  const url = new URL(document.location.href);
-  const view = url.searchParams.get('v');
-  const isDashboard = view === 'dashboard';
-  const Component = isDashboard ? Board : App;
-  return <Component />;
+  return (
+    <Router>
+      <Switch>
+        <Route path="/greetings">
+          <App />
+        </Route>
+        <Route path="/">
+          <Board />
+        </Route>
+      </Switch>
+    </Router>
+  );
 };
 
 ReactDOM.render(<Root />, document.getElementById('root'));
