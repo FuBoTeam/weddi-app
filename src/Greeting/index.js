@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import './App.css';
+import './greeting.css';
 
-import { TOTAL_IMGS, FM_IMGS_SHOULD_BE_PICKED } from './configs';
-import { combination } from './utils/random';
-import { getImageUrl } from './images';
-import Dialog from './Board/Dialog';
+import { TOTAL_IMGS, FM_IMGS_SHOULD_BE_PICKED } from '../configs';
+import { combination } from '../utils/random';
+import { getImageUrl } from '../images';
+import Dialog from '../Board/Dialog';
 
-import Api from './api';
+import Api from '../api';
 
-class App extends Component {
+class Greeting extends Component {
   constructor() {
     super();
     const imageKeys = combination(TOTAL_IMGS, FM_IMGS_SHOULD_BE_PICKED);
@@ -85,20 +85,20 @@ class App extends Component {
       );
     });
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">祝福留言版</h1>
+      <div className="greeting">
+        <header className="greeting-header">
+          <h1 className="greeting-title">祝福留言版</h1>
         </header>
         {
           !this.state.modalDisplay && (
-            <form className="App-form" onSubmit={this.onSubmitHandler}>
+            <form className="greeting-form" onSubmit={this.onSubmitHandler}>
               <label className="pick">挑一張照片</label>
               <div className="slideshow-container">
                 {picRadios}
                 <a className="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</a>
                 <a className="next" onClick={() => this.plusImgIdx( 1)}>&#10095;</a>
               </div>
-              <div className="App-message-block">
+              <div className="greeting-message-block">
                 <label className="input"><h2>@</h2><input type="text" name="name" placeholder="姓名" onChange={this.onTextChangeHandler} required /></label>
                 <label className="input"><textarea name="greetings" placeholder="祝賀詞" onChange={this.onTextChangeHandler} required /></label>
               </div>
@@ -113,4 +113,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Greeting;

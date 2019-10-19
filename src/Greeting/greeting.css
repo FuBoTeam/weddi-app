@@ -1,36 +1,36 @@
 @import url(//fonts.googleapis.com/earlyaccess/notosanskannada.css);
 
-.App {
+.greeting {
   background: #222;
   text-align: center;
   min-height: 100%;
   font-family: 'Noto Sans Kannada', sans-serif;
 }
 
-.App-header {
+.greeting-header {
   padding: 20px;
   color: white;
 }
 
-.App-title {
+.greeting-title {
   font-size: 1.5em;
 }
 
-.App-intro {
+.greeting-intro {
   font-size: large;
 }
 
-.App-message-block {
+.greeting-message-block {
   background: rgba(255, 255, 255, .7);
   padding: 15px;
 }
 
-.App-message-block h2 {
+.greeting-message-block h2 {
   display: inline-block;
   margin-right: 5px;
 }
 
-.App .input input, textarea {
+.greeting .input input, textarea {
   margin-top: 5px;
   height: 40px;
   padding: 5px 10px;
@@ -40,13 +40,13 @@
   border: none;
 }
 
-.App .input textarea {
+.greeting .input textarea {
   width: 100%;
   height: 5em;
   resize: vertical;
 }
 
-.App-form {
+.greeting-form {
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
