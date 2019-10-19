@@ -8,8 +8,7 @@ import Api from './api';
 const setTitle = (title) => document.title = title;
 
 const App = ({ match }) => {
-  const gnbId = match.params.gnbId;
-  Configs.init(gnbId);
+  Configs.init(match.params.gnbId);
   Api.init();
   setTitle(Configs.getDocConfig().title);
   const path = match.url;
