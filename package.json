@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://weddi.app/",
   "dependencies": {
-    "firebase": "^7.2.1",
+    "firebase": "^7.2.3",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-router-dom": "^5.1.2",
