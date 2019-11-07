@@ -34,9 +34,9 @@ export default class Board extends Component {
     window.onload = () => {
       this.setState(({ isLoading }) => ({ isLoading: !isLoading }))
 
-      this.intervals.push[setInterval(() => {
+      this.intervals.push(setInterval(() => {
         this.pickUpFeed(newFeeds, oldFeeds);
-      }, 8000)];
+      }, 8000));
     };
 
     setInterval(() => {
