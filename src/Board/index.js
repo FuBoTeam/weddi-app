@@ -13,15 +13,17 @@ import { getImageUrl } from '../images';
 import Api from '../api';
 
 export default class Board extends Component {
-  interval = null;
+  allImgUrls = range(Configs.getImgConfig().totalImgs).map(k => getImageUrl(k));
+  bgImgUrls = combinationList(this.allImgUrls, Configs.getImgConfig().bgImgsShouldBePicked);
+  bgImgUrls = permutationList([...this.bgImgUrls, ...this.bgImgUrls]);
+  intervals = [];
   state = {
     isLoading: true,
     modalDisplay: false,
     user: {},
+    bgImgUrls: this.bgImgUrls,
+    isBgSwitching: false,
   };
-  allImgUrls = range(Configs.getImgConfig().totalImgs).map(k => getImageUrl(k));
-  bgImgUrls = combinationList(this.allImgUrls, Configs.getImgConfig().bgImgsShouldBePicked);
-  bgImgUrls = permutationList(this.bgImgUrls);
 
   componentDidMount() {
     const newFeeds = new Queue();
@@ -32,14 +34,30 @@ export default class Board extends Component {
     window.onload = () => {
       this.setState(({ isLoading }) => ({ isLoading: !isLoading }))
 
-      this.interval = setInterval(() => {
+      this.intervals.push[setInterval(() => {
         this.pickUpFeed(newFeeds, oldFeeds);
-      }, 8000);
+      }, 8000)];
     };
+
+    setInterval(() => {
+      this.setState({
+        isBgSwitching: true,
+      });
+      setTimeout(() => {
+        this.setState({
+          bgImgUrls: permutationList(this.state.bgImgUrls),
+        });
+        setTimeout(() => {
+          this.setState({
+            isBgSwitching: false,
+          })
+        }, 1000);
+      }, 1000);
+    }, 5 * 60 * 1000);
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval);
+    clearInterval(this.intervals);
   }
 
   showDialog = (user) => {
@@ -67,8 +85,8 @@ export default class Board extends Component {
         }
         <section className="pic-container">
         {
-          this.bgImgUrls.map((bgImgUrl, index) => (
-            <div key={index} className={this.state.isLoading ? 'pic-block hidden' : 'pic-block'}>
+          this.bgImgUrls.map((bgImgUrl, idx) => (
+            <div key={`${bgImgUrl}_${idx}`} className={this.state.isLoading || this.state.isBgSwitching ? 'pic-block hidden' : 'pic-block visible'}>
               <img src={bgImgUrl} alt="" />
             </div>
           ))
