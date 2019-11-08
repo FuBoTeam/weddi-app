@@ -69,20 +69,18 @@ class Greeting extends Component {
     return name.trim() !== '' && greetings.trim() !== '' && imgUrl.trim() !== '';
   }
 
+  renderPhotoRadios = () => this.imgUrls.map((url, i) => {
+    const checked = this.state.form.imgPicked === i;
+    return (
+      <React.Fragment key={`image_${i}`}>
+        <input className="hidden" type="radio" name="imgUrl" value={url}
+          onChange={this.onTextChangeHandler} required checked={checked} />
+        <img className={"fade" + (checked ? "" : " hidden")} src={url} alt={url} />
+      </React.Fragment>
+    );
+  });
+
   render() {
-    const picRadios = this.imgUrls.map((url, i) => {
-      const checked = this.state.form.imgPicked === i;
-      return (
-        <div key={i} className="fade" style={checked ? {display: 'block'} : {display: 'none'}}>
-          <div className="numbertext">{i + 1} / {this.fmImgsShouldBePicked}</div>
-          <label>
-            <input style={{display: 'none'}} type="radio" name="imgUrl" value={url}
-              onChange={this.onTextChangeHandler} required checked={checked} />
-            <img className="img-choice" style={{ border: '5px solid white' }} src={url} alt={url} />
-          </label>
-        </div>
-      );
-    });
     return (
       <div className="greeting">
         <header className="greeting-header">
@@ -93,7 +91,10 @@ class Greeting extends Component {
             <form className="greeting-form" onSubmit={this.onSubmitHandler}>
               <label className="pick">挑一張照片</label>
               <div className="slideshow-container">
-                {picRadios}
+                <div className="img-window">
+                  <div className="numbertext">{this.state.form.imgPicked + 1} / {this.fmImgsShouldBePicked}</div>
+                  {this.renderPhotoRadios()}
+                </div>
                 <a className="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</a>
                 <a className="next" onClick={() => this.plusImgIdx( 1)}>&#10095;</a>
               </div>
