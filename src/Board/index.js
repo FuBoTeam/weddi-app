@@ -76,25 +76,23 @@ export default class Board extends Component {
 
   render() {
     return (
-      <div className="container">
-        {
-          this.state.isLoading && <div className="loading">
-            <img src={loadingIcon} alt="" />
-            <span>Loading...</span>
-          </div>
-        }
-        <section className="pic-container">
-        {
-          this.bgImgUrls.map((bgImgUrl, idx) => (
-            <div key={`${bgImgUrl}_${idx}`} className={this.state.isLoading || this.state.isBgSwitching ? 'pic-block hidden' : 'pic-block visible'}>
-              <img src={bgImgUrl} alt="" />
+      <React.Fragment>
+        <div className="container">
+          {
+            this.state.isLoading && <div className="loading">
+              <img src={loadingIcon} alt="" />
+              <span>Loading...</span>
             </div>
-          ))
-        }
-        </section>
+          }
+          {
+            this.bgImgUrls.map((bgImgUrl, idx) =>
+              <img className={this.state.isLoading || this.state.isBgSwitching ? 'pic-block hidden' : 'pic-block visible'} key={`${bgImgUrl}_${idx}`} src={bgImgUrl} alt="" />
+            )
+          }
+        </div>
         <Dialog user={this.state.user} show={this.state.modalDisplay} />
         <a className="message-link" href={`${this.props.match.url}/greetings`}>&lt;&lt; 留下你的祝福</a>
-      </div>
+      </React.Fragment>
     );
   }
 }
