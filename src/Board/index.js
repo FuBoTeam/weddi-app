@@ -15,13 +15,12 @@ import Api from '../api';
 export default class Board extends Component {
   allImgUrls = range(Configs.getImgConfig().totalImgs).map(k => getImageUrl(k));
   bgImgUrls = combinationList(this.allImgUrls, Configs.getImgConfig().bgImgsShouldBePicked);
-  bgImgUrls = permutationList([...this.bgImgUrls, ...this.bgImgUrls]);
   intervals = [];
   state = {
     isLoading: true,
     modalDisplay: false,
     user: {},
-    bgImgUrls: this.bgImgUrls,
+    permutation: permutationList(range(this.bgImgUrls.length)),
     isBgSwitching: false,
   };
 
@@ -39,25 +38,27 @@ export default class Board extends Component {
       }, 8000));
     };
 
-    setInterval(() => {
-      this.setState({
-        isBgSwitching: true,
-      });
-      setTimeout(() => {
+    this.intervals.push(
+        setInterval(() => {
         this.setState({
-          bgImgUrls: permutationList(this.state.bgImgUrls),
+          isBgSwitching: true,
         });
         setTimeout(() => {
           this.setState({
-            isBgSwitching: false,
-          })
+            permutation: permutationList(range(this.bgImgUrls.length)),
+          });
+          setTimeout(() => {
+            this.setState({
+              isBgSwitching: false,
+            })
+          }, 1000);
         }, 1000);
-      }, 1000);
-    }, 5 * 60 * 1000);
+      }, 5 * 60 * 1000)
+    );
   }
 
   componentWillUnmount() {
-    clearInterval(this.intervals);
+    this.intervals.forEach(clearInterval);
   }
 
   showDialog = (user) => {
@@ -86,7 +87,15 @@ export default class Board extends Component {
           }
           {
             this.bgImgUrls.map((bgImgUrl, idx) =>
-              <img className={this.state.isLoading || this.state.isBgSwitching ? 'pic-block hidden' : 'pic-block visible'} key={`${bgImgUrl}_${idx}`} src={bgImgUrl} alt="" />
+              <img
+                key={bgImgUrl}
+                className={
+                  this.state.isLoading || this.state.isBgSwitching ? 'pic-block hidden' : 'pic-block visible'
+                }
+                style={{order: this.state.permutation[idx]}}
+                src={bgImgUrl}
+                alt=""
+              />
             )
           }
         </div>
