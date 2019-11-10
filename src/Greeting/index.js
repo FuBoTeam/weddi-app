@@ -92,53 +92,55 @@ class Greeting extends Component {
     );
   });
 
+  renderUploadImageSection() {
+    return (
+      <div className="img-window">
+        <input className="numbertext" type="file" name="upload" placeholder="上傳照片" accept="image/*" onChange={this.onFileChangeHandler} />
+        <img style={{width: '100%', height: '243px'}} src={this.state.form.upload} alt="upload preview" />
+      </div>
+    );
+  }
+
+  renderPickImageSection() {
+    return (
+      <React.Fragment>
+        <div className="img-window">
+          <div className="numbertext">{this.state.form.imgPicked + 1} / {this.fmImgsShouldBePicked}</div>
+          {this.renderPhotoRadios()}
+        </div>
+        <a className="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</a>
+        <a className="next" onClick={() => this.plusImgIdx( 1)}>&#10095;</a>
+      </React.Fragment>
+    );
+  }
+
+  renderGreetingForm() {
+    return (
+      <form className="greeting-form" onSubmit={this.onSubmitHandler}>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <label className="pick" onClick={() => this.setState({ upload: false })}>挑一張照片</label>
+          <label className="pick" onClick={() => this.setState({ upload: true })}>上傳一張照片</label>
+        </div>
+        <div className="slideshow-container">
+          {this.state.upload ? this.renderUploadImageSection() : this.renderPickImageSection()}
+        </div>
+        <div className="greeting-message-block">
+          <label className="input"><h2>@</h2><input type="text" name="name" placeholder="姓名" onChange={this.onTextChangeHandler} required /></label>
+          <label className="input"><textarea name="greetings" placeholder="祝賀詞" onChange={this.onTextChangeHandler} required /></label>
+        </div>
+        <input className="btn" type="submit" value="留言" />
+        <a className="link" href={this.getUpperUrl()}>去照片牆瞧瞧</a>
+      </form>
+    );
+  }
+
   render() {
     return (
       <div className="greeting">
         <header className="greeting-header">
           <h1 className="greeting-title">祝福留言版</h1>
         </header>
-        {
-          !this.state.modalDisplay && (
-            <form className="greeting-form" onSubmit={this.onSubmitHandler}>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <label className="pick" onClick={() => this.setState({ upload: false })}>挑一張照片</label>
-                <label className="pick" onClick={() => this.setState({ upload: true })}>上傳一張照片</label>
-              </div>
-              <div className="slideshow-container">
-                {
-                  this.state.upload ? (
-                    <div className="img-window">
-                      {
-                        this.state.form.upload ?
-                          <React.Fragment>
-                            <input type="file" name="upload" placeholder="上傳照片" accept="image/*" onChange={this.onFileChangeHandler} />
-                            <img src={this.state.form.upload} alt="upload preview" />
-                          </React.Fragment> :
-                          <input type="file" name="upload" placeholder="上傳照片" accept="image/*" onChange={this.onFileChangeHandler} />
-                      }
-                    </div>
-                  ) : (
-                    <React.Fragment>
-                      <div className="img-window">
-                        <div className="numbertext">{this.state.form.imgPicked + 1} / {this.fmImgsShouldBePicked}</div>
-                        {this.renderPhotoRadios()}
-                      </div>
-                      <a className="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</a>
-                      <a className="next" onClick={() => this.plusImgIdx( 1)}>&#10095;</a>
-                    </React.Fragment>
-                  )
-                }
-              </div>
-              <div className="greeting-message-block">
-                <label className="input"><h2>@</h2><input type="text" name="name" placeholder="姓名" onChange={this.onTextChangeHandler} required /></label>
-                <label className="input"><textarea name="greetings" placeholder="祝賀詞" onChange={this.onTextChangeHandler} required /></label>
-              </div>
-              <input className="btn" type="submit" value="留言" />
-              <a className="link" href={this.getUpperUrl()}>去照片牆瞧瞧</a>
-            </form>
-          )
-        }
+        {!this.state.modalDisplay && this.renderGreetingForm()}
         <Dialog user={this.getFormData()} show={this.state.modalDisplay} />
       </div>
     );
