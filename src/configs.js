@@ -2,12 +2,12 @@ const CHYY_CONFIG = {
   doc: {
     title: "<3 YaYun & ChinHui <3"
   },
-  db: {
+  firebase: {
     apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
     authDomain: "weddi-app.firebaseapp.com",
     databaseURL: "https://weddi-app.firebaseio.com/",
     projectId: "weddi-app",
-    storageBucket: "weddi-app.appspot.com",
+    storageBucket: "image.weddi.app",
     messagingSenderId: "324415165027",
     appId: "1:324415165027:web:76b8291835ef32c5c75e56"
   },
@@ -23,12 +23,12 @@ const TLTY_CONFIG = {
   doc: {
     title: "<3 水母 & 印麥王 <3"
   },
-  db: {
+  firebase: {
     apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
     authDomain: "weddi-app.firebaseapp.com",
     databaseURL: "https://weddi-app-test.firebaseio.com/",
     projectId: "weddi-app",
-    storageBucket: "weddi-app.appspot.com",
+    storageBucket: "image.weddi.app",
     messagingSenderId: "324415165027",
     appId: "1:324415165027:web:76b8291835ef32c5c75e56"
   },
@@ -44,12 +44,12 @@ const TEST_CONFIG = {
   doc: {
     title: "<3 Groom & Bride <3"
   },
-  db: {
+  firebase: {
     apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
     authDomain: "weddi-app.firebaseapp.com",
     databaseURL: "https://weddi-app-test.firebaseio.com/",
     projectId: "weddi-app",
-    storageBucket: "weddi-app.appspot.com",
+    storageBucket: "image.weddi.app",
     messagingSenderId: "324415165027",
     appId: "1:324415165027:web:76b8291835ef32c5c75e56"
   },
@@ -82,12 +82,12 @@ const init = gnbId => {
 };
 
 const getDocConfig = () => config.doc;
-const getDBConfig = () => config.db;
+const getFirebaseConfig = () => config.firebase;
 const getImgConfig = () => config.img;
 
 export default {
   init,
   getDocConfig,
-  getDBConfig,
+  getFirebaseConfig,
   getImgConfig
 };

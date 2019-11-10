@@ -1,16 +1,22 @@
 import * as firebase from 'firebase/app';
 import 'firebase/database';
+import 'firebase/storage';
 
 import Configs from '../configs';
 
 class apiBase {
   constructor () {
-    this.app = firebase.initializeApp(Configs.getDBConfig());
-    this.firebase = firebase;
-    this.database = firebase.database();
+    this.app = firebase.initializeApp(Configs.getFirebaseConfig());
+    this.database = this.app.database();
+    this.storage = this.app.storage();
   }
+
   getDB () {
     return this.database;
+  }
+
+  getStorage () {
+    return this.storage;
   }
 };
 
