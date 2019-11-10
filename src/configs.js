@@ -12,6 +12,7 @@ const CHYY_CONFIG = {
     appId: "1:324415165027:web:76b8291835ef32c5c75e56"
   },
   img: {
+    namespace: "chyy",
     endpoint: "https://storage.googleapis.com/image.weddi.app/chyy/",
     totalImgs: 114,
     bgImgsShouldBePicked: 40,
@@ -33,6 +34,7 @@ const TLTY_CONFIG = {
     appId: "1:324415165027:web:76b8291835ef32c5c75e56"
   },
   img: {
+    namespace: "tlty",
     endpoint: "https://storage.googleapis.com/image.weddi.app/tlty/",
     totalImgs: 30,
     bgImgsShouldBePicked: 30,
@@ -54,6 +56,7 @@ const TEST_CONFIG = {
     appId: "1:324415165027:web:76b8291835ef32c5c75e56"
   },
   img: {
+    namespace: "chyy",
     endpoint: "https://storage.googleapis.com/image.weddi.app/chyy/",
     totalImgs: 114,
     bgImgsShouldBePicked: 40,

@@ -47,8 +47,18 @@ const getPost = (callback) => {
   });
 };
 
+const listAllImages = () => {
+  return api.getStorage().ref(Configs.getImgConfig().namespace).listAll();
+}
+
+const uploadImage = (imgName, image) => {
+  return api.getStorage().ref(Configs.getImgConfig().namespace).child(imgName).put(image);
+}
+
 export default {
   init,
   writePost,
   getPost,
+  listAllImages,
+  uploadImage,
 };
