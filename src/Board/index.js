@@ -90,7 +90,7 @@ export default class Board extends Component {
               <img
                 key={bgImgUrl}
                 className={
-                  this.state.isLoading || this.state.isBgSwitching ? 'pic-block hidden' : 'pic-block visible'
+                  this.state.isLoading || this.state.isBgSwitching ? 'hidden' : 'visible'
                 }
                 style={{order: this.state.permutation[idx]}}
                 src={bgImgUrl}

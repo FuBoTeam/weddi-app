@@ -19,7 +19,6 @@ class Greeting extends Component {
       name: '',
       greetings: '',
       imgPicked: 0,
-      imgUrl: this.imgUrls[0],
     },
     modalDisplay: false,
   };
@@ -37,17 +36,23 @@ class Greeting extends Component {
     return paths.join('/');
   }
 
+  getFormData() {
+    return {
+      ...this.state.form,
+      imgUrl: this.imgUrls[this.state.form.imgPicked],
+    };
+  }
+
   onTextChangeHandler(event) {
-    event.preventDefault();
     const key = event.target.name;
     const value = event.target.value.trim();
-    this.setState(({ form }) => ({form: {...form, [key]: value}}));
+    this.setState(({ form }) => ({ form: { ...form, [key]: value } }));
   }
 
   onSubmitHandler(event) {
     event.preventDefault();
     if (this.isValid()) {
-      return Api.writePost(this.state.form).then(() => {
+      return Api.writePost(this.getFormData()).then(() => {
         this.setState({ modalDisplay: true });
         setTimeout(() => { this.props.history.push(this.getUpperUrl()); }, 3000);
       });
@@ -55,8 +60,7 @@ class Greeting extends Component {
   }
 
   setImgIdx(imgPicked) {
-    const imgUrl = this.imgUrls[imgPicked];
-    this.setState(({ form }) => ({form: {...form, imgPicked, imgUrl}}));
+    this.setState(({ form }) => ({ form: { ...form, imgPicked } }));
   }
 
   plusImgIdx(i) {
@@ -65,16 +69,17 @@ class Greeting extends Component {
   }
 
   isValid() {
-    const { name, greetings, imgUrl } = this.state.form;
-    return name.trim() !== '' && greetings.trim() !== '' && imgUrl.trim() !== '';
+    const { name, greetings, imgPicked } = this.state.form;
+    return name.trim() !== '' && greetings.trim() !== '' && imgPicked !== undefined;
   }
 
   renderPhotoRadios = () => this.imgUrls.map((url, i) => {
     const checked = this.state.form.imgPicked === i;
     return (
       <React.Fragment key={`image_${i}`}>
-        <input className="hidden" type="radio" name="imgUrl" value={url}
-          onChange={this.onTextChangeHandler} required checked={checked} />
+        <label className="hidden">
+          <input type="radio" name="imgUrl" value={url} checked={checked} readOnly />
+        </label>
         <img className={"fade" + (checked ? "" : " hidden")} src={url} alt={url} />
       </React.Fragment>
     );
@@ -107,7 +112,7 @@ class Greeting extends Component {
             </form>
           )
         }
-        <Dialog user={this.state.form} show={this.state.modalDisplay} />
+        <Dialog user={this.getFormData()} show={this.state.modalDisplay} />
       </div>
     );
   }
