@@ -30,7 +30,7 @@ const init = () => {
 };
 
 const writePost = (postData) => {
-  const postId = api.getDB().ref().child('posts').push().key;
+  const postId = api.getDB().ref('posts').push().key;
   const wrappedPostData = {
     ...postData,
     modifiedTime: new Date().toISOString(),
