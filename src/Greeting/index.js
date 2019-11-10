@@ -19,10 +19,13 @@ class Greeting extends Component {
       name: '',
       greetings: '',
       imgPicked: 0,
+      file: '',
     },
+    upload: false,
     modalDisplay: false,
   };
 
+  onFileChangeHandler = this.onFileChangeHandler.bind(this);
   onTextChangeHandler = this.onTextChangeHandler.bind(this);
   onSubmitHandler = this.onSubmitHandler.bind(this);
   isValid = this.isValid.bind(this);
@@ -41,6 +44,12 @@ class Greeting extends Component {
       ...this.state.form,
       imgUrl: this.imgUrls[this.state.form.imgPicked],
     };
+  }
+
+  onFileChangeHandler(event) {
+    const key = event.target.name;
+    const value = URL.createObjectURL(event.target.files[0]);
+    this.setState(({ form }) => ({ form: { ...form, [key]: value } }))
   }
 
   onTextChangeHandler(event) {
@@ -77,9 +86,7 @@ class Greeting extends Component {
     const checked = this.state.form.imgPicked === i;
     return (
       <React.Fragment key={`image_${i}`}>
-        <label className="hidden">
-          <input type="radio" name="imgUrl" value={url} checked={checked} readOnly />
-        </label>
+        <input className="hidden" type="radio" name="imgUrl" value={url} checked={checked} readOnly />
         <img className={"fade" + (checked ? "" : " hidden")} src={url} alt={url} />
       </React.Fragment>
     );
@@ -94,14 +101,34 @@ class Greeting extends Component {
         {
           !this.state.modalDisplay && (
             <form className="greeting-form" onSubmit={this.onSubmitHandler}>
-              <label className="pick">挑一張照片</label>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <label className="pick" onClick={() => this.setState({ upload: false })}>挑一張照片</label>
+                <label className="pick" onClick={() => this.setState({ upload: true })}>上傳一張照片</label>
+              </div>
               <div className="slideshow-container">
-                <div className="img-window">
-                  <div className="numbertext">{this.state.form.imgPicked + 1} / {this.fmImgsShouldBePicked}</div>
-                  {this.renderPhotoRadios()}
-                </div>
-                <a className="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</a>
-                <a className="next" onClick={() => this.plusImgIdx( 1)}>&#10095;</a>
+                {
+                  this.state.upload ? (
+                    <div className="img-window">
+                      {
+                        this.state.form.upload ?
+                          <React.Fragment>
+                            <input type="file" name="upload" placeholder="上傳照片" accept="image/*" onChange={this.onFileChangeHandler} />
+                            <img src={this.state.form.upload} alt="upload preview" />
+                          </React.Fragment> :
+                          <input type="file" name="upload" placeholder="上傳照片" accept="image/*" onChange={this.onFileChangeHandler} />
+                      }
+                    </div>
+                  ) : (
+                    <React.Fragment>
+                      <div className="img-window">
+                        <div className="numbertext">{this.state.form.imgPicked + 1} / {this.fmImgsShouldBePicked}</div>
+                        {this.renderPhotoRadios()}
+                      </div>
+                      <a className="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</a>
+                      <a className="next" onClick={() => this.plusImgIdx( 1)}>&#10095;</a>
+                    </React.Fragment>
+                  )
+                }
               </div>
               <div className="greeting-message-block">
                 <label className="input"><h2>@</h2><input type="text" name="name" placeholder="姓名" onChange={this.onTextChangeHandler} required /></label>
