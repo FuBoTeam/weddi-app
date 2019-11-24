@@ -1,4 +1,32 @@
-const CHYY_CONFIG = {
+interface RootConfig {
+  doc: DocumentConfig;
+  firebase: FirebaseConfig;
+  img: ImageConfig;
+}
+
+interface DocumentConfig {
+  title: String;
+}
+
+interface FirebaseConfig {
+  apiKey: String;
+  authDomain: String;
+  databaseURL: String;
+  projectId: String;
+  storageBucket: String;
+  messagingSenderId: String;
+  appId: String;
+}
+
+interface ImageConfig {
+  namespace: String;
+  endpoint: String;
+  totalImgs: Number;
+  bgImgsShouldBePicked: Number;
+  fmImgsShouldBePicked: Number;
+}
+
+const CHYY_CONFIG: RootConfig = {
   doc: {
     title: "<3 YaYun & ChinHui <3"
   },
@@ -42,7 +70,7 @@ const TLTY_CONFIG = {
   }
 };
 
-const TEST_CONFIG = {
+const TEST_CONFIG: RootConfig = {
   doc: {
     title: "<3 Groom & Bride <3"
   },
@@ -64,7 +92,7 @@ const TEST_CONFIG = {
   }
 };
 
-const setConfigById = gnbId => {
+const getConfigById = (gnbId: String): RootConfig => {
   switch (gnbId) {
     case "chyy":
       return CHYY_CONFIG;
@@ -75,22 +103,37 @@ const setConfigById = gnbId => {
   }
 };
 
-let config;
+class Config {
+  config?: RootConfig;
 
-const init = gnbId => {
-  if (!config) {
-    config = setConfigById(gnbId);
+  init(gnbId: String) {
+    if (!this.config) {
+      this.config = getConfigById(gnbId);
+    }
   }
-  return config;
-};
 
-const getDocConfig = () => config.doc;
-const getFirebaseConfig = () => config.firebase;
-const getImgConfig = () => config.img;
+  get doc() {
+    if (this.config) {
+      return this.config.doc;
+    }
+    throw Error("config is not set yet");
+  }
 
-export default {
-  init,
-  getDocConfig,
-  getFirebaseConfig,
-  getImgConfig
-};
+  get firebase() {
+    if (this.config) {
+      return this.config.firebase;
+    }
+    throw Error("config is not set yet");
+  }
+
+  get img() {
+    if (this.config) {
+      return this.config.img;
+    }
+    throw Error("config is not set yet");
+  }
+}
+
+const config: Config = new Config();
+
+export default config;

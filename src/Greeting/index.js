@@ -10,8 +10,8 @@ import Dialog from '../Board/Dialog';
 import Api from '../api';
 
 class Greeting extends Component {
-  allImgUrls = range(Configs.getImgConfig().totalImgs).map(k => getImageUrl(k));
-  fmImgsShouldBePicked = Configs.getImgConfig().fmImgsShouldBePicked;
+  allImgUrls = range(Configs.img.totalImgs).map(k => getImageUrl(k));
+  fmImgsShouldBePicked = Configs.img.fmImgsShouldBePicked;
   imgUrls = combinationList(this.allImgUrls, this.fmImgsShouldBePicked);
 
   state = {

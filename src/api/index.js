@@ -6,7 +6,7 @@ import Configs from '../configs';
 
 class apiBase {
   constructor () {
-    this.app = firebase.initializeApp(Configs.getFirebaseConfig());
+    this.app = firebase.initializeApp(Configs.firebase);
     this.database = this.app.database();
     this.storage = this.app.storage();
   }
@@ -48,11 +48,11 @@ const getPost = (callback) => {
 };
 
 const listAllImages = () => {
-  return api.getStorage().ref(Configs.getImgConfig().namespace).listAll();
+  return api.getStorage().ref(Configs.img.namespace).listAll();
 }
 
 const uploadImage = (imgName, image) => {
-  return api.getStorage().ref(Configs.getImgConfig().namespace).child(imgName).put(image);
+  return api.getStorage().ref(Configs.img.namespace).child(imgName).put(image);
 }
 
 export default {

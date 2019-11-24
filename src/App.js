@@ -10,7 +10,7 @@ const setTitle = (title) => document.title = title;
 const App = ({ match }) => {
   Configs.init(match.params.gnbId);
   Api.init();
-  setTitle(Configs.getDocConfig().title);
+  setTitle(Configs.doc.title);
   const path = match.url;
   return (
     <Switch>
