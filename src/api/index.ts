@@ -2,14 +2,14 @@ import * as firebase from "firebase/app";
 import "firebase/database";
 import "firebase/storage";
 
-import Configs from "../configs";
+import Config from "../config";
 
 class apiBase {
   app: firebase.app.App;
   database: firebase.database.Database;
   storage: firebase.storage.Storage;
   constructor() {
-    this.app = firebase.initializeApp(Configs.firebase);
+    this.app = firebase.initializeApp(Config.firebase);
     this.database = this.app.database();
     this.storage = this.app.storage();
   }
@@ -49,12 +49,12 @@ const getPost = (callback: Function) => {
 };
 
 const listAllImages = () => {
-  return api.storage.ref(Configs.img.namespace).listAll();
+  return api.storage.ref(Config.img.namespace).listAll();
 };
 
 const uploadImage = (imgName: string, image: Blob) => {
   return api.storage
-    .ref(Configs.img.namespace)
+    .ref(Config.img.namespace)
     .child(imgName)
     .put(image);
 };

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import range from 'lodash/range';
 import './greeting.css';
 
-import Configs from '../configs';
+import Config from '../config';
 import { combinationList } from '../utils/random';
 import { getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';
@@ -10,8 +10,8 @@ import Dialog from '../Board/Dialog';
 import Api from '../api';
 
 class Greeting extends Component {
-  allImgUrls = range(Configs.img.totalImgs).map(k => getImageUrl(k));
-  fmImgsShouldBePicked = Configs.img.fmImgsShouldBePicked;
+  allImgUrls = range(Config.img.totalImgs).map(k => getImageUrl(k));
+  fmImgsShouldBePicked = Config.img.fmImgsShouldBePicked;
   imgUrls = combinationList(this.allImgUrls, this.fmImgsShouldBePicked);
 
   state = {
