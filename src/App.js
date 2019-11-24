@@ -9,7 +9,7 @@ const setTitle = (title) => document.title = title;
 
 const App = ({ match }) => {
   Config.init(match.params.gnbId);
-  Api.init();
+  Api.init(Config);
   setTitle(Config.doc.title);
   const path = match.url;
   return (

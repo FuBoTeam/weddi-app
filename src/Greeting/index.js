@@ -7,7 +7,7 @@ import { combinationList } from '../utils/random';
 import { getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';
 
-import Api from '../api';
+import * as Api from '../api';
 
 class Greeting extends Component {
   allImgUrls = range(Config.img.totalImgs).map(k => getImageUrl(k));

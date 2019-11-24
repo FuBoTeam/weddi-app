@@ -103,7 +103,7 @@ const getConfigById = (gnbId: String): IConfig => {
   }
 };
 
-class Config {
+export class Config {
   config?: IConfig;
 
   init(gnbId: String): void {

@@ -10,7 +10,7 @@ import { combinationList, permutationList } from '../utils/random';
 import { getImageUrl } from '../images';
 
 
-import Api from '../api';
+import * as Api from '../api';
 
 export default class Board extends Component {
   allImgUrls = range(Config.img.totalImgs).map(k => getImageUrl(k));
