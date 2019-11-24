@@ -5,25 +5,25 @@ interface IConfig {
 }
 
 interface DocumentConfig {
-  title: String;
+  title: string;
 }
 
 interface FirebaseConfig {
-  apiKey: String;
-  authDomain: String;
-  databaseURL: String;
-  projectId: String;
-  storageBucket: String;
-  messagingSenderId: String;
-  appId: String;
+  apiKey: string;
+  authDomain: string;
+  databaseURL: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
 }
 
 interface ImageConfig {
-  namespace: String;
-  endpoint: String;
-  totalImgs: Number;
-  bgImgsShouldBePicked: Number;
-  fmImgsShouldBePicked: Number;
+  namespace: string;
+  endpoint: string;
+  totalImgs: number;
+  bgImgsShouldBePicked: number;
+  fmImgsShouldBePicked: number;
 }
 
 const CHYY_CONFIG: IConfig = {
