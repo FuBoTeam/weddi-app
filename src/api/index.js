@@ -10,15 +10,7 @@ class apiBase {
     this.database = this.app.database();
     this.storage = this.app.storage();
   }
-
-  getDB () {
-    return this.database;
-  }
-
-  getStorage () {
-    return this.storage;
-  }
-};
+}
 
 let api;
 
@@ -30,29 +22,29 @@ const init = () => {
 };
 
 const writePost = (postData) => {
-  const postId = api.getDB().ref('posts').push().key;
+  const postId = api.database.ref('posts').push().key;
   const wrappedPostData = {
     ...postData,
     modifiedTime: new Date().toISOString(),
     userAgent: navigator.userAgent,
     id: postId,
   };
-  return api.getDB().ref(`posts/${postId}`).set(wrappedPostData);
+  return api.database.ref('posts').child(postId).set(wrappedPostData);
 };
 
 const getPost = (callback) => {
-  const postRef = api.getDB().ref('posts');
+  const postRef = api.database.ref('posts');
   postRef.on('child_added', (data) => {
     callback(data.val());
   });
 };
 
 const listAllImages = () => {
-  return api.getStorage().ref(Configs.img.namespace).listAll();
+  return api.storage.ref(Configs.img.namespace).listAll();
 }
 
 const uploadImage = (imgName, image) => {
-  return api.getStorage().ref(Configs.img.namespace).child(imgName).put(image);
+  return api.storage.ref(Configs.img.namespace).child(imgName).put(image);
 }
 
 export default {
