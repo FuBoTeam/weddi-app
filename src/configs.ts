@@ -1,4 +1,4 @@
-interface RootConfig {
+interface IConfig {
   doc: DocumentConfig;
   firebase: FirebaseConfig;
   img: ImageConfig;
@@ -26,7 +26,7 @@ interface ImageConfig {
   fmImgsShouldBePicked: Number;
 }
 
-const CHYY_CONFIG: RootConfig = {
+const CHYY_CONFIG: IConfig = {
   doc: {
     title: "<3 YaYun & ChinHui <3"
   },
@@ -48,7 +48,7 @@ const CHYY_CONFIG: RootConfig = {
   }
 };
 
-const TLTY_CONFIG = {
+const TLTY_CONFIG: IConfig = {
   doc: {
     title: "<3 水母 & 印麥王 <3"
   },
@@ -70,7 +70,7 @@ const TLTY_CONFIG = {
   }
 };
 
-const TEST_CONFIG: RootConfig = {
+const TEST_CONFIG: IConfig = {
   doc: {
     title: "<3 Groom & Bride <3"
   },
@@ -92,7 +92,7 @@ const TEST_CONFIG: RootConfig = {
   }
 };
 
-const getConfigById = (gnbId: String): RootConfig => {
+const getConfigById = (gnbId: String): IConfig => {
   switch (gnbId) {
     case "chyy":
       return CHYY_CONFIG;
@@ -104,29 +104,29 @@ const getConfigById = (gnbId: String): RootConfig => {
 };
 
 class Config {
-  config?: RootConfig;
+  config?: IConfig;
 
-  init(gnbId: String) {
+  init(gnbId: String): void {
     if (!this.config) {
       this.config = getConfigById(gnbId);
     }
   }
 
-  get doc() {
+  get doc(): DocumentConfig {
     if (this.config) {
       return this.config.doc;
     }
     throw Error("config is not set yet");
   }
 
-  get firebase() {
+  get firebase(): FirebaseConfig {
     if (this.config) {
       return this.config.firebase;
     }
     throw Error("config is not set yet");
   }
 
-  get img() {
+  get img(): ImageConfig {
     if (this.config) {
       return this.config.img;
     }
