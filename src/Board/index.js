@@ -38,6 +38,7 @@ export default class Board extends Component {
       }, 8000));
     };
 
+    // Auto refresh background images
     this.intervals.push(
         setInterval(() => {
         this.setState({

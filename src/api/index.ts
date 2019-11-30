@@ -32,6 +32,21 @@ class FirebaseApi {
 const firebaseApi = new FirebaseApi();
 export default firebaseApi;
 
+// TODO: refactor to be registration api sets, i.e.
+// firebaseApi.dbRegister(posts)
+//
+// posts = (dbRef) => ({
+//   write: data => {
+//     id = dbRef.push().key
+//     return dbRef.child(id).set(data)
+//   },
+//   onAdded: ...
+// })
+//
+// firebaseApi.storageRegister(imgs)
+// imgs = (storageRef) => ...
+//
+
 export const writePost = (postData: object) => {
   const postId = firebaseApi.database.ref("posts").push().key;
   if (!postId) {
@@ -69,6 +84,7 @@ export const uploadImage = (imgName: string, image: Blob) => {
   }
   return firebaseApi.storage
     .ref(firebaseApi.config.img.namespace)
+    .child("public_upload")
     .child(imgName)
     .put(image);
 };

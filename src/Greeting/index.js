@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import range from 'lodash/range';
+import uuid from 'uuid';
 import './greeting.css';
 
 import Config from '../config';
@@ -18,7 +19,10 @@ class Greeting extends Component {
     form: {
       name: '',
       greetings: '',
-      imgPicked: 0,
+      pickedImg: {
+        idx: 0,
+        url: this.imgUrls[0],
+      },
       file: '',
     },
     upload: false,
@@ -29,7 +33,7 @@ class Greeting extends Component {
   onTextChangeHandler = this.onTextChangeHandler.bind(this);
   onSubmitHandler = this.onSubmitHandler.bind(this);
   isValid = this.isValid.bind(this);
-  setImgIdx = this.setImgIdx.bind(this);
+  getImg = this.getImg.bind(this);
   plusImgIdx = this.plusImgIdx.bind(this);
 
   getUpperUrl() {
@@ -42,14 +46,16 @@ class Greeting extends Component {
   getFormData() {
     return {
       ...this.state.form,
-      imgUrl: this.imgUrls[this.state.form.imgPicked],
+      imgUrl: this.state.form.pickedImg.url,
     };
   }
 
   onFileChangeHandler(event) {
     const key = event.target.name;
-    const value = URL.createObjectURL(event.target.files[0]);
-    this.setState(({ form }) => ({ form: { ...form, [key]: value } }))
+    const value = event.target.files[0];
+    if (key && value && value.type.startsWith('image/')) {
+      this.setState(({ form }) => ({ form: { ...form, [key]: value } }))
+    }
   }
 
   onTextChangeHandler(event) {
@@ -61,29 +67,56 @@ class Greeting extends Component {
   onSubmitHandler(event) {
     event.preventDefault();
     if (this.isValid()) {
-      return Api.writePost(this.getFormData()).then(() => {
-        this.setState({ modalDisplay: true });
-        setTimeout(() => { this.props.history.push(this.getUpperUrl()); }, 3000);
-      });
+      return this.uploadFlow();
     }
   }
 
-  setImgIdx(imgPicked) {
-    this.setState(({ form }) => ({ form: { ...form, imgPicked } }));
+  async uploadFlow() {
+    // TODO?: start uploading place holder
+    let imgUrl = this.state.form.pickedImg.url;
+    if (this.state.upload)
+    {
+      const imgName = uuid.v4();
+      const uploadProc = await Api.uploadImage(imgName, this.state.form.upload);
+      imgUrl = `${Config.img.endpoint}${uploadProc.metadata.fullPath}`;
+    }
+    await Api.writePost({
+      ...this.state.form,
+      imgUrl,
+    });
+    // TODO:? stop uploading place holder
+    this.setState({
+      modalDisplay: true,
+      form: {
+        ...this.state.form,
+        pickedImg: {
+          ...this.state.form.pickedImg,
+          url: imgUrl
+        }
+      }
+    });
+    setTimeout(() => { this.props.history.push(this.getUpperUrl()); }, 3000);
+  }
+
+  getImg(idx) {
+    return ({ idx, url: this.imgUrls[idx] });
   }
 
   plusImgIdx(i) {
-    const nextIdx = (this.state.form.imgPicked + i + this.fmImgsShouldBePicked) % this.fmImgsShouldBePicked;
-    this.setImgIdx(nextIdx);
+    const nextIdx = (this.state.form.pickedImg.idx + i + this.fmImgsShouldBePicked) % this.fmImgsShouldBePicked;
+    // set img idx to render the seleceted img
+    this.setState(({ form }) => ({
+      form: { ...form, pickedImg: this.getImg(nextIdx) }
+    }));
   }
 
   isValid() {
-    const { name, greetings, imgPicked } = this.state.form;
-    return name.trim() !== '' && greetings.trim() !== '' && imgPicked !== undefined;
+    const { name, greetings, pickedImg } = this.state.form;
+    return name.trim() !== '' && greetings.trim() !== '' && pickedImg.url !== undefined;
   }
 
   renderPhotoRadios = () => this.imgUrls.map((url, i) => {
-    const checked = this.state.form.imgPicked === i;
+    const checked = this.state.form.pickedImg.idx === i && this.state.form.pickedImg.url === url;
     return (
       <React.Fragment key={`image_${i}`}>
         <input className="hidden" type="radio" name="imgUrl" value={url} checked={checked} readOnly />
@@ -96,7 +129,7 @@ class Greeting extends Component {
     return (
       <div className="img-window">
         <input className="numbertext" type="file" name="upload" placeholder="上傳照片" accept="image/*" onChange={this.onFileChangeHandler} />
-        <img style={{width: '100%', height: '243px'}} src={this.state.form.upload} alt="upload preview" />
+        {this.state.form.upload && <img style={{width: '100%', height: '243px'}} src={URL.createObjectURL(this.state.form.upload)} alt="upload preview" />}
       </div>
     );
   }
@@ -105,7 +138,7 @@ class Greeting extends Component {
     return (
       <React.Fragment>
         <div className="img-window">
-          <div className="numbertext">{this.state.form.imgPicked + 1} / {this.fmImgsShouldBePicked}</div>
+          <div className="numbertext">{this.state.form.pickedImg.idx + 1} / {this.fmImgsShouldBePicked}</div>
           {this.renderPhotoRadios()}
         </div>
         <a className="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</a>
@@ -118,8 +151,8 @@ class Greeting extends Component {
     return (
       <form className="greeting-form" onSubmit={this.onSubmitHandler}>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <label className="pick" onClick={() => this.setState({ upload: false })}>挑一張照片</label>
-          <label className="pick" onClick={() => this.setState({ upload: true })}>上傳一張照片</label>
+          <span className="pick" onClick={() => this.setState({ upload: false })}>挑一張照片</span>
+          <span className="pick" onClick={() => this.setState({ upload: true })}>上傳一張照片</span>
         </div>
         <div className="slideshow-container">
           {this.state.upload ? this.renderUploadImageSection() : this.renderPickImageSection()}
