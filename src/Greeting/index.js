@@ -157,6 +157,16 @@ class Greeting extends Component {
         <div className="slideshow-container">
           {this.state.upload ? this.renderUploadImageSection() : this.renderPickImageSection()}
         </div>
+        <button onClick={
+          async () => {
+            const imgName = uuid.v4();
+            const uploadProc = await Api.uploadImage(imgName, this.state.form.upload);
+            // TODO: gen img url by metadata bucket and full path
+            const metadata = uploadProc.metadata;
+            const imgUrl = `${Config.img.endpoint}${metadata.fullPath}`;
+            console.log(uploadProc, imgUrl);
+          }
+        }>upload test</button>
         <div className="greeting-message-block">
           <label className="input"><h2>@</h2><input type="text" name="name" placeholder="姓名" onChange={this.onTextChangeHandler} required /></label>
           <label className="input"><textarea name="greetings" placeholder="祝賀詞" onChange={this.onTextChangeHandler} required /></label>
