@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import range from 'lodash/range';
 import uuid from 'uuid';
-import './greeting.css';
+import './greeting.scss';
 
 import Config from '../config';
 import { combinationList } from '../utils/random';
@@ -14,7 +14,6 @@ class Greeting extends Component {
   allImgUrls = range(Config.img.totalImgs).map(k => getImageUrl(k));
   fmImgsShouldBePicked = Config.img.fmImgsShouldBePicked;
   imgUrls = combinationList(this.allImgUrls, this.fmImgsShouldBePicked);
-
   state = {
     form: {
       name: '',
@@ -127,10 +126,11 @@ class Greeting extends Component {
 
   renderUploadImageSection() {
     return (
-      <div className="img-window">
-        <input className="numbertext" type="file" name="upload" placeholder="上傳照片" accept="image/*" onChange={this.onFileChangeHandler} />
-        {this.state.form.upload && <img style={{width: '100%', height: '243px'}} src={URL.createObjectURL(this.state.form.upload)} alt="upload preview" />}
-      </div>
+      <label className="img-window upload">
+        <input hidden className="numbertext" type="file" name="upload" placeholder="上傳照片" accept="image/*" onChange={this.onFileChangeHandler} />
+        {this.state.form.upload && <img src={URL.createObjectURL(this.state.form.upload)} alt="upload preview" />}
+        {!this.state.form.upload && <span className="upload-field">請上傳圖片</span>}
+      </label>
     );
   }
 
@@ -138,11 +138,12 @@ class Greeting extends Component {
     return (
       <React.Fragment>
         <div className="img-window">
+          <div className="layer" style={{ backgroundImage: `url(${this.state.form.pickedImg.url})` }} />
           <div className="numbertext">{this.state.form.pickedImg.idx + 1} / {this.fmImgsShouldBePicked}</div>
           {this.renderPhotoRadios()}
         </div>
-        <a className="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</a>
-        <a className="next" onClick={() => this.plusImgIdx( 1)}>&#10095;</a>
+        <span className="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</span>
+        <span className="next" onClick={() => this.plusImgIdx(1)}>&#10095;</span>
       </React.Fragment>
     );
   }
@@ -150,12 +151,13 @@ class Greeting extends Component {
   renderGreetingForm() {
     return (
       <form className="greeting-form" onSubmit={this.onSubmitHandler}>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <span className="pick" onClick={() => this.setState({ upload: false })}>挑一張照片</span>
-          <span className="pick" onClick={() => this.setState({ upload: true })}>上傳一張照片</span>
-        </div>
+        <ul className="tabs-view">
+          <li className={ this.state.upload ? 'pick' : 'pick active' } onClick={() => this.setState({ upload: false })}>挑一張照片</li>
+          <li className={ this.state.upload ? 'pick active' : 'pick' } onClick={() => this.setState({ upload: true })}>上傳一張照片</li>
+        </ul>
         <div className="slideshow-container">
-          {this.state.upload ? this.renderUploadImageSection() : this.renderPickImageSection()}
+          <div hidden={!this.state.upload}>{this.renderUploadImageSection()}</div>
+          <div hidden={this.state.upload}>{this.renderPickImageSection()}</div>
         </div>
         <button onClick={
           async () => {

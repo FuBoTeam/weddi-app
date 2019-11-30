@@ -1,4 +1,5 @@
 @import url(//fonts.googleapis.com/earlyaccess/notosanskannada.css);
+$orange: #FF8260;
 
 .greeting {
   background: #222;
@@ -54,12 +55,13 @@
   text-align: left;
   color: #444;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 10px;
 }
 
 .slideshow-container {
   position: relative;
   margin: auto;
+  border: 3px solid $orange;
 }
 
 .prev, .next {
@@ -88,7 +90,7 @@
 .numbertext {
   color: #f2f2f2;
   font-size: 12px;
-  margin: 8px 12px;
+  padding: 8px 12px;
   position: absolute;
   top: 0;
   left: 0;
@@ -97,15 +99,54 @@
 .img-window {
   width: 100%;
   height: 300px;
-  background: rgba(255, 255, 255, .7);
   display: flex;
   justify-content: center;
   align-items: center;
-}
+  position: relative;
 
-.img-window .fade {
-  -webkit-animation: fade 0.5s;
-  animation: fade 0.5s;
+  &.upload {
+    background: $orange;
+  }
+
+  .layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    z-index: 0;
+    filter: blur(2px);
+    opacity: .5;
+  }
+
+  .fade {
+    -webkit-animation: fade 0.5s;
+    animation: fade 0.5s;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  img {
+    border: 2px solid white;
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 0;
+  }
+
+  .upload-field {
+    width: 90%;
+    height: 90%;
+    border: 1px dashed white;
+    text-align: center;
+    color: white;
+    padding-top: 110px;
+    cursor: pointer;
+  }
 }
 
 @-webkit-keyframes fade {
@@ -118,24 +159,29 @@
   to { opacity: 1 }
 }
 
-.img-window .hidden {
-  display: none;
-}
+.tabs-view {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  justify-content: space-between;
 
-.img-window img {
-  border: 5px solid white;
-  max-width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-  cursor: pointer;
-  margin-left: auto;
-  margin-right: auto;
-}
+  .pick {
+    color: $orange;
+    display: block;
+    border: 3px solid $orange;
+    border-bottom: 0;
+    border-radius: 5px 5px 0 0;
+    padding: 8px 10px;
+    width: calc(50% - 5px);
+    text-align: center;
+    cursor: pointer;
 
-.pick {
-  color: white;
-  margin-bottom: 5px;
-  display: block;
+    &.active {
+      background: $orange;
+      color: white;
+      transition: background .5s;
+    }
+  }  
 }
 
 .btn {
