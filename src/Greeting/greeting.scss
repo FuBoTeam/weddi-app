@@ -1,8 +1,8 @@
+@import '../stylesheets/vars.scss';
 @import url(//fonts.googleapis.com/earlyaccess/notosanskannada.css);
-$orange: #FF8260;
 
 .greeting {
-  background: #222;
+  background: $background;
   text-align: center;
   min-height: 100%;
   font-family: 'Noto Sans Kannada', sans-serif;
@@ -186,7 +186,7 @@ $orange: #FF8260;
 
 .btn {
   padding: 10px 20px;
-  background: #FF8260;
+  background: $orange;
   border: none;
   border-radius: 3px;
   color: white;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './board.css';
+import './board.scss';
 
 export default class Dialog extends Component {
   constructor() {

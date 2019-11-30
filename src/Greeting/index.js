@@ -174,7 +174,7 @@ class Greeting extends Component {
           <label className="input"><textarea name="greetings" placeholder="祝賀詞" onChange={this.onTextChangeHandler} required /></label>
         </div>
         <input className="btn" type="submit" value="留言" />
-        <a className="link" href={this.getUpperUrl()}>去照片牆瞧瞧</a>
+        <a className="link orange-font" href={this.getUpperUrl()}>去照片牆瞧瞧</a>
       </form>
     );
   }
@@ -183,7 +183,7 @@ class Greeting extends Component {
     return (
       <div className="greeting">
         <header className="greeting-header">
-          <h1 className="greeting-title">祝福留言版</h1>
+          <h1 className="greeting-title orange-font">祝福留言版</h1>
         </header>
         {!this.state.modalDisplay && this.renderGreetingForm()}
         <Dialog user={this.getFormData()} show={this.state.modalDisplay} />

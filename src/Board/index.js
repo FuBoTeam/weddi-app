@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import range from 'lodash/range';
-import './board.css';
+import './board.scss';
 import loadingIcon from '../images/loading.gif';
 import Dialog from './Dialog';
 
