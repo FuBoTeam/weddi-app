@@ -1,0 +1,7 @@
+[
+  {
+    "origin": ["weddi.app"],
+    "method": ["GET"],
+    "maxAgeSeconds": 3600
+  }
+]
