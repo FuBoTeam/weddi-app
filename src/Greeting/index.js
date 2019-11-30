@@ -118,6 +118,7 @@ class Greeting extends Component {
     const checked = this.state.form.pickedImg.idx === i && this.state.form.pickedImg.url === url;
     return (
       <React.Fragment key={`image_${i}`}>
+        <div className={"layer" + (checked ? "" : " hidden")} style={{ backgroundImage: `url(${url})` }} />
         <input className="hidden" type="radio" name="imgUrl" value={url} checked={checked} readOnly />
         <img className={"fade" + (checked ? "" : " hidden")} src={url} alt={url} />
       </React.Fragment>
@@ -138,7 +139,6 @@ class Greeting extends Component {
     return (
       <React.Fragment>
         <div className="img-window">
-          <div className="layer" style={{ backgroundImage: `url(${this.state.form.pickedImg.url})` }} />
           <div className="numbertext">{this.state.form.pickedImg.idx + 1} / {this.fmImgsShouldBePicked}</div>
           {this.renderPhotoRadios()}
         </div>
