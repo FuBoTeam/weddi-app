@@ -18,6 +18,10 @@ export default class Dialog extends Component {
     };
   }
 
+  componentDidMount() {
+    this.img.src = this.props.show ? this.props.user.imgUrl : '';
+  }
+
   componentDidUpdate() {
     this.img.src = this.props.show ? this.props.user.imgUrl : '';
   }

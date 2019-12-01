@@ -5,7 +5,7 @@ import './greeting.scss';
 
 import Config from '../config';
 import { combinationList } from '../utils/random';
-import { getImageUrl } from '../images';
+import { preloadImage, getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';
 
 import * as Api from '../api';
@@ -77,24 +77,24 @@ class Greeting extends Component {
     {
       const imgName = uuid.v4();
       const uploadProc = await Api.uploadImage(imgName, this.state.form.upload);
-      imgUrl = `${Config.img.endpoint}${uploadProc.metadata.fullPath}`;
-    }
-    await Api.writePost({
-      ...this.state.form,
-      imgUrl,
-    });
-    // TODO:? stop uploading place holder
-    this.setState({
-      modalDisplay: true,
-      form: {
-        ...this.state.form,
-        pickedImg: {
-          ...this.state.form.pickedImg,
-          url: imgUrl
+      imgUrl = await uploadProc.ref.getDownloadURL();
+      this.setState({
+        form: {
+          ...this.state.form,
+          pickedImg: {
+            idx: -1,
+            url: imgUrl
+          }
         }
-      }
-    });
-    setTimeout(() => { this.props.history.push(this.getUpperUrl()); }, 3000);
+      });
+    }
+    await Api.writePost(this.getFormData());
+    // TODO:? stop uploading place holder
+    const updateStateAndRedirect = () => {
+      this.setState({ modalDisplay: true });
+      setTimeout(() => { this.props.history.push(this.getUpperUrl()); }, 5000);
+    }
+    preloadImage(imgUrl, updateStateAndRedirect);
   }
 
   getImg(idx) {

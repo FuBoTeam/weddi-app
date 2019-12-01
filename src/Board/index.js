@@ -7,7 +7,7 @@ import Dialog from './Dialog';
 import Queue from './queue';
 import Config from '../config';
 import { combinationList, permutationList } from '../utils/random';
-import { getImageUrl } from '../images';
+import { preloadImage, getImageUrl } from '../images';
 
 
 import * as Api from '../api';
@@ -63,11 +63,16 @@ export default class Board extends Component {
   }
 
   showDialog = (user) => {
-    this.setState(() => ({ modalDisplay: true, user: Object.assign({}, user) }));
+    this.setState({ user: Object.assign({}, user) });
+    const displayAndHide = () => {
+      this.setState(() => ({ modalDisplay: true }));
 
-    setTimeout(() => {
-      this.setState(() => ({ modalDisplay: false }));
-    }, 5000);
+      setTimeout(() => {
+        this.setState(() => ({ modalDisplay: false }));
+      }, 5000);
+    };
+    // preload dialog img and display in dialog
+    preloadImage(user.imgUrl, displayAndHide);
   }
 
   pickUpFeed = (newFeeds, oldFeeds) => {
