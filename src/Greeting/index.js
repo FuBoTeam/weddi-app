@@ -118,8 +118,8 @@ class Greeting extends Component {
     const checked = this.state.form.pickedImg.idx === i && this.state.form.pickedImg.url === url;
     return (
       <React.Fragment key={`image_${i}`}>
+        <input hidden type="radio" name="imgUrl" value={url} checked={checked} readOnly />
         <div className={"layer" + (checked ? "" : " hidden")} style={{ backgroundImage: `url(${url})` }} />
-        <input className="hidden" type="radio" name="imgUrl" value={url} checked={checked} readOnly />
         <img className={"fade" + (checked ? "" : " hidden")} src={url} alt={url} />
       </React.Fragment>
     );
@@ -128,7 +128,7 @@ class Greeting extends Component {
   renderUploadImageSection() {
     return (
       <label className="img-window upload">
-        <input hidden className="numbertext" type="file" name="upload" placeholder="上傳照片" accept="image/*" onChange={this.onFileChangeHandler} />
+        <input hidden type="file" name="upload" placeholder="上傳照片" accept="image/*" onChange={this.onFileChangeHandler} />
         {this.state.form.upload && <img src={URL.createObjectURL(this.state.form.upload)} alt="upload preview" />}
         {!this.state.form.upload && <span className="upload-field">請上傳圖片</span>}
       </label>
@@ -159,16 +159,6 @@ class Greeting extends Component {
           <div hidden={!this.state.upload}>{this.renderUploadImageSection()}</div>
           <div hidden={this.state.upload}>{this.renderPickImageSection()}</div>
         </div>
-        <button onClick={
-          async () => {
-            const imgName = uuid.v4();
-            const uploadProc = await Api.uploadImage(imgName, this.state.form.upload);
-            // TODO: gen img url by metadata bucket and full path
-            const metadata = uploadProc.metadata;
-            const imgUrl = `${Config.img.endpoint}${metadata.fullPath}`;
-            console.log(uploadProc, imgUrl);
-          }
-        }>upload test</button>
         <div className="greeting-message-block">
           <label className="input"><h2>@</h2><input type="text" name="name" placeholder="姓名" onChange={this.onTextChangeHandler} required /></label>
           <label className="input"><textarea name="greetings" placeholder="祝賀詞" onChange={this.onTextChangeHandler} required /></label>
