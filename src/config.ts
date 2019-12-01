@@ -50,7 +50,7 @@ const CHYY_CONFIG: IConfig = {
 
 const TLTY_CONFIG: IConfig = {
   doc: {
-    title: "<3 水母 & 印麥王 <3"
+    title: "<3 Tony & Claire <3"
   },
   firebase: {
     apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
