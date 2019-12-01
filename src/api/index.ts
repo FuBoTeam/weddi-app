@@ -64,7 +64,7 @@ export const writePost = (postData: object) => {
     .set(wrappedPostData);
 };
 
-export const getPost = (callback: Function) => {
+export const onNewPost = (callback: Function) => {
   const postRef = firebaseApi.database.ref("posts");
   postRef.on("child_added", (data: firebase.database.DataSnapshot) => {
     callback(data.val());

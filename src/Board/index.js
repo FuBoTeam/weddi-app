@@ -28,7 +28,7 @@ export default class Board extends Component {
     const newFeeds = new Queue();
     const oldFeeds = new Queue();
 
-    Api.getPost((user) => newFeeds.push(user));
+    Api.onNewPost((feed) => newFeeds.push(feed));
 
     window.onload = () => {
       this.setState(({ isLoading }) => ({ isLoading: !isLoading }))
