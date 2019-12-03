@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import range from 'lodash/range';
 import uuid from 'uuid';
+import loadImage from 'blueimp-load-image';
 import './greeting.scss';
 
 import Config from '../config';
@@ -22,7 +23,7 @@ class Greeting extends Component {
         idx: 0,
         url: this.imgUrls[0],
       },
-      file: '',
+      upload: null,
     },
     upload: false,
     modalDisplay: false,
@@ -53,7 +54,13 @@ class Greeting extends Component {
     const key = event.target.name;
     const value = event.target.files[0];
     if (key && value && value.type.startsWith('image/')) {
-      this.setState(({ form }) => ({ form: { ...form, [key]: value } }))
+      loadImage(
+        value,
+        canvas => canvas.toBlob(blob => {
+          this.setState(({ form }) => ({ form: { ...form, [key]: blob } }))
+        }, "image/jpeg", 0.75),
+        { maxWidth: 2048, maxHeight: 2048, orientation: true, canvas: true, noRevoke: true }
+      );
     }
   }
 

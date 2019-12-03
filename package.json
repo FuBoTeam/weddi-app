@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://weddi.app/",
   "dependencies": {
+    "blueimp-load-image": "^2.24.0",
     "firebase": "^7.2.3",
     "node-sass": "^4.13.0",
     "react": "^16.11.0",
