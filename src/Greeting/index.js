@@ -8,7 +8,7 @@ import Config from '../config';
 import { combinationList } from '../utils/random';
 import { preloadImage, getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';
-
+import loadingIcon from '../images/uploadLoading.svg';
 import * as Api from '../api';
 
 class Greeting extends Component {
@@ -27,6 +27,7 @@ class Greeting extends Component {
     },
     upload: false,
     modalDisplay: false,
+    isLoading: false
   };
 
   onFileChangeHandler = this.onFileChangeHandler.bind(this);
@@ -79,9 +80,9 @@ class Greeting extends Component {
 
   async uploadFlow() {
     // TODO?: start uploading place holder
+    this.setState({ isLoading: true })
     let imgUrl = this.state.form.pickedImg.url;
-    if (this.state.upload)
-    {
+    if (this.state.isUploadPage) {
       const imgName = uuid.v4();
       const uploadProc = await Api.uploadImage(imgName, this.state.form.upload);
       imgUrl = await uploadProc.ref.getDownloadURL();
@@ -98,7 +99,7 @@ class Greeting extends Component {
     await Api.writePost(this.getFormData());
     // TODO:? stop uploading place holder
     const updateStateAndRedirect = () => {
-      this.setState({ modalDisplay: true });
+      this.setState({ modalDisplay: true, isLoading: false });
       setTimeout(() => { this.props.history.push(this.getUpperUrl()); }, 5000);
     }
     preloadImage(imgUrl, updateStateAndRedirect);
@@ -159,18 +160,21 @@ class Greeting extends Component {
     return (
       <form className="greeting-form" onSubmit={this.onSubmitHandler}>
         <ul className="tabs-view">
-          <li className={ this.state.upload ? 'pick' : 'pick active' } onClick={() => this.setState({ upload: false })}>挑一張照片</li>
-          <li className={ this.state.upload ? 'pick active' : 'pick' } onClick={() => this.setState({ upload: true })}>上傳一張照片</li>
+          <li className={ this.state.isUploadPage ? 'pick' : 'pick active' } onClick={() => this.setState({ isUploadPage: false })}>挑一張照片</li>
+          <li className={ this.state.isUploadPage ? 'pick active' : 'pick' } onClick={() => this.setState({ isUploadPage: true })}>上傳一張照片</li>
         </ul>
         <div className="slideshow-container">
-          <div hidden={!this.state.upload}>{this.renderUploadImageSection()}</div>
-          <div hidden={this.state.upload}>{this.renderPickImageSection()}</div>
+          <div hidden={!this.state.isUploadPage}>{this.renderUploadImageSection()}</div>
+          <div hidden={this.state.isUploadPage}>{this.renderPickImageSection()}</div>
         </div>
         <div className="greeting-message-block">
           <label className="input"><h2>@</h2><input type="text" name="name" placeholder="姓名" onChange={this.onTextChangeHandler} required /></label>
           <label className="input"><textarea name="greetings" placeholder="祝賀詞" onChange={this.onTextChangeHandler} required /></label>
         </div>
-        <input className="btn" type="submit" value="留言" />
+        <button className="btn" type="submit" disabled={this.state.isLoading}>
+          {this.state.isLoading && <img className="loading-img" src={loadingIcon} alt="" />}
+          留言
+        </button>
         <a className="link orange-font" href={this.getUpperUrl()}>去照片牆瞧瞧</a>
       </form>
     );

@@ -199,11 +199,15 @@
   width: 100%;
   font-size: 16px;
   box-shadow: none;
-}
 
-.btn:hover {
-  opacity: .8;
-  transition: opacity .5s;
+  &:hover {
+    opacity: .8;
+    transition: opacity .5s;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+  }
 }
 
 .link {
@@ -211,4 +215,9 @@
   display: block;
   text-align: center;
   margin-top: 20px;
+}
+
+.loading-img {
+  height: 17px;
+  margin-right: 10px;
 }
