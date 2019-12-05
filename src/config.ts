@@ -55,7 +55,7 @@ const TLTY_CONFIG: IConfig = {
   firebase: {
     apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
     authDomain: "weddi-app.firebaseapp.com",
-    databaseURL: "https://weddi-app-test.firebaseio.com/",
+    databaseURL: "https://weddi-app-tlty.firebaseio.com/",
     projectId: "weddi-app",
     storageBucket: "image.weddi.app",
     messagingSenderId: "324415165027",
