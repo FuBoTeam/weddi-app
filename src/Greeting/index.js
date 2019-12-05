@@ -25,7 +25,7 @@ class Greeting extends Component {
       },
       upload: null,
     },
-    upload: false,
+    isUploadPage: false,
     modalDisplay: false,
     isLoading: false
   };
@@ -79,7 +79,6 @@ class Greeting extends Component {
   }
 
   async uploadFlow() {
-    // TODO?: start uploading place holder
     this.setState({ isLoading: true })
     let imgUrl = this.state.form.pickedImg.url;
     if (this.state.isUploadPage) {
@@ -97,7 +96,6 @@ class Greeting extends Component {
       });
     }
     await Api.writePost(this.getFormData());
-    // TODO:? stop uploading place holder
     const updateStateAndRedirect = () => {
       this.setState({ modalDisplay: true, isLoading: false });
       setTimeout(() => { this.props.history.push(this.getUpperUrl()); }, 5000);
