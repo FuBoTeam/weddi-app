@@ -81,7 +81,7 @@ class Greeting extends Component {
   async uploadFlow() {
     this.setState({ isLoading: true })
     let imgUrl = this.state.form.pickedImg.url;
-    if (this.state.isUploadPage) {
+    if (this.state.isUploadPage && this.state.form.upload) {
       const imgName = uuid.v4();
       const uploadProc = await Api.uploadImage(imgName, this.state.form.upload);
       imgUrl = await uploadProc.ref.getDownloadURL();
