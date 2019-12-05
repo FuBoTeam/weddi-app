@@ -134,7 +134,15 @@ class Greeting extends Component {
   renderUploadImageSection() {
     return (
       <label className="img-window upload">
-        <input hidden type="file" name="upload" placeholder="上傳照片" accept="image/*" onChange={this.onFileChangeHandler} />
+        <input
+          hidden
+          type="file"
+          name="upload"
+          placeholder="上傳照片"
+          accept="image/*"
+          onChange={this.onFileChangeHandler}
+          disabled={this.state.isLoading}
+        />
         {this.state.form.upload && <img src={URL.createObjectURL(this.state.form.upload)} alt="upload preview" />}
         {!this.state.form.upload && <span className="upload-field">請上傳圖片</span>}
       </label>
@@ -148,8 +156,8 @@ class Greeting extends Component {
           <div className="numbertext">{this.state.form.pickedImg.idx + 1} / {this.fmImgsShouldBePicked}</div>
           {this.renderPhotoRadios()}
         </div>
-        <span className="prev" onClick={() => this.plusImgIdx(-1)}>&#10094;</span>
-        <span className="next" onClick={() => this.plusImgIdx(1)}>&#10095;</span>
+        <span className="prev" onClick={() => !this.state.isLoading && this.plusImgIdx(-1)}>&#10094;</span>
+        <span className="next" onClick={() => !this.state.isLoading && this.plusImgIdx(1)}>&#10095;</span>
       </React.Fragment>
     );
   }
@@ -158,16 +166,31 @@ class Greeting extends Component {
     return (
       <form className="greeting-form" onSubmit={this.onSubmitHandler}>
         <ul className="tabs-view">
-          <li className={ this.state.isUploadPage ? 'pick' : 'pick active' } onClick={() => this.setState({ isUploadPage: false })}>挑一張照片</li>
-          <li className={ this.state.isUploadPage ? 'pick active' : 'pick' } onClick={() => this.setState({ isUploadPage: true })}>上傳一張照片</li>
+          <li
+            className={ this.state.isUploadPage ? 'pick' : 'pick active' }
+            onClick={() => !this.state.isLoading && this.setState({ isUploadPage: false })}
+          >
+            挑一張照片
+          </li>
+          <li
+            className={ this.state.isUploadPage ? 'pick active' : 'pick' }
+            onClick={() => !this.state.isLoading && this.setState({ isUploadPage: true })}
+          >
+            上傳一張照片
+          </li>
         </ul>
         <div className="slideshow-container">
           <div hidden={!this.state.isUploadPage}>{this.renderUploadImageSection()}</div>
           <div hidden={this.state.isUploadPage}>{this.renderPickImageSection()}</div>
         </div>
         <div className="greeting-message-block">
-          <label className="input"><h2>@</h2><input type="text" name="name" placeholder="姓名" onChange={this.onTextChangeHandler} required /></label>
-          <label className="input"><textarea name="greetings" placeholder="祝賀詞" onChange={this.onTextChangeHandler} required /></label>
+          <label className="input">
+            <h2>@</h2>
+            <input type="text" name="name" placeholder="姓名" onChange={this.onTextChangeHandler} required disabled={this.state.isLoading} />
+          </label>
+          <label className="input">
+            <textarea name="greetings" placeholder="祝賀詞" onChange={this.onTextChangeHandler} required disabled={this.state.isLoading} />
+          </label>
         </div>
         <button className="btn" type="submit" disabled={this.state.isLoading}>
           {this.state.isLoading && <img className="loading-img" src={loadingIcon} alt="" />}
