@@ -3,88 +3,136 @@ import "firebase/database";
 import "firebase/storage";
 
 import { Config } from "../config";
+import { ArrowFunctionExpression } from "@babel/types";
 
 class FirebaseApi {
-  config?: Config;
-  app?: firebase.app.App;
-  init(config: Config) {
-    if (!this.app) {
-      this.config = config;
-      this.app = firebase.initializeApp(this.config.firebase);
+  _config?: Config;
+  private _app?: firebase.app.App;
+  private _database?: Register<firebase.database.Reference>;
+  private _storage?: Register<firebase.storage.Reference>;
+  public init(config: Config): void {
+    // init app
+    if (!this._app) {
+      this._config = config;
+      this._app = firebase.initializeApp(this._config.firebase);
+    }
+
+    if (!this._database) {
+      this._database = new Register<firebase.database.Reference>(
+        this._app.database().ref(),
+        "database"
+      );
+      this._database.register(posts, this._app.database().ref("posts"));
+    }
+
+    if (!this._storage) {
+      this._storage = new Register<firebase.storage.Reference>(
+        this._app.storage().ref(),
+        "storage"
+      );
+      this._storage.register(
+        images,
+        this._app.storage().ref(this._config!.img.namespace)
+      );
     }
   }
 
-  get database(): firebase.database.Database {
-    if (!this.app) {
-      throw new Error("app is not initial yet");
-    }
-    return this.app.database();
+  public get database() {
+    return this._database!.topics;
   }
 
-  get storage(): firebase.storage.Storage {
-    if (!this.app) {
-      throw new Error("app is not initial yet");
-    }
-    return this.app.storage();
+  public get storage() {
+    return this._storage!.topics;
   }
 }
 
 const firebaseApi = new FirebaseApi();
 export default firebaseApi;
 
-// TODO: refactor to be registration api sets, i.e.
-// firebaseApi.dbRegister(posts)
-//
-// posts = (dbRef) => ({
-//   write: data => {
-//     id = dbRef.push().key
-//     return dbRef.child(id).set(data)
-//   },
-//   onAdded: ...
-// })
-//
-// firebaseApi.storageRegister(imgs)
-// imgs = (storageRef) => ...
-//
+class Register<R> implements RegisterType<R> {
+  private _name: string;
+  private _rootReference: R;
+  private _topics: {
+    [topic: string]: ReturnType<Topic<R>>;
+  } = {};
 
-export const writePost = (postData: object) => {
-  const postId = firebaseApi.database.ref("posts").push().key;
-  if (!postId) {
-    throw new Error("post id is empty");
+  public constructor(rootRef: R, name?: string) {
+    this._rootReference = rootRef;
+    this._name = name || "defaultRegister";
   }
-  const wrappedPostData = {
-    ...postData,
-    modifiedTime: new Date().toISOString(),
-    userAgent: navigator.userAgent,
-    id: postId
+
+  public register(topic: Topic<R>, ref?: R): Function {
+    if (this._topics[topic.name] !== undefined) {
+      throw new Error(`topic ${topic.name} is registered`);
+    }
+    const reference = ref || this._rootReference;
+    this._topics[topic.name] = topic(reference);
+
+    return topic;
+  }
+
+  public deregister(topic: Topic<R>): void {
+    delete this._topics[topic.name];
+  }
+
+  public get topics() {
+    return this._topics;
+  }
+}
+
+interface RegisterType<R> {
+  register: (topic: Topic<R>, ref?: R, name?: string) => Function;
+  deregister: (topic: Topic<R>) => void;
+  topics: {
+    [topic: string]: ReturnType<Topic<R>>;
   };
-  return firebaseApi.database
-    .ref("posts")
-    .child(postId)
-    .set(wrappedPostData);
+}
+
+type Topic<R> = (
+  Ref: R
+) => {
+  [subTopic: string]: Function | ArrowFunctionExpression;
 };
 
-export const onNewPost = (callback: Function) => {
-  const postRef = firebaseApi.database.ref("posts");
-  postRef.on("child_added", (data: firebase.database.DataSnapshot) => {
-    callback(data.val());
-  });
+const posts: Topic<firebase.database.Reference> = (
+  postRef: firebase.database.Reference
+) => {
+  const write = (postData: object) => {
+    const postId = postRef.push().key!;
+    const wrappedPostData = {
+      ...postData,
+      modifiedTime: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      id: postId
+    };
+
+    return postRef.child(postId).set(wrappedPostData);
+  };
+
+  const onAdded = (callback: Function) => {
+    postRef.on("child_added", (data: firebase.database.DataSnapshot) => {
+      callback(data.val());
+    });
+  };
+
+  return {
+    write,
+    onAdded
+  };
 };
 
-export const listAllImages = () => {
-  if (!firebaseApi.config) {
-    throw new Error("app is not initial yet");
-  }
-  return firebaseApi.storage.ref(firebaseApi.config.img.namespace).listAll();
-};
+const images: Topic<firebase.storage.Reference> = (
+  imgRef: firebase.storage.Reference
+) => {
+  const listAll = () => imgRef.listAll();
+  const upload = (imgName: string, image: Blob) =>
+    imgRef
+      .child("public_upload")
+      .child(imgName)
+      .put(image);
 
-export const uploadImage = (imgName: string, image: Blob) => {
-  if (!firebaseApi.config) {
-    throw new Error("app is not initial yet");
-  }
-  return firebaseApi.storage
-    .ref(firebaseApi.config.img.namespace)
-    .child("public_upload")
-    .child(imgName)
-    .put(image);
+  return {
+    listAll,
+    upload
+  };
 };

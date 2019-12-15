@@ -10,7 +10,7 @@ import { combinationList, permutationList } from '../utils/random';
 import { preloadImage, getImageUrl } from '../images';
 
 
-import * as Api from '../api';
+import Api from '../api';
 
 export default class Board extends Component {
   allImgUrls = range(Config.img.totalImgs).map(k => getImageUrl(k));
@@ -28,7 +28,7 @@ export default class Board extends Component {
     const newFeeds = new Queue();
     const oldFeeds = new Queue();
 
-    Api.onNewPost((feed) => newFeeds.push(feed));
+    Api.database.posts.onAdded((feed) => newFeeds.push(feed));
 
     window.onload = () => {
       this.setState(({ isLoading }) => ({ isLoading: !isLoading }))

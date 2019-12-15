@@ -9,7 +9,7 @@ import { combinationList } from '../utils/random';
 import { preloadImage, getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';
 import loadingIcon from '../images/uploadLoading.svg';
-import * as Api from '../api';
+import Api from '../api';
 
 class Greeting extends Component {
   allImgUrls = range(Config.img.totalImgs).map(k => getImageUrl(k));
@@ -83,7 +83,7 @@ class Greeting extends Component {
     let imgUrl = this.state.form.pickedImg.url;
     if (this.state.isUploadPage && this.state.form.upload) {
       const imgName = uuid.v4();
-      const uploadProc = await Api.uploadImage(imgName, this.state.form.upload);
+      const uploadProc = await Api.storage.images.upload(imgName, this.state.form.upload);
       imgUrl = await uploadProc.ref.getDownloadURL();
       this.setState({
         form: {
@@ -95,7 +95,7 @@ class Greeting extends Component {
         }
       });
     }
-    await Api.writePost(this.getFormData());
+    await Api.database.posts.write(this.getFormData());
     const updateStateAndRedirect = () => {
       this.setState({ modalDisplay: true, isLoading: false });
       setTimeout(() => { this.props.history.push(this.getUpperUrl()); }, 5000);
