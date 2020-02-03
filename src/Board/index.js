@@ -13,8 +13,8 @@ import { preloadImage, getImageUrl } from '../images';
 import * as Api from '../api';
 
 export default class Board extends Component {
-  allImgUrls = range(configService.img.totalImgs).map(k => getImageUrl(k));
-  bgImgUrls = combinationList(this.allImgUrls, configService.img.bgImgsShouldBePicked);
+  allImgUrls = range(configService.config.img.totalImgs).map(k => getImageUrl(k));
+  bgImgUrls = combinationList(this.allImgUrls, configService.config.img.bgImgsShouldBePicked);
   intervals = [];
   state = {
     isLoading: true,

@@ -9,8 +9,8 @@ const setTitle = (title) => document.title = title;
 
 const App = ({ match }) => {
   configService.init(match.params.gnbId);
-  Api.init(configService);
-  setTitle(configService.doc.title);
+  Api.init();
+  setTitle(configService.config.doc.title);
   const path = match.url;
   return (
     <Switch>

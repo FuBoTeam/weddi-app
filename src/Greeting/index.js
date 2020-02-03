@@ -12,8 +12,8 @@ import loadingIcon from '../images/uploadLoading.svg';
 import * as Api from '../api';
 
 class Greeting extends Component {
-  allImgUrls = range(configService.img.totalImgs).map(k => getImageUrl(k));
-  fmImgsShouldBePicked = configService.img.fmImgsShouldBePicked;
+  allImgUrls = range(configService.config.img.totalImgs).map(k => getImageUrl(k));
+  fmImgsShouldBePicked = configService.config.img.fmImgsShouldBePicked;
   imgUrls = combinationList(this.allImgUrls, this.fmImgsShouldBePicked);
   state = {
     form: {

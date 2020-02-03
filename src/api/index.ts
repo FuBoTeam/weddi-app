@@ -2,15 +2,13 @@ import * as firebase from "firebase/app";
 import "firebase/database";
 import "firebase/storage";
 
-import { ConfigService } from "../services/configService";
+import configService from "../services/configService";
 
 class FirebaseApi {
-  public config?: ConfigService;
   private app?: firebase.app.App;
-  public init(config: ConfigService): void {
+  public init(): void {
     if (!this.app) {
-      this.config = config;
-      this.app = firebase.initializeApp(this.config.firebase);
+      this.app = firebase.initializeApp(configService.config.firebase);
     }
   }
 
@@ -72,18 +70,12 @@ export const onNewPost = (callback: Function): void => {
 };
 
 export const listAllImages = (): Promise<firebase.storage.ListResult> => {
-  if (!firebaseApi.config) {
-    throw new Error("app is not initial yet");
-  }
-  return firebaseApi.storage.ref(firebaseApi.config.img.namespace).listAll();
+  return firebaseApi.storage.ref(configService.config.img.namespace).listAll();
 };
 
 export const uploadImage = (imgName: string, image: Blob): firebase.storage.UploadTask => {
-  if (!firebaseApi.config) {
-    throw new Error("app is not initial yet");
-  }
   return firebaseApi.storage
-    .ref(firebaseApi.config.img.namespace)
+    .ref(configService.config.img.namespace)
     .child("public_upload")
     .child(imgName)
     .put(image);

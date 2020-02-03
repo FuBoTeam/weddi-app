@@ -118,27 +118,6 @@ export class ConfigService {
     }
     return this._config;
   }
-
-  public get doc(): DocumentConfig {
-    if (this._config) {
-      return this._config.doc;
-    }
-    throw Error("config is not set yet");
-  }
-
-  public get firebase(): FirebaseConfig {
-    if (this._config) {
-      return this._config.firebase;
-    }
-    throw Error("config is not set yet");
-  }
-
-  public get img(): ImageConfig {
-    if (this._config) {
-      return this._config.img;
-    }
-    throw Error("config is not set yet");
-  }
 }
 
 const configService: ConfigService = new ConfigService();

@@ -11,7 +11,7 @@ export const preloadImage = (url, callback) => {
 
 // TODO: make it a service and do not need to concate urls
 export const getImageUrl = (key, size = IMG_SIZE_S) =>
-  `${configService.img.endpoint}${configService.img.namespace}/${key}${size}.jpg`;
+  `${configService.config.img.endpoint}${configService.config.img.namespace}/${key}${size}.jpg`;
 
 export const IMG_SIZES = {
   IMG_SIZE_S,
