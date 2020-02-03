@@ -31,7 +31,7 @@ export default class Board extends Component {
     Api.onNewPost((feed) => newFeeds.push(feed));
 
     window.onload = () => {
-      this.setState(({ isLoading }) => ({ isLoading: !isLoading }))
+      this.setState(({ isLoading }) => ({ isLoading: !isLoading }));
 
       this.intervals.push(setInterval(() => {
         this.pickUpFeed(newFeeds, oldFeeds);
@@ -40,7 +40,7 @@ export default class Board extends Component {
 
     // Auto refresh background images
     this.intervals.push(
-        setInterval(() => {
+      setInterval(() => {
         this.setState({
           isBgSwitching: true,
         });
@@ -51,7 +51,7 @@ export default class Board extends Component {
           setTimeout(() => {
             this.setState({
               isBgSwitching: false,
-            })
+            });
           }, 1000);
         }, 1000);
       }, 5 * 60 * 1000)

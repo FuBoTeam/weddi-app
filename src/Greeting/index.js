@@ -58,7 +58,7 @@ class Greeting extends Component {
       loadImage(
         value,
         canvas => canvas.toBlob(blob => {
-          this.setState(({ form }) => ({ form: { ...form, [key]: blob } }))
+          this.setState(({ form }) => ({ form: { ...form, [key]: blob } }));
         }, "image/jpeg", 0.75),
         { maxWidth: 2048, maxHeight: 2048, orientation: true, canvas: true, noRevoke: true }
       );
@@ -79,7 +79,7 @@ class Greeting extends Component {
   }
 
   async uploadFlow() {
-    this.setState({ isLoading: true })
+    this.setState({ isLoading: true });
     let imgUrl = this.state.form.pickedImg.url;
     if (this.state.isUploadPage && this.state.form.upload) {
       const imgName = uuid.v4();
@@ -99,7 +99,7 @@ class Greeting extends Component {
     const updateStateAndRedirect = () => {
       this.setState({ modalDisplay: true, isLoading: false });
       setTimeout(() => { this.props.history.push(this.getUpperUrl()); }, 5000);
-    }
+    };
     preloadImage(imgUrl, updateStateAndRedirect);
   }
 
