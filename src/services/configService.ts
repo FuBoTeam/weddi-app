@@ -103,7 +103,7 @@ const getConfigById = (gnbId: string): InterfaceConfig => {
   }
 };
 
-export class Config {
+export class ConfigService {
   private config?: InterfaceConfig;
 
   public init(gnbId: string): void {
@@ -134,6 +134,6 @@ export class Config {
   }
 }
 
-const config: Config = new Config();
+const configService: ConfigService = new ConfigService();
 
-export default config;
+export default configService;

@@ -2,12 +2,12 @@ import * as firebase from "firebase/app";
 import "firebase/database";
 import "firebase/storage";
 
-import { Config } from "../services/config";
+import { ConfigService } from "../services/configService";
 
 class FirebaseApi {
-  public config?: Config;
+  public config?: ConfigService;
   private app?: firebase.app.App;
-  public init(config: Config): void {
+  public init(config: ConfigService): void {
     if (!this.app) {
       this.config = config;
       this.app = firebase.initializeApp(this.config.firebase);
