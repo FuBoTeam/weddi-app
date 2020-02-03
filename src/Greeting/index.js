@@ -4,7 +4,7 @@ import uuid from 'uuid';
 import loadImage from 'blueimp-load-image';
 import './greeting.scss';
 
-import Config from '../config';
+import Config from '../services/config';
 import { combinationList } from '../utils/random';
 import { preloadImage, getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';

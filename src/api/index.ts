@@ -2,7 +2,7 @@ import * as firebase from "firebase/app";
 import "firebase/database";
 import "firebase/storage";
 
-import { Config } from "../config";
+import { Config } from "../services/config";
 
 class FirebaseApi {
   public config?: Config;

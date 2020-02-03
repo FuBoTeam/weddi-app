@@ -5,7 +5,7 @@ import loadingIcon from '../images/loading.gif';
 import Dialog from './Dialog';
 
 import Queue from './queue';
-import Config from '../config';
+import Config from '../services/config';
 import { combinationList, permutationList } from '../utils/random';
 import { preloadImage, getImageUrl } from '../images';
 

@@ -1,4 +1,4 @@
-import Config from "../config";
+import Config from "../services/config";
 
 const IMG_SIZE_S = "_small";
 const IMG_SIZE_M = "";
