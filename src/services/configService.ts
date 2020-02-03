@@ -1,4 +1,4 @@
-interface InterfaceConfig {
+interface Config {
   doc: DocumentConfig;
   firebase: FirebaseConfig;
   img: ImageConfig;
@@ -26,7 +26,7 @@ interface ImageConfig {
   fmImgsShouldBePicked: number;
 }
 
-const CHYY_CONFIG: InterfaceConfig = {
+const CHYY_CONFIG: Config = {
   doc: {
     title: "<3 YaYun & ChinHui <3"
   },
@@ -48,7 +48,7 @@ const CHYY_CONFIG: InterfaceConfig = {
   }
 };
 
-const TLTY_CONFIG: InterfaceConfig = {
+const TLTY_CONFIG: Config = {
   doc: {
     title: "<3 Tony & Claire <3"
   },
@@ -70,7 +70,7 @@ const TLTY_CONFIG: InterfaceConfig = {
   }
 };
 
-const TEST_CONFIG: InterfaceConfig = {
+const TEST_CONFIG: Config = {
   doc: {
     title: "<3 Groom & Bride <3"
   },
@@ -92,7 +92,7 @@ const TEST_CONFIG: InterfaceConfig = {
   }
 };
 
-const getConfigById = (gnbId: string): InterfaceConfig => {
+const getConfigById = (gnbId: string): Config => {
   switch (gnbId) {
     case "chyy":
       return CHYY_CONFIG;
@@ -104,31 +104,38 @@ const getConfigById = (gnbId: string): InterfaceConfig => {
 };
 
 export class ConfigService {
-  private config?: InterfaceConfig;
+  private _config?: Config;
 
   public init(gnbId: string): void {
-    if (!this.config) {
-      this.config = getConfigById(gnbId);
+    if (!this._config) {
+      this._config = getConfigById(gnbId);
     }
   }
 
+  public get config(): Config {
+    if (!this._config) {
+      throw Error("config is not set yet");
+    }
+    return this._config;
+  }
+
   public get doc(): DocumentConfig {
-    if (this.config) {
-      return this.config.doc;
+    if (this._config) {
+      return this._config.doc;
     }
     throw Error("config is not set yet");
   }
 
   public get firebase(): FirebaseConfig {
-    if (this.config) {
-      return this.config.firebase;
+    if (this._config) {
+      return this._config.firebase;
     }
     throw Error("config is not set yet");
   }
 
   public get img(): ImageConfig {
-    if (this.config) {
-      return this.config.img;
+    if (this._config) {
+      return this._config.img;
     }
     throw Error("config is not set yet");
   }
