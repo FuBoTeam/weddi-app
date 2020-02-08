@@ -1,32 +1,4 @@
-interface Config {
-  doc: DocumentConfig;
-  firebase: FirebaseConfig;
-  img: ImageConfig;
-}
-
-interface DocumentConfig {
-  title: string;
-}
-
-interface FirebaseConfig {
-  apiKey: string;
-  authDomain: string;
-  databaseURL: string;
-  projectId: string;
-  storageBucket: string;
-  messagingSenderId: string;
-  appId: string;
-}
-
-interface ImageConfig {
-  namespace: string;
-  endpoint: string;
-  totalImgs: number;
-  bgImgsShouldBePicked: number;
-  fmImgsShouldBePicked: number;
-}
-
-const CHYY_CONFIG: Config = {
+const CHYY_CONFIG: ConfigService.Config = {
   doc: {
     title: "<3 YaYun & ChinHui <3"
   },
@@ -48,7 +20,7 @@ const CHYY_CONFIG: Config = {
   }
 };
 
-const TLTY_CONFIG: Config = {
+const TLTY_CONFIG: ConfigService.Config = {
   doc: {
     title: "<3 Tony & Claire <3"
   },
@@ -70,7 +42,7 @@ const TLTY_CONFIG: Config = {
   }
 };
 
-const TEST_CONFIG: Config = {
+const TEST_CONFIG: ConfigService.Config = {
   doc: {
     title: "<3 Groom & Bride <3"
   },
@@ -92,7 +64,7 @@ const TEST_CONFIG: Config = {
   }
 };
 
-const getConfigById = (gnbId: string): Config => {
+const getConfigById = (gnbId: string): ConfigService.Config => {
   switch (gnbId) {
     case "chyy":
       return CHYY_CONFIG;
@@ -103,23 +75,24 @@ const getConfigById = (gnbId: string): Config => {
   }
 };
 
-export class ConfigService {
-  private _config?: Config;
+class ConfigService implements ConfigServiceInterface {
+  private _config: ConfigService.Config | null = null;
 
   public init(gnbId: string): void {
-    if (!this._config) {
+    if (this._config === null) {
       this._config = getConfigById(gnbId);
     }
   }
 
-  public get config(): Config {
-    if (!this._config) {
+  public get config(): ConfigService.Config {
+    if (this._config === null) {
       throw Error("config is not set yet");
     }
     return this._config;
   }
 }
 
-const configService: ConfigService = new ConfigService();
+// Singleton
+const configService: ConfigServiceInterface = new ConfigService();
 
 export default configService;
