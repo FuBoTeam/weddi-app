@@ -1,4 +1,10 @@
-export default class Queue<T> {
+interface QueueInterface<T> {
+  push(item: T): void;
+  pop(): T;
+  isEmpty(): boolean;
+}
+
+export default class Queue<T> implements QueueInterface<T> {
   private q: T[];
   public constructor() {
     this.q = [];
