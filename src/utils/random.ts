@@ -1,7 +1,7 @@
 import random from 'lodash/random';
 
-export const combinationList = (list, k) => {
-  const result = [];
+export function combinationList<T>(list: T[], k: number): T[] {
+  const result: T[] = [];
   /* select k elements n-k <= i < n */
   for (let i = list.length - k; i < list.length; i++) {
     /* A random integer such that 0 <= j < i */
@@ -15,9 +15,9 @@ export const combinationList = (list, k) => {
     }
   }
   return result;
-};
+}
 
-export const permutationList = list => {
+export function permutationList<T>(list: T[]): T[] {
   for (let i = 0; i <= list.length - 2; i++) {
     /* A random integer such that i <= j < n */
     const j = random(i, list.length - 1);
@@ -25,4 +25,4 @@ export const permutationList = list => {
     [list[i], list[j]] = [list[j], list[i]];
   }
   return list;
-};
+}
