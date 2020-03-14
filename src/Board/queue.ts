@@ -1,20 +1,20 @@
 interface QueueInterface<T> {
-  push(item: T): void;
-  pop(): T;
+  enQueue(item: T): void;
+  deQueue(): T;
   isEmpty(): boolean;
 }
 
 export default class Queue<T> implements QueueInterface<T> {
   private q: T[];
-  public constructor() {
-    this.q = [];
+  public constructor(init: T[] = []) {
+    this.q = init;
   }
 
-  public push(element: T): void {
+  public enQueue(element: T): void {
     this.q.push(element);
   }
 
-  public pop(): T {
+  public deQueue(): T {
     const result = this.q.splice(0, 1)[0];
     return result;
   }

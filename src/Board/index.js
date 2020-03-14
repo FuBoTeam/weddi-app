@@ -28,7 +28,7 @@ export default class Board extends Component {
     const newFeeds = new Queue();
     const oldFeeds = new Queue();
 
-    Api.onNewPost((feed) => newFeeds.push(feed));
+    Api.onNewPost((feed) => newFeeds.enQueue(feed));
 
     window.onload = () => {
       this.setState(({ isLoading }) => ({ isLoading: !isLoading }));
@@ -76,9 +76,9 @@ export default class Board extends Component {
   }
 
   pickUpFeed = (newFeeds, oldFeeds) => {
-    const nextFeed = newFeeds.isEmpty() ? oldFeeds.pop() : newFeeds.pop();
+    const nextFeed = newFeeds.isEmpty() ? oldFeeds.deQueue() : newFeeds.deQueue();
     this.showDialog(nextFeed);
-    oldFeeds.push(nextFeed);
+    oldFeeds.enQueue(nextFeed);
   }
 
   render() {
