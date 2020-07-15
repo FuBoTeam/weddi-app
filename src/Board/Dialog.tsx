@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './board.scss';
+import { Feed } from './type';
 
-const Dialog = (props: { user: { imgUrl: string; name: string; greetings: string }; show: boolean }) => {
+const Dialog = (props: { user: Feed; show: boolean }) => {
   const [state, setState] = useState({ imgWidth: 0, imgHeight: 0 });
 
   useEffect(() => {
