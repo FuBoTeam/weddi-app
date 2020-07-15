@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Greeting from './Greeting';
-import Board from './Board';
+import Board from './Board/Board';
 import Config from './config';
 import Api from './api';
 
