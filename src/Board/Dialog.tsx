@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './board.scss';
 
-const Dialog = (props) => {
+const Dialog = (props: { user: { imgUrl: string; name: string; greetings: string }; show: boolean }) => {
   const [state, setState] = useState({ imgWidth: 0, imgHeight: 0 });
 
   useEffect(() => {
     const img = new Image();
     img.onload = function() {
       setState(() => ({
-        imgWidth: this.width || 0,
-        imgHeight: this.height || 0,
+        imgWidth: img.width || 0,
+        imgHeight: img.height || 0,
       }));
     };
     img.src = props.show ? props.user.imgUrl : '';
