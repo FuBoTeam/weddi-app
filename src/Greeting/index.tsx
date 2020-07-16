@@ -10,8 +10,9 @@ import { preloadImage, getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';
 import loadingIcon from '../images/uploadLoading.svg';
 import * as Api from '../api';
+import { RouteComponentProps } from 'react-router';
 
-const Greeting = (props) => {
+const Greeting = (props: RouteComponentProps) => {
   const allImgUrls = range(Config.img.totalImgs).map(k => getImageUrl(k));
   const fmImgsShouldBePicked = Config.img.fmImgsShouldBePicked;
   const imgUrls = combinationList(allImgUrls, fmImgsShouldBePicked);
@@ -22,7 +23,7 @@ const Greeting = (props) => {
       idx: 0,
       url: imgUrls[0],
     },
-    upload: null,
+    upload: new Blob(),
   });
   const [isUploadPage, setIsUploadPage] = useState(false);
   const [modalDisplay, setModalDisplay] = useState(false);
@@ -42,13 +43,13 @@ const Greeting = (props) => {
     };
   };
 
-  const onFileChangeHandler = (event) => {
+  const onFileChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const key = event.target.name;
-    const value = event.target.files[0];
+    const value = event.target.files && event.target.files[0];
     if (key && value && value.type.startsWith('image/')) {
       loadImage(
         value,
-        canvas => canvas.toBlob(blob => {
+        canvas => (canvas as HTMLCanvasElement).toBlob(blob => {
           setForm(form => ({ ...form, [key]: blob }));
         }, "image/jpeg", 0.75),
         { maxWidth: 2048, maxHeight: 2048, orientation: true, canvas: true, noRevoke: true }
@@ -56,17 +57,15 @@ const Greeting = (props) => {
     }
   };
 
-  const onTextChangeHandler = (event) => {
+  const onTextChangeHandler = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const key = event.target.name;
     const value = event.target.value.trim();
     setForm((form) => ({ ...form, [key]: value }));
   };
 
-  const onSubmitHandler = (event) => {
-    event.preventDefault();
-    if (isValid()) {
-      return uploadFlow();
-    }
+  const isValid = () => {
+    const { name, greetings, pickedImg } = form;
+    return name.trim() !== '' && greetings.trim() !== '' && pickedImg.url !== undefined;
   };
 
   const uploadFlow = async () => {
@@ -93,21 +92,23 @@ const Greeting = (props) => {
     preloadImage(imgUrl, updateStateAndRedirect);
   };
 
-  const getImg = (idx) => {
+  const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (isValid()) {
+      return uploadFlow();
+    }
+  };
+
+  const getImg = (idx: number) => {
     return ({ idx, url: imgUrls[idx] });
   };
 
-  const plusImgIdx = (i) => {
+  const plusImgIdx = (i: number) => {
     const nextIdx = (form.pickedImg.idx + i + fmImgsShouldBePicked) % fmImgsShouldBePicked;
     // set img idx to render the seleceted img
     setForm(form => ({
       ...form, pickedImg: getImg(nextIdx)
     }));
-  };
-
-  const isValid = () => {
-    const { name, greetings, pickedImg } = form;
-    return name.trim() !== '' && greetings.trim() !== '' && pickedImg.url !== undefined;
   };
 
   const renderPhotoRadios = () => imgUrls.map((url, i) => {
