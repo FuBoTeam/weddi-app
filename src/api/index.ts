@@ -5,23 +5,23 @@ import "firebase/storage";
 import { Config } from "../config";
 
 class FirebaseApi {
-  config?: Config;
-  app?: firebase.app.App;
-  init(config: Config) {
+  public config?: Config;
+  private app?: firebase.app.App;
+  public init(config: Config): void {
     if (!this.app) {
       this.config = config;
       this.app = firebase.initializeApp(this.config.firebase);
     }
   }
 
-  get database(): firebase.database.Database {
+  public get database(): firebase.database.Database {
     if (!this.app) {
       throw new Error("app is not initial yet");
     }
     return this.app.database();
   }
 
-  get storage(): firebase.storage.Storage {
+  public get storage(): firebase.storage.Storage {
     if (!this.app) {
       throw new Error("app is not initial yet");
     }
@@ -47,7 +47,7 @@ export default firebaseApi;
 // imgs = (storageRef) => ...
 //
 
-export const writePost = (postData: object) => {
+export const writePost = (postData: object): Promise<object> => {
   const postId = firebaseApi.database.ref("posts").push().key;
   if (!postId) {
     throw new Error("post id is empty");
@@ -64,21 +64,21 @@ export const writePost = (postData: object) => {
     .set(wrappedPostData);
 };
 
-export const onNewPost = (callback: Function) => {
+export const onNewPost = (callback: Function): void => {
   const postRef = firebaseApi.database.ref("posts");
   postRef.on("child_added", (data: firebase.database.DataSnapshot) => {
     callback(data.val());
   });
 };
 
-export const listAllImages = () => {
+export const listAllImages = (): Promise<firebase.storage.ListResult> => {
   if (!firebaseApi.config) {
     throw new Error("app is not initial yet");
   }
   return firebaseApi.storage.ref(firebaseApi.config.img.namespace).listAll();
 };
 
-export const uploadImage = (imgName: string, image: Blob) => {
+export const uploadImage = (imgName: string, image: Blob): firebase.storage.UploadTask => {
   if (!firebaseApi.config) {
     throw new Error("app is not initial yet");
   }
