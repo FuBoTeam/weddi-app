@@ -4,7 +4,7 @@ import uuid from 'uuid';
 import loadImage from 'blueimp-load-image';
 import './greeting.scss';
 
-import Config from '../config';
+import configService from '../services/configService';
 import { combinationList } from '../utils/random';
 import { preloadImage, getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';
@@ -12,8 +12,8 @@ import loadingIcon from '../images/uploadLoading.svg';
 import * as Api from '../api';
 
 class Greeting extends Component {
-  allImgUrls = range(Config.img.totalImgs).map(k => getImageUrl(k));
-  fmImgsShouldBePicked = Config.img.fmImgsShouldBePicked;
+  allImgUrls = range(configService.config.img.totalImgs).map(k => getImageUrl(k));
+  fmImgsShouldBePicked = configService.config.img.fmImgsShouldBePicked;
   imgUrls = combinationList(this.allImgUrls, this.fmImgsShouldBePicked);
   state = {
     form: {

@@ -1,32 +1,4 @@
-interface InterfaceConfig {
-  doc: DocumentConfig;
-  firebase: FirebaseConfig;
-  img: ImageConfig;
-}
-
-interface DocumentConfig {
-  title: string;
-}
-
-interface FirebaseConfig {
-  apiKey: string;
-  authDomain: string;
-  databaseURL: string;
-  projectId: string;
-  storageBucket: string;
-  messagingSenderId: string;
-  appId: string;
-}
-
-interface ImageConfig {
-  namespace: string;
-  endpoint: string;
-  totalImgs: number;
-  bgImgsShouldBePicked: number;
-  fmImgsShouldBePicked: number;
-}
-
-const CHYY_CONFIG: InterfaceConfig = {
+const CHYY_CONFIG: ConfigService.Config = {
   doc: {
     title: "<3 YaYun & ChinHui <3"
   },
@@ -48,7 +20,7 @@ const CHYY_CONFIG: InterfaceConfig = {
   }
 };
 
-const TLTY_CONFIG: InterfaceConfig = {
+const TLTY_CONFIG: ConfigService.Config = {
   doc: {
     title: "<3 Tony & Claire <3"
   },
@@ -70,7 +42,7 @@ const TLTY_CONFIG: InterfaceConfig = {
   }
 };
 
-const TEST_CONFIG: InterfaceConfig = {
+const TEST_CONFIG: ConfigService.Config = {
   doc: {
     title: "<3 Groom & Bride <3"
   },
@@ -92,7 +64,7 @@ const TEST_CONFIG: InterfaceConfig = {
   }
 };
 
-const getConfigById = (gnbId: string): InterfaceConfig => {
+const getConfigById = (gnbId: string): ConfigService.Config => {
   switch (gnbId) {
     case "chyy":
       return CHYY_CONFIG;
@@ -103,37 +75,24 @@ const getConfigById = (gnbId: string): InterfaceConfig => {
   }
 };
 
-export class Config {
-  private config?: InterfaceConfig;
+class ConfigService implements ConfigServiceInterface {
+  private _config: ConfigService.Config | null = null;
 
   public init(gnbId: string): void {
-    if (!this.config) {
-      this.config = getConfigById(gnbId);
+    if (this._config === null) {
+      this._config = getConfigById(gnbId);
     }
   }
 
-  public get doc(): DocumentConfig {
-    if (this.config) {
-      return this.config.doc;
+  public get config(): ConfigService.Config {
+    if (this._config === null) {
+      throw Error("config is not set yet");
     }
-    throw Error("config is not set yet");
-  }
-
-  public get firebase(): FirebaseConfig {
-    if (this.config) {
-      return this.config.firebase;
-    }
-    throw Error("config is not set yet");
-  }
-
-  public get img(): ImageConfig {
-    if (this.config) {
-      return this.config.img;
-    }
-    throw Error("config is not set yet");
+    return this._config;
   }
 }
 
-const config: Config = new Config();
+// Singleton
+const configService: ConfigServiceInterface = new ConfigService();
 
-export default config;
+export default configService;

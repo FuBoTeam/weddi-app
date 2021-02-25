@@ -5,7 +5,7 @@ import loadingIcon from '../images/loading.gif';
 import Dialog from './Dialog';
 
 import Queue from './queue';
-import Config from '../config';
+import configService from '../services/configService';
 import { combinationList, permutationList } from '../utils/random';
 import { preloadImage, getImageUrl } from '../images';
 
@@ -13,8 +13,8 @@ import { preloadImage, getImageUrl } from '../images';
 import * as Api from '../api';
 
 export default class Board extends Component {
-  allImgUrls = range(Config.img.totalImgs).map(k => getImageUrl(k));
-  bgImgUrls = combinationList(this.allImgUrls, Config.img.bgImgsShouldBePicked);
+  allImgUrls = range(configService.config.img.totalImgs).map(k => getImageUrl(k));
+  bgImgUrls = combinationList(this.allImgUrls, configService.config.img.bgImgsShouldBePicked);
   intervals = [];
   state = {
     isLoading: true,

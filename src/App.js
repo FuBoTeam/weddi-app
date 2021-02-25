@@ -2,15 +2,15 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Greeting from './Greeting';
 import Board from './Board';
-import Config from './config';
+import configService from './services/configService';
 import Api from './api';
 
 const setTitle = (title) => document.title = title;
 
 const App = ({ match }) => {
-  Config.init(match.params.gnbId);
-  Api.init(Config);
-  setTitle(Config.doc.title);
+  configService.init(match.params.gnbId);
+  Api.init();
+  setTitle(configService.config.doc.title);
   const path = match.url;
   return (
     <Switch>
