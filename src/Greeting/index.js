@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import range from 'lodash/range';
+import { range } from '../utils/range';
 import uuid from 'uuid';
 import loadImage from 'blueimp-load-image';
 import './greeting.scss';

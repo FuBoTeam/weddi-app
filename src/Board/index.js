@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import range from 'lodash/range';
+import { range } from '../utils/range';
 import './board.scss';
 import loadingIcon from '../images/loading.gif';
 import Dialog from './Dialog';
