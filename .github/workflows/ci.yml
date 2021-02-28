@@ -2,6 +2,9 @@ name: CI
 
 on: [push]
 
+env:
+  node_version: "13.x"
+
 jobs:
   test:
     runs-on: ubuntu-latest
