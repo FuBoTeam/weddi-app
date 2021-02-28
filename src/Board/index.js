@@ -7,7 +7,8 @@ import Dialog from './Dialog';
 import Queue from './queue';
 import configService from '../services/configService';
 import { combinationList, permutationList } from '../utils/random';
-import { preloadImage, getImageUrl } from '../images';
+import { getImageUrl } from '../images';
+import { preloadImage } from '../images/preloadImage';
 
 
 import * as Api from '../api';

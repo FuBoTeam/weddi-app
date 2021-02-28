@@ -6,7 +6,8 @@ import './greeting.scss';
 
 import configService from '../services/configService';
 import { combinationList } from '../utils/random';
-import { preloadImage, getImageUrl } from '../images';
+import { getImageUrl } from '../images';
+import { preloadImage } from '../images/preloadImage';
 import Dialog from '../Board/Dialog';
 import loadingIcon from '../images/uploadLoading.svg';
 import * as Api from '../api';
