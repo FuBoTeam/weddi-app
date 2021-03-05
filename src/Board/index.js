@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { range } from '../utils/range';
 import './board.scss';
 import loadingIcon from '../images/loading.gif';
@@ -13,101 +13,103 @@ import { preloadImage } from '../images/preloadImage';
 
 import * as Api from '../api';
 
-export default class Board extends Component {
-  allImgUrls = range(configService.config.img.totalImgs).map(k => getImageUrl(k));
-  bgImgUrls = combinationList(this.allImgUrls, configService.config.img.bgImgsShouldBePicked);
-  intervals = [];
-  state = {
-    isLoading: true,
-    modalDisplay: false,
-    user: {},
-    permutation: permutationList(this.bgImgUrls),
-    isBgSwitching: false,
-  };
+const Board = (props) => {
+  // get all image urls from api
+  const allImgUrls = range(configService.config.img.totalImgs).map(k => getImageUrl(k));
+  const bgImgUrls = combinationList(allImgUrls, configService.config.img.bgImgsShouldBePicked);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isBgSwitching, setIsBgSwitching] = useState(false);
+  const [permutation, setPermutation] = useState(permutationList(bgImgUrls));
 
-  componentDidMount() {
-    const newFeeds = new Queue();
-    const oldFeeds = new Queue();
-
-    Api.onNewPost((feed) => newFeeds.push(feed));
-
+  useEffect(() => {
+    // set loaded after background images are ready
     window.onload = () => {
-      this.setState(({ isLoading }) => ({ isLoading: !isLoading }));
-
-      this.intervals.push(setInterval(() => {
-        this.pickUpFeed(newFeeds, oldFeeds);
-      }, 8000));
+      setIsLoading(false);
     };
+  });
+
+  useEffect(() => {
+    // auto permutate background images
+    const interval = setInterval(() => {
+      setIsBgSwitching(true);
+      setTimeout(() => {
+        setPermutation((permutation) => permutationList(permutation));
+        setTimeout(() => {
+          setIsBgSwitching(false);
+        }, 1000);
+      }, 1000);
+    }, 5 * 60 * 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  });
+
+  const [modalDisplay, setModalDisplay] = useState(false);
+  const newFeeds = useMemo(() => new Queue(), []);
+  const oldFeeds = useMemo(() => new Queue(), []);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    // subscribe the feeds
+    Api.onNewPost((feed) => newFeeds.push(feed));
+  });
+
+  useEffect(() => {
+    // show feeds
+    const interval = setInterval(() => {
+      const pickUpFeed = () => {
+        const nextFeed = newFeeds.isEmpty() ? oldFeeds.pop() : newFeeds.pop();
+        const showDialog = (user) => {
+          setUser(user);
+          const displayAndHide = () => {
+            setModalDisplay(true);
+
+            setTimeout(() => {
+              setModalDisplay(false);
+            }, 5000);
+          };
+          // preload dialog img and display in dialog
+          preloadImage(user.imgUrl, displayAndHide);
+        };
+        showDialog(nextFeed);
+        oldFeeds.push(nextFeed);
+      };
+
+      pickUpFeed();
+    }, 8000);
 
     // Auto refresh background images
-    this.intervals.push(
-      setInterval(() => {
-        this.setState({
-          isBgSwitching: true,
-        });
-        setTimeout(() => {
-          this.setState({
-            permutation: permutationList(this.state.permutation),
-          });
-          setTimeout(() => {
-            this.setState({
-              isBgSwitching: false,
-            });
-          }, 1000);
-        }, 1000);
-      }, 5 * 60 * 1000)
-    );
-  }
-
-  componentWillUnmount() {
-    this.intervals.forEach(clearInterval);
-  }
-
-  showDialog = (user) => {
-    this.setState({ user: Object.assign({}, user) });
-    const displayAndHide = () => {
-      this.setState(() => ({ modalDisplay: true }));
-
-      setTimeout(() => {
-        this.setState(() => ({ modalDisplay: false }));
-      }, 5000);
+    return () => {
+      clearInterval(interval);
     };
-    // preload dialog img and display in dialog
-    preloadImage(user.imgUrl, displayAndHide);
-  }
+  });
 
-  pickUpFeed = (newFeeds, oldFeeds) => {
-    const nextFeed = newFeeds.isEmpty() ? oldFeeds.pop() : newFeeds.pop();
-    this.showDialog(nextFeed);
-    oldFeeds.push(nextFeed);
-  }
+  return (
+    <React.Fragment>
+      <div className="container">
+        {
+          isLoading && <div className="loading">
+            <img src={loadingIcon} alt="" />
+            <span>Loading...</span>
+          </div>
+        }
+        {
+          permutation.map((bgImgUrl) =>
+            <img
+              key={bgImgUrl}
+              className={
+                isLoading || isBgSwitching ? 'hidden' : 'visible'
+              }
+              src={bgImgUrl}
+              alt=""
+            />
+          )
+        }
+      </div>
+      <Dialog user={user} show={modalDisplay} />
+      <a className="message-link" href={`${props.match.url}/greetings`}>&lt;&lt; 留下你的祝福</a>
+    </React.Fragment>
+  );
+};
 
-  render() {
-    return (
-      <React.Fragment>
-        <div className="container">
-          {
-            this.state.isLoading && <div className="loading">
-              <img src={loadingIcon} alt="" />
-              <span>Loading...</span>
-            </div>
-          }
-          {
-            this.state.permutation.map((bgImgUrl) =>
-              <img
-                key={bgImgUrl}
-                className={
-                  this.state.isLoading || this.state.isBgSwitching ? 'hidden' : 'visible'
-                }
-                src={bgImgUrl}
-                alt=""
-              />
-            )
-          }
-        </div>
-        <Dialog user={this.state.user} show={this.state.modalDisplay} />
-        <a className="message-link" href={`${this.props.match.url}/greetings`}>&lt;&lt; 留下你的祝福</a>
-      </React.Fragment>
-    );
-  }
-}
+export default Board;
