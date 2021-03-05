@@ -21,7 +21,7 @@ export default class Board extends Component {
     isLoading: true,
     modalDisplay: false,
     user: {},
-    permutation: permutationList(range(this.bgImgUrls.length)),
+    permutation: permutationList(this.bgImgUrls),
     isBgSwitching: false,
   };
 
@@ -47,7 +47,7 @@ export default class Board extends Component {
         });
         setTimeout(() => {
           this.setState({
-            permutation: permutationList(range(this.bgImgUrls.length)),
+            permutation: permutationList(this.state.permutation),
           });
           setTimeout(() => {
             this.setState({
@@ -93,13 +93,12 @@ export default class Board extends Component {
             </div>
           }
           {
-            this.bgImgUrls.map((bgImgUrl, idx) =>
+            this.state.permutation.map((bgImgUrl) =>
               <img
                 key={bgImgUrl}
                 className={
                   this.state.isLoading || this.state.isBgSwitching ? 'hidden' : 'visible'
                 }
-                style={{order: this.state.permutation[idx]}}
                 src={bgImgUrl}
                 alt=""
               />
