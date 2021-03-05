@@ -1,24 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { preloadImage } from '../images/preloadImage';
 import './board.scss';
 
 const Dialog = ({ user, show }) => {
   const [state, setState] = useState({ imgWidth: 0, imgHeight: 0});
 
-  const img =  new Image();
-  img.onload = () => {
+  preloadImage(user.imgUrl, (img) => {
     setState(() => ({
       imgWidth: img.width || 0,
       imgHeight: img.height || 0,
     }));
-  };
-
-  useEffect(() => {
-    if (show && user.imgUrl) {
-      img.src = user.imgUrl;
-    } else {
-      img.src = '';
-    }
-  }, [img.src, show, user.imgUrl]);
+  });
 
   const mayMobile = window.innerWidth < 1000;
   const verticalImg = state.imgWidth < state.imgHeight;

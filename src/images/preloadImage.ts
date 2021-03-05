@@ -1,5 +1,5 @@
-export const preloadImage = (url: string, callback: (ev: Event) => any): void => {
+export const preloadImage = (url: string, callback: (img: HTMLImageElement) => void): void => {
   const img = new Image();
   img.src = url;
-  img.onload = callback;
+  img.onload = (): void => callback(img);
 };
