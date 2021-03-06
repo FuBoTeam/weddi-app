@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import './board.scss';
 import Dialog from './Dialog';
 import { Background } from './Background';
@@ -7,46 +7,49 @@ import Queue from './queue';
 
 import * as Api from '../api';
 
+const subscribePost = (listener) => {
+  const newFeeds = new Queue();
+  const oldFeeds = new Queue();
+
+  // init
+  Api.onNewPost((feed) => newFeeds.push(feed));
+
+  const interval = setInterval(() => {
+    const nextFeed = newFeeds.isEmpty() ? oldFeeds.pop() : newFeeds.pop();
+    if (nextFeed) {
+      oldFeeds.push(nextFeed);
+    }
+    listener(nextFeed);
+  }, 8000);
+
+  const unsubscribe = () => {
+    clearInterval(interval);
+    // TODO: unsub API
+  };
+  return unsubscribe;
+}
+
 const Board = (props) => {
   const [modalDisplay, setModalDisplay] = useState(false);
-  const newFeeds = useMemo(() => new Queue(), []);
-  const oldFeeds = useMemo(() => new Queue(), []);
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    // subscribe the feeds
-    Api.onNewPost((feed) => newFeeds.push(feed));
-  });
+    const unsubscribe = subscribePost((user) => {
+      if (user) {
+        setUser(user);
+        const displayAndHide = () => {
+          setModalDisplay(true);
 
-  useEffect(() => {
-    // show feeds
-    const interval = setInterval(() => {
-      const pickUpFeed = () => {
-        const nextFeed = newFeeds.isEmpty() ? oldFeeds.pop() : newFeeds.pop();
-        const showDialog = (user) => {
-          setUser(user);
-          const displayAndHide = () => {
-            setModalDisplay(true);
-
-            setTimeout(() => {
-              setModalDisplay(false);
-            }, 5000);
-          };
-          displayAndHide();
+          setTimeout(() => {
+            setModalDisplay(false);
+          }, 5000);
         };
-        if (nextFeed) {
-          showDialog(nextFeed);
-          oldFeeds.push(nextFeed);
-        }
-      };
-
-      pickUpFeed();
-    }, 8000);
-
-    // Auto refresh background images
+        displayAndHide();
+      }
+    });
     return () => {
-      clearInterval(interval);
-    };
+      unsubscribe();
+    }
   });
 
   return (
