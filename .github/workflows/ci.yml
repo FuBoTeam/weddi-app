@@ -35,3 +35,16 @@ jobs:
         run: yarn install
       - name: Test
         run: yarn test
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ env.node_version }}
+      - uses: c-hive/gha-yarn-cache@v1
+      - name: Install JS dependencies
+        run: yarn install
+      - name: build
+        run: yarn build
