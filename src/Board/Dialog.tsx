@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { preloadImage } from '../images/preloadImage';
+import { User } from '../types/User';
 import './board.scss';
 
-const Dialog = ({ user, show }) => {
+interface DialogProps {
+  user: User;
+  show: boolean;
+}
+
+const Dialog = ({ user, show }: DialogProps) => {
   const [state, setState] = useState({ imgWidth: 0, imgHeight: 0});
 
   preloadImage(user.imgUrl, (img) => {
