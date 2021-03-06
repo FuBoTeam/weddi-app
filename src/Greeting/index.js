@@ -19,14 +19,12 @@ const Greeting = (props) => {
   const [isUploadPage, setIsUploadPage] = useState(false);
   const [modalDisplay, setModalDisplay] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [pickerIndex, setPickerIndex] = useState(0);
+  const [upload, setUpload] = useState(null);
   const [form, setForm] = useState({
     name: '',
     greetings: '',
-    pickedImg: {
-      idx: 0,
-      url: imgUrls[0],
-    },
-    upload: null,
+    pickedImg: imgUrls[0],
   });
 
   const getUpperUrl = () => {
@@ -39,17 +37,17 @@ const Greeting = (props) => {
   const getFormData = () => {
     return {
       ...form,
-      imgUrl: form.pickedImg.url,
+      imgUrl: form.pickedImg,
     };
   };
 
   const renderPhotoRadios = () => imgUrls.map((url, i) => {
-    const checked = form.pickedImg.idx === i && form.pickedImg.url === url;
+    const checked = pickerIndex === i;
     return (
-      <React.Fragment key={`image_${i}`}>
+      <React.Fragment key={url}>
         <input hidden type="radio" name="imgUrl" value={url} checked={checked} readOnly />
-        <div className={"layer" + (checked ? "" : " hidden")} style={{ backgroundImage: `url(${url})` }} />
-        <img className={"fade" + (checked ? "" : " hidden")} src={url} alt={url} />
+        <div className={`layer ${checked ? "" : " hidden"}`} style={{ backgroundImage: `url(${url})` }} />
+        <img className={`fade ${checked ? "" : " hidden"}`} src={url} alt={url} />
       </React.Fragment>
     );
   });
@@ -62,7 +60,7 @@ const Greeting = (props) => {
         loadImage(
           value,
           canvas => canvas.toBlob(blob => {
-            setForm((form) => ({ ...form, [key]: blob }));
+            setUpload(blob);
           }, "image/jpeg", 0.75),
           { maxWidth: 2048, maxHeight: 2048, orientation: true, canvas: true, noRevoke: true }
         );
@@ -80,28 +78,27 @@ const Greeting = (props) => {
           onChange={onFileChangeHandler}
           disabled={isLoading}
         />
-        {form.upload && <img src={URL.createObjectURL(form.upload)} alt="upload preview" />}
-        {!form.upload && <span className="upload-field">請上傳圖片</span>}
+        {upload && <img src={URL.createObjectURL(upload)} alt="upload preview" />}
+        {!upload && <span className="upload-field">請上傳圖片</span>}
       </label>
     );
   };
 
   const renderPickImageSection = () => {
     const plusImgIdx = (i) => {
-      const nextIdx = (form.pickedImg.idx + i + fmImgsShouldBePicked) % fmImgsShouldBePicked;
-      const getImg = (idx) => {
-        return ({ idx, url: imgUrls[idx] });
-      };
+      const nextIdx = (pickerIndex + i + fmImgsShouldBePicked) % fmImgsShouldBePicked;
+
       // set img idx to render the seleceted img
       setForm((form) => ({
-        ...form, pickedImg: getImg(nextIdx)
+        ...form, pickedImg: imgUrls[nextIdx]
       }));
+      setPickerIndex(nextIdx);
     };
 
     return (
       <React.Fragment>
         <div className="img-window">
-          <div className="numbertext">{form.pickedImg.idx + 1} / {fmImgsShouldBePicked}</div>
+          <div className="numbertext">{pickerIndex + 1} / {fmImgsShouldBePicked}</div>
           {renderPhotoRadios()}
         </div>
         <span className="prev" onClick={() => !isLoading && plusImgIdx(-1)}>&#10094;</span>
@@ -121,26 +118,27 @@ const Greeting = (props) => {
       event.preventDefault();
       const isValid = () => {
         const { name, greetings, pickedImg } = form;
-        return name.trim() !== '' && greetings.trim() !== '' && pickedImg.url !== undefined;
+        return name.trim() !== '' && greetings.trim() !== '' && pickedImg !== undefined;
       };
       if (isValid()) {
         const uploadFlow = async () => {
           setIsLoading(true);
-          let imgUrl = form.pickedImg.url;
-          if (isUploadPage && form.upload) {
+          let imgUrl = form.pickedImg;
+          if (isUploadPage && upload) {
             const imgName = uuid.v4();
-            const uploadProc = await Api.uploadImage(imgName, form.upload);
+            const uploadProc = await Api.uploadImage(imgName, upload);
             imgUrl = await uploadProc.ref.getDownloadURL();
+          }
+          await Api.writePost({
+            name: form.name,
+            greetings: form.greetings,
+            imgUrl,
+          });
+          const updateStateAndRedirect = () => {
             setForm((form) => ({
               ...form,
-              pickedImg: {
-                idx: -1,
-                url: imgUrl
-              }
+              pickedImg: imgUrl
             }));
-          }
-          await Api.writePost(getFormData());
-          const updateStateAndRedirect = () => {
             setModalDisplay(true);
             setIsLoading(false);
             setTimeout(() => { props.history.push(getUpperUrl()); }, 5000);
@@ -151,18 +149,38 @@ const Greeting = (props) => {
       }
     };
 
+    const onPickerClick = () => {
+      if (!isLoading) {
+        setIsUploadPage(false);
+        setForm((form) => ({
+          ...form,
+          pickedImg: imgUrls[pickerIndex],
+        }));
+      }
+    };
+
+    const onUploaderClick = () => {
+      if (!isLoading) {
+        setIsUploadPage(true);
+        setForm((form) => ({
+          ...form,
+          pickedImg: '',
+        }));
+      }
+    };
+
     return (
       <form className="greeting-form" onSubmit={onSubmitHandler}>
         <ul className="tabs-view">
           <li
-            className={ isUploadPage ? 'pick' : 'pick active' }
-            onClick={() => !isLoading && setIsUploadPage(false)}
+            className={`pick ${isUploadPage ? "" : "active"}`}
+            onClick={onPickerClick}
           >
             挑一張照片
           </li>
           <li
-            className={ isUploadPage ? 'pick active' : 'pick' }
-            onClick={() => !isLoading && setIsUploadPage(true)}
+            className={`pick ${isUploadPage ? "active" : ""}`}
+            onClick={onUploaderClick}
           >
             上傳一張照片
           </li>
