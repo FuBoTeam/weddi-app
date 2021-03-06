@@ -1,26 +1,29 @@
-import React, { useState } from 'react';
-import { preloadImage } from '../images/preloadImage';
+import React, { useState, useEffect, useRef } from 'react';
 import './board.scss';
 
 const Dialog = ({ user, show }) => {
-  const [state, setState] = useState({ imgWidth: 0, imgHeight: 0});
+  const [loading, setLoading] = useState(false);
+  const imgRef = useRef();
 
-  preloadImage(user.imgUrl, (img) => {
-    setState(() => ({
-      imgWidth: img.width || 0,
-      imgHeight: img.height || 0,
-    }));
-  });
+  useEffect(() => {
+    if (user.imgUrl) {
+      setLoading(true);
+    }
+  }, [user.imgUrl]);
+
+  const onLoad = () => {
+    setLoading(false);
+  };
 
   const mayMobile = window.innerWidth < 1000;
-  const verticalImg = state.imgWidth < state.imgHeight;
-  const modalStyle = (show && mayMobile && verticalImg) ? { margin: '10% 20% 50px' } : {};
+  const verticalImg = !loading && imgRef.current && imgRef.current.clientWidth < imgRef.current.clientHeight;
+  const modalStyle = (!loading && mayMobile && verticalImg) ? { margin: '10% 20% 50px' } : {};
 
   return (
-    <div className={show ? 'dialog show-dialog' : 'dialog'}>
+    <div className={`dialog ${show && !loading ? "show-dialog" : ""}`}>
       <div className="modal-sm" style={modalStyle}>
         <div className="image-container">
-          <img className="user-image" src={user.imgUrl} alt="images" />
+          <img ref={imgRef} className="user-image" src={user.imgUrl} alt="images" onLoad={onLoad} />
         </div>
         <div className="message">
           <h2>@ {user.name}</h2>

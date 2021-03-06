@@ -7,7 +7,6 @@ import './greeting.scss';
 import configService from '../services/configService';
 import { combinationList } from '../utils/random';
 import { getImageUrl } from '../images';
-import { preloadImage } from '../images/preloadImage';
 import Dialog from '../Board/Dialog';
 import loadingIcon from '../images/uploadLoading.svg';
 import * as Api from '../api';
@@ -143,7 +142,7 @@ const Greeting = (props) => {
             setIsLoading(false);
             setTimeout(() => { props.history.push(getUpperUrl()); }, 5000);
           };
-          preloadImage(imgUrl, updateStateAndRedirect);
+          updateStateAndRedirect();
         };
         return uploadFlow();
       }

@@ -8,7 +8,6 @@ import Queue from './queue';
 import configService from '../services/configService';
 import { combinationList, permutationList } from '../utils/random';
 import { getImageUrl } from '../images';
-import { preloadImage } from '../images/preloadImage';
 
 
 import * as Api from '../api';
@@ -68,11 +67,12 @@ const Board = (props) => {
               setModalDisplay(false);
             }, 5000);
           };
-          // preload dialog img and display in dialog
-          preloadImage(user.imgUrl, displayAndHide);
+          displayAndHide();
         };
-        showDialog(nextFeed);
-        oldFeeds.push(nextFeed);
+        if (nextFeed) {
+          showDialog(nextFeed);
+          oldFeeds.push(nextFeed);
+        }
       };
 
       pickUpFeed();
