@@ -27,7 +27,7 @@ const subscribePost = (listener) => {
     // TODO: unsub API
   };
   return unsubscribe;
-}
+};
 
 const Board = (props) => {
   const [modalDisplay, setModalDisplay] = useState(false);
@@ -49,7 +49,7 @@ const Board = (props) => {
     });
     return () => {
       unsubscribe();
-    }
+    };
   });
 
   return (
