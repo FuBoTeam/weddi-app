@@ -34,6 +34,7 @@ const Board = (props) => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
+    // subscribe post while component did mount
     const unsubscribe = subscribePost((user) => {
       if (user) {
         setUser(user);
@@ -48,9 +49,10 @@ const Board = (props) => {
       }
     });
     return () => {
+      // unsubscribe post while component will unmount
       unsubscribe();
     };
-  });
+  }, []);
 
   return (
     <React.Fragment>

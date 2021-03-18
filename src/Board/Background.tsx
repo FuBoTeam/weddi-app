@@ -32,7 +32,7 @@ export const Background = () => {
     window.onload = () => {
       setIsLoading(false);
     };
-  });
+  }, []);
 
   useEffect(() => {
     switch(bgState) {

@@ -6,6 +6,7 @@ const Dialog = ({ user, show }) => {
   const imgRef = useRef();
 
   useEffect(() => {
+    // while image url changes set to loading
     if (user.imgUrl) {
       setLoading(true);
     }
