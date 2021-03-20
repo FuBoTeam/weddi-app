@@ -9,7 +9,8 @@ import { combinationList } from '../utils/random';
 import { getImageUrl } from '../images';
 import Dialog from '../Board/Dialog';
 import loadingIcon from '../images/uploadLoading.svg';
-import * as Api from '../api';
+import { uploadImage, writePost } from '../api';
+import { useDatabase, useStorage } from '../Provider/FirebaseApp';
 
 const Greeting = (props) => {
   const allImgUrls = useMemo(() => range(configService.config.img.totalImgs).map(k => getImageUrl(k)), []);
@@ -25,6 +26,8 @@ const Greeting = (props) => {
     greetings: '',
     pickedImg: imgUrls[0],
   });
+  const database = useDatabase();
+  const storage = useStorage();
 
   const getUpperUrl = () => {
     const matchUrl = props.match.url;
@@ -45,8 +48,8 @@ const Greeting = (props) => {
     return (
       <React.Fragment key={url}>
         <input hidden type="radio" name="imgUrl" value={url} checked={checked} readOnly />
-        <div className={`layer ${checked ? "" : " hidden"}`} style={{ backgroundImage: `url(${url})` }} />
-        <img className={`fade ${checked ? "" : " hidden"}`} src={url} alt={url} />
+        <div className={`layer ${checked ? '' : ' hidden'}`} style={{ backgroundImage: `url(${url})` }} />
+        <img className={`fade ${checked ? '' : ' hidden'}`} src={url} alt={url} />
       </React.Fragment>
     );
   });
@@ -60,7 +63,7 @@ const Greeting = (props) => {
           value,
           canvas => canvas.toBlob(blob => {
             setUpload(blob);
-          }, "image/jpeg", 0.75),
+          }, 'image/jpeg', 0.75),
           { maxWidth: 2048, maxHeight: 2048, orientation: true, canvas: true, noRevoke: true }
         );
       }
@@ -125,10 +128,10 @@ const Greeting = (props) => {
           let imgUrl = form.pickedImg;
           if (isUploadPage && upload) {
             const imgName = uuid.v4();
-            const uploadProc = await Api.uploadImage(imgName, upload);
+            const uploadProc = await uploadImage(storage)(imgName, upload);
             imgUrl = await uploadProc.ref.getDownloadURL();
           }
-          await Api.writePost({
+          await writePost(database)({
             name: form.name,
             greetings: form.greetings,
             imgUrl,
@@ -172,13 +175,13 @@ const Greeting = (props) => {
       <form className="greeting-form" onSubmit={onSubmitHandler}>
         <ul className="tabs-view">
           <li
-            className={`pick ${isUploadPage ? "" : "active"}`}
+            className={`pick ${isUploadPage ? '' : 'active'}`}
             onClick={onPickerClick}
           >
             挑一張照片
           </li>
           <li
-            className={`pick ${isUploadPage ? "active" : ""}`}
+            className={`pick ${isUploadPage ? 'active' : ''}`}
             onClick={onUploaderClick}
           >
             上傳一張照片

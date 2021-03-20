@@ -1,54 +1,11 @@
-import * as firebase from "firebase/app";
-import "firebase/database";
-import "firebase/storage";
+import firebase from 'firebase/app';
 
-import configService from "../services/configService";
+import configService from '../services/configService';
 
-class FirebaseApi {
-  private app?: firebase.app.App;
-  public init(): void {
-    if (!this.app) {
-      this.app = firebase.initializeApp(configService.config.firebase);
-    }
-  }
-
-  public get database(): firebase.database.Database {
-    if (!this.app) {
-      throw new Error("app is not initial yet");
-    }
-    return this.app.database();
-  }
-
-  public get storage(): firebase.storage.Storage {
-    if (!this.app) {
-      throw new Error("app is not initial yet");
-    }
-    return this.app.storage();
-  }
-}
-
-const firebaseApi = new FirebaseApi();
-export default firebaseApi;
-
-// TODO: refactor to be registration api sets, i.e.
-// firebaseApi.dbRegister(posts)
-//
-// posts = (dbRef) => ({
-//   write: data => {
-//     id = dbRef.push().key
-//     return dbRef.child(id).set(data)
-//   },
-//   onAdded: ...
-// })
-//
-// firebaseApi.storageRegister(imgs)
-// imgs = (storageRef) => ...
-//
-
-export const writePost = (postData: object): Promise<object> => {
-  const postId = firebaseApi.database.ref("posts").push().key;
+export const writePost = (database: firebase.database.Database) => (postData: object): Promise<object> => {
+  const postId = database.ref('posts').push().key;
   if (!postId) {
-    throw new Error("post id is empty");
+    throw new Error('post id is empty');
   }
   const wrappedPostData = {
     ...postData,
@@ -56,27 +13,27 @@ export const writePost = (postData: object): Promise<object> => {
     userAgent: navigator.userAgent,
     id: postId
   };
-  return firebaseApi.database
-    .ref("posts")
+  return database
+    .ref('posts')
     .child(postId)
     .set(wrappedPostData);
 };
 
-export const onNewPost = (callback: Function): void => {
-  const postRef = firebaseApi.database.ref("posts");
-  postRef.on("child_added", (data: firebase.database.DataSnapshot) => {
+export const onNewPost = (database: firebase.database.Database) => (callback: Function): void => {
+  const postRef = database.ref('posts');
+  postRef.on('child_added', (data: firebase.database.DataSnapshot) => {
     callback(data.val());
   });
 };
 
-export const listAllImages = (): Promise<firebase.storage.ListResult> => {
-  return firebaseApi.storage.ref(configService.config.img.namespace).listAll();
+export const listAllImages = (storage: firebase.storage.Storage) => (): Promise<firebase.storage.ListResult> => {
+  return storage.ref(configService.config.img.namespace).listAll();
 };
 
-export const uploadImage = (imgName: string, image: Blob): firebase.storage.UploadTask => {
-  return firebaseApi.storage
+export const uploadImage = (storage: firebase.storage.Storage) => (imgName: string, image: Blob): firebase.storage.UploadTask => {
+  return storage
     .ref(configService.config.img.namespace)
-    .child("public_upload")
+    .child('public_upload')
     .child(imgName)
     .put(image);
 };
