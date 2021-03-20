@@ -11,6 +11,7 @@ import Dialog from '../Board/Dialog';
 import loadingIcon from '../images/uploadLoading.svg';
 import { uploadImage, writePost } from '../api';
 import { useDatabase, useStorage } from '../Provider/FirebaseApp';
+import { ImagePicker } from './ImagePicker';
 
 const Greeting = (props) => {
   const allImgUrls = useMemo(() => range(configService.config.img.totalImgs).map(k => getImageUrl(k)), []);
@@ -19,12 +20,11 @@ const Greeting = (props) => {
   const [isUploadPage, setIsUploadPage] = useState(false);
   const [modalDisplay, setModalDisplay] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [pickerIndex, setPickerIndex] = useState(0);
   const [upload, setUpload] = useState(null);
+  const [pickedImg, setPickedImg] = useState(imgUrls[0]);
   const [form, setForm] = useState({
     name: '',
     greetings: '',
-    pickedImg: imgUrls[0],
   });
   const database = useDatabase();
   const storage = useStorage();
@@ -35,24 +35,6 @@ const Greeting = (props) => {
     paths.pop();
     return paths.join('/');
   };
-
-  const getFormData = () => {
-    return {
-      ...form,
-      imgUrl: form.pickedImg,
-    };
-  };
-
-  const renderPhotoRadios = () => imgUrls.map((url, i) => {
-    const checked = pickerIndex === i;
-    return (
-      <React.Fragment key={url}>
-        <input hidden type="radio" name="imgUrl" value={url} checked={checked} readOnly />
-        <div className={`layer ${checked ? '' : ' hidden'}`} style={{ backgroundImage: `url(${url})` }} />
-        <img className={`fade ${checked ? '' : ' hidden'}`} src={url} alt={url} />
-      </React.Fragment>
-    );
-  });
 
   const renderUploadImageSection = () => {
     const onFileChangeHandler = (event) => {
@@ -86,29 +68,6 @@ const Greeting = (props) => {
     );
   };
 
-  const renderPickImageSection = () => {
-    const plusImgIdx = (i) => {
-      const nextIdx = (pickerIndex + i + fmImgsShouldBePicked) % fmImgsShouldBePicked;
-
-      // set img idx to render the seleceted img
-      setForm((form) => ({
-        ...form, pickedImg: imgUrls[nextIdx]
-      }));
-      setPickerIndex(nextIdx);
-    };
-
-    return (
-      <React.Fragment>
-        <div className="img-window">
-          <div className="numbertext">{pickerIndex + 1} / {fmImgsShouldBePicked}</div>
-          {renderPhotoRadios()}
-        </div>
-        <span className="prev" onClick={() => !isLoading && plusImgIdx(-1)}>&#10094;</span>
-        <span className="next" onClick={() => !isLoading && plusImgIdx(1)}>&#10095;</span>
-      </React.Fragment>
-    );
-  };
-
   const renderGreetingForm = () => {
     const onTextChangeHandler = (event) => {
       const key = event.target.name;
@@ -119,13 +78,13 @@ const Greeting = (props) => {
     const onSubmitHandler = (event) => {
       event.preventDefault();
       const isValid = () => {
-        const { name, greetings, pickedImg } = form;
-        return name.trim() !== '' && greetings.trim() !== '' && pickedImg !== undefined;
+        const { name, greetings } = form;
+        return name.trim() !== '' && greetings.trim() !== '' && (pickedImg || upload);
       };
       if (isValid()) {
         const uploadFlow = async () => {
           setIsLoading(true);
-          let imgUrl = form.pickedImg;
+          let imgUrl = pickedImg;
           if (isUploadPage && upload) {
             const imgName = uuid.v4();
             const uploadProc = await uploadImage(storage)(imgName, upload);
@@ -137,10 +96,7 @@ const Greeting = (props) => {
             imgUrl,
           });
           const updateStateAndRedirect = () => {
-            setForm((form) => ({
-              ...form,
-              pickedImg: imgUrl
-            }));
+            setPickedImg(imgUrl);
             setModalDisplay(true);
             setIsLoading(false);
             setTimeout(() => { props.history.push(getUpperUrl()); }, 5000);
@@ -154,20 +110,16 @@ const Greeting = (props) => {
     const onPickerClick = () => {
       if (!isLoading) {
         setIsUploadPage(false);
-        setForm((form) => ({
-          ...form,
-          pickedImg: imgUrls[pickerIndex],
-        }));
       }
+    };
+
+    const onPickerChange = (imgUrl) => {
+      setPickedImg(imgUrl);
     };
 
     const onUploaderClick = () => {
       if (!isLoading) {
         setIsUploadPage(true);
-        setForm((form) => ({
-          ...form,
-          pickedImg: '',
-        }));
       }
     };
 
@@ -189,7 +141,9 @@ const Greeting = (props) => {
         </ul>
         <div className="slideshow-container">
           <div hidden={!isUploadPage}>{renderUploadImageSection()}</div>
-          <div hidden={isUploadPage}>{renderPickImageSection()}</div>
+          <div hidden={isUploadPage}>
+            <ImagePicker disabled={isLoading} imgUrls={imgUrls} onChange={onPickerChange} />
+          </div>
         </div>
         <div className="greeting-message-block">
           <label className="input">
@@ -215,7 +169,10 @@ const Greeting = (props) => {
         <h1 className="greeting-title orange-font">祝福留言版</h1>
       </header>
       {!modalDisplay && renderGreetingForm()}
-      <Dialog user={getFormData()} show={modalDisplay} />
+      <Dialog user={{
+        ...form,
+        imgUrl: pickedImg,
+      }} show={modalDisplay} />
     </div>
   );
 };
