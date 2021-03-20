@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { range } from '../utils/range';
 import uuid from 'uuid';
-import loadImage from 'blueimp-load-image';
 import './greeting.scss';
 
 import configService from '../services/configService';
@@ -12,6 +11,7 @@ import loadingIcon from '../images/uploadLoading.svg';
 import { uploadImage, writePost } from '../api';
 import { useDatabase, useStorage } from '../Provider/FirebaseApp';
 import { ImagePicker } from './ImagePicker';
+import { ImageUploader } from './ImageUploader';
 
 const Greeting = (props) => {
   const allImgUrls = useMemo(() => range(configService.config.img.totalImgs).map(k => getImageUrl(k)), []);
@@ -34,38 +34,6 @@ const Greeting = (props) => {
     const paths = matchUrl.split('/');
     paths.pop();
     return paths.join('/');
-  };
-
-  const renderUploadImageSection = () => {
-    const onFileChangeHandler = (event) => {
-      const key = event.target.name;
-      const value = event.target.files[0];
-      if (key && value && value.type.startsWith('image/')) {
-        loadImage(
-          value,
-          canvas => canvas.toBlob(blob => {
-            setUpload(blob);
-          }, 'image/jpeg', 0.75),
-          { maxWidth: 2048, maxHeight: 2048, orientation: true, canvas: true, noRevoke: true }
-        );
-      }
-    };
-
-    return (
-      <label className="img-window upload">
-        <input
-          hidden
-          type="file"
-          name="upload"
-          placeholder="上傳照片"
-          accept="image/*"
-          onChange={onFileChangeHandler}
-          disabled={isLoading}
-        />
-        {upload && <img src={URL.createObjectURL(upload)} alt="upload preview" />}
-        {!upload && <span className="upload-field">請上傳圖片</span>}
-      </label>
-    );
   };
 
   const renderGreetingForm = () => {
@@ -123,6 +91,10 @@ const Greeting = (props) => {
       }
     };
 
+    const onUploaderChange = (blob) => {
+      setUpload(blob);
+    };
+
     return (
       <form className="greeting-form" onSubmit={onSubmitHandler}>
         <ul className="tabs-view">
@@ -140,7 +112,9 @@ const Greeting = (props) => {
           </li>
         </ul>
         <div className="slideshow-container">
-          <div hidden={!isUploadPage}>{renderUploadImageSection()}</div>
+          <div hidden={!isUploadPage}>
+            <ImageUploader disabled={isLoading} onChange={onUploaderChange} />
+          </div>
           <div hidden={isUploadPage}>
             <ImagePicker disabled={isLoading} imgUrls={imgUrls} onChange={onPickerChange} />
           </div>

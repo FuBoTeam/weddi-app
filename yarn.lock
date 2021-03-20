@@ -1530,6 +1530,11 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/blueimp-load-image@^5.14.1":
+  version "5.14.1"
+  resolved "https://registry.yarnpkg.com/@types/blueimp-load-image/-/blueimp-load-image-5.14.1.tgz#3963813699b574e757a140ed75a51050177ac780"
+  integrity sha512-hXiHTQ/ZDlkYZCNdkY7JgZRq/cV/cG56cTPwznWi9/0VQ5dfVeaYv48g7ikxwnys5bWqGeYFh2tbNcXTkMw6Ig==
+
 "@types/bytebuffer@^5.0.40":
   version "5.0.40"
   resolved "https://registry.yarnpkg.com/@types/bytebuffer/-/bytebuffer-5.0.40.tgz#d6faac40dcfb09cd856cdc4c01d3690ba536d3ee"
