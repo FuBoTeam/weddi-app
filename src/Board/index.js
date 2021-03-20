@@ -5,14 +5,14 @@ import { Background } from './Background';
 
 import Queue from './queue';
 
-import * as Api from '../api';
+import { onNewPost } from '../api';
+import { useDatabase } from '../Provider/FirebaseApp';
 
-const subscribePost = (listener) => {
+const subscribePost = (database) => (listener) => {
   const newFeeds = new Queue();
   const oldFeeds = new Queue();
 
-  // init
-  Api.onNewPost((feed) => newFeeds.push(feed));
+  onNewPost(database)((feed) => newFeeds.push(feed));
 
   const interval = setInterval(() => {
     const nextFeed = newFeeds.isEmpty() ? oldFeeds.pop() : newFeeds.pop();
@@ -32,10 +32,11 @@ const subscribePost = (listener) => {
 const Board = (props) => {
   const [modalDisplay, setModalDisplay] = useState(false);
   const [user, setUser] = useState({});
+  const database = useDatabase();
 
   useEffect(() => {
     // subscribe post while component did mount
-    const unsubscribe = subscribePost((user) => {
+    const unsubscribe = subscribePost(database)((user) => {
       if (user) {
         setUser(user);
         const displayAndHide = () => {
@@ -52,7 +53,7 @@ const Board = (props) => {
       // unsubscribe post while component will unmount
       unsubscribe();
     };
-  }, []);
+  }, [database]);
 
   return (
     <React.Fragment>
