@@ -5,6 +5,9 @@ on:
     types:
       - "published"
 
+env:
+  node_version: "13.x"
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
