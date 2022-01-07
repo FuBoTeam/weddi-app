@@ -48,6 +48,31 @@ const TLTY_CONFIG: ConfigService.Config = {
   }
 };
 
+const YKYL_CONFIG: ConfigService.Config = {
+  doc: {
+    title: "<3 呱呱 & 以練 <3"
+  },
+  firebase: {
+    apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
+    authDomain: "weddi-app.firebaseapp.com",
+    databaseURL: "https://weddi-app.firebaseio.com/",
+    projectId: "weddi-app",
+    storageBucket: "image.weddi.app",
+    messagingSenderId: "324415165027",
+    appId: "1:324415165027:web:76b8291835ef32c5c75e56"
+  },
+  post: {
+    namespace: "ykyl",
+  },
+  img: {
+    namespace: "ykyl",
+    endpoint: "https://storage.googleapis.com/image.weddi.app/",
+    totalImgs: 28,
+    bgImgsShouldBePicked: 28,
+    fmImgsShouldBePicked: 5
+  }
+};
+
 const TEST_CONFIG: ConfigService.Config = {
   doc: {
     title: "<3 Groom & Bride <3"
@@ -79,6 +104,8 @@ const getConfigById = (gnbId: string): ConfigService.Config => {
       return CHYY_CONFIG;
     case "tlty":
       return TLTY_CONFIG;
+    case "ykyl":
+      return YKYL_CONFIG;
     default:
       return TEST_CONFIG;
   }
