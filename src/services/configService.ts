@@ -11,6 +11,9 @@ const CHYY_CONFIG: ConfigService.Config = {
     messagingSenderId: "324415165027",
     appId: "1:324415165027:web:76b8291835ef32c5c75e56"
   },
+  post: {
+    namespace: "chyy",
+  },
   img: {
     namespace: "chyy",
     endpoint: "https://storage.googleapis.com/image.weddi.app/",
@@ -27,11 +30,14 @@ const TLTY_CONFIG: ConfigService.Config = {
   firebase: {
     apiKey: "AIzaSyD_1irJWOgT9x5fvmbXJm0fRRRZ8DNUfpU",
     authDomain: "weddi-app.firebaseapp.com",
-    databaseURL: "https://weddi-app-tlty.firebaseio.com/",
+    databaseURL: "https://weddi-app.firebaseio.com/",
     projectId: "weddi-app",
     storageBucket: "image.weddi.app",
     messagingSenderId: "324415165027",
     appId: "1:324415165027:web:76b8291835ef32c5c75e56"
+  },
+  post: {
+    namespace: "tlty",
   },
   img: {
     namespace: "tlty",
@@ -54,6 +60,9 @@ const TEST_CONFIG: ConfigService.Config = {
     storageBucket: "image.weddi.app",
     messagingSenderId: "324415165027",
     appId: "1:324415165027:web:76b8291835ef32c5c75e56"
+  },
+  post: {
+    namespace: "test",
   },
   img: {
     namespace: "chyy",

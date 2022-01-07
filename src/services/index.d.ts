@@ -7,6 +7,7 @@ declare namespace ConfigService {
   interface Config {
     doc: DocumentConfig;
     firebase: FirebaseConfig;
+    post: PostConfig;
     img: ImageConfig;
   }
 
@@ -24,6 +25,9 @@ declare namespace ConfigService {
     appId: string;
   }
 
+  interface PostConfig {
+    namespace: string;
+  }
   interface ImageConfig {
     namespace: string;
     endpoint: string;

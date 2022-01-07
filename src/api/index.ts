@@ -3,7 +3,7 @@ import firebase from 'firebase/app';
 import configService from '../services/configService';
 
 export const writePost = (database: firebase.database.Database) => (postData: object): Promise<object> => {
-  const postId = database.ref('posts').push().key;
+  const postId = database.ref(`${configService.config.post.namespace}/posts`).push().key;
   if (!postId) {
     throw new Error('post id is empty');
   }
@@ -14,13 +14,13 @@ export const writePost = (database: firebase.database.Database) => (postData: ob
     id: postId
   };
   return database
-    .ref('posts')
+    .ref(`${configService.config.post.namespace}/posts`)
     .child(postId)
     .set(wrappedPostData);
 };
 
 export const onNewPost = (database: firebase.database.Database) => (callback: Function): void => {
-  const postRef = database.ref('posts');
+  const postRef = database.ref(`${configService.config.post.namespace}/posts`);
   postRef.on('child_added', (data: firebase.database.DataSnapshot) => {
     callback(data.val());
   });
