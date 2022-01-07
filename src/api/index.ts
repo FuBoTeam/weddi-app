@@ -26,8 +26,9 @@ export const onNewPost = (database: firebase.database.Database) => (callback: Fu
   });
 };
 
-export const listAllImages = (storage: firebase.storage.Storage) => (): Promise<firebase.storage.ListResult> => {
-  return storage.ref(configService.config.img.namespace).listAll();
+export const listAllImages = (storage: firebase.storage.Storage) => (size: 'small' | 'regular' = 'small') => {
+  return storage.ref(configService.config.img.namespace).child(size).listAll()
+    .then(listResult => Promise.all(listResult.items.map(item => item.getDownloadURL())));
 };
 
 export const uploadImage = (storage: firebase.storage.Storage) => (imgName: string, image: Blob): firebase.storage.UploadTask => {

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { range } from '../utils/range';
+import { useStorage } from '../Provider/FirebaseApp';
 import configService from '../services/configService';
+import { listAllImages } from '../api';
 import { combinationList, permutationList } from '../utils/random';
-import { getImageUrl } from '../images';
+import { preloadImage } from '../images/preloadImage';
 
 import loadingIcon from '../images/loading.gif';
 import './board.scss';
@@ -20,19 +21,33 @@ enum BG_STATE {
 }
 
 export const Background = () => {
-  // get all image urls from api
-  const allImgUrls = range(configService.config.img.totalImgs).map(k => getImageUrl(k));
-  const bgImgUrls = combinationList(allImgUrls, configService.config.img.bgImgsShouldBePicked);
+  const storage = useStorage();
   const [isLoading, setIsLoading] = useState(true);
+  const [counter, setCounter] = useState(0);
   const [bgState, setBgState] = useState(BG_STATE.BG_HIDDEN);
-  const [permutation, setPermutation] = useState(permutationList(bgImgUrls));
+  const [permutation, setPermutation] = useState<string[]>([]);
+
+  useEffect(() => {
+    listAllImages(storage)().then(imgUrls => {
+      if (isLoading) {
+        imgUrls.map(url => preloadImage(url, () => {
+          setCounter(counter => counter + 1);
+        }));
+      }
+      setPermutation(
+        permutationList(
+          combinationList(imgUrls, configService.config.img.bgImgsShouldBePicked)
+        )
+      );
+    });
+  }, [storage]);
 
   useEffect(() => {
     // set loaded after background images are ready
-    window.onload = () => {
+    if (counter === configService.config.img.bgImgsShouldBePicked) {
       setIsLoading(false);
-    };
-  }, []);
+    }
+  }, [counter]);
 
   useEffect(() => {
     switch(bgState) {
