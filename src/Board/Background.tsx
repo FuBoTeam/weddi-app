@@ -3,7 +3,7 @@ import { useStorage } from '../Provider/FirebaseApp';
 import configService from '../services/configService';
 import { listAllImages } from '../api';
 import { combinationList, permutationList } from '../utils/random';
-import { preloadImage } from '../images/preloadImage';
+import { preloadImageAsync } from '../images/preloadImage';
 
 import loadingIcon from '../images/loading.gif';
 import './board.scss';
@@ -30,9 +30,7 @@ export const Background = () => {
     if (isLoading) {
       listAllImages(storage)().then(imgUrls => {
         Promise.all(
-          imgUrls.map(url => new Promise((resolve) => {
-            preloadImage(url, (img) => resolve(img));
-          }))
+          imgUrls.map(preloadImageAsync)
         ).then(() => setIsLoading(false));
         setPermutation(
           permutationList(
