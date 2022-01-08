@@ -23,31 +23,25 @@ enum BG_STATE {
 export const Background = () => {
   const storage = useStorage();
   const [isLoading, setIsLoading] = useState(true);
-  const [counter, setCounter] = useState(0);
   const [bgState, setBgState] = useState(BG_STATE.BG_HIDDEN);
   const [permutation, setPermutation] = useState<string[]>([]);
 
   useEffect(() => {
-    listAllImages(storage)().then(imgUrls => {
-      if (isLoading) {
-        imgUrls.map(url => preloadImage(url, () => {
-          setCounter(counter => counter + 1);
-        }));
-      }
-      setPermutation(
-        permutationList(
-          combinationList(imgUrls, configService.config.img.bgImgsShouldBePicked)
-        )
-      );
-    });
-  }, [storage]);
-
-  useEffect(() => {
-    // set loaded after background images are ready
-    if (counter === configService.config.img.bgImgsShouldBePicked) {
-      setIsLoading(false);
+    if (isLoading) {
+      listAllImages(storage)().then(imgUrls => {
+        Promise.all(
+          imgUrls.map(url => new Promise((resolve) => {
+            preloadImage(url, (img) => resolve(img));
+          }))
+        ).then(() => setIsLoading(false));
+        setPermutation(
+          permutationList(
+            combinationList(imgUrls, configService.config.img.bgImgsShouldBePicked)
+          )
+        );
+      });
     }
-  }, [counter]);
+  }, [storage, isLoading]);
 
   useEffect(() => {
     switch(bgState) {
