@@ -2,6 +2,13 @@ import firebase from 'firebase/app';
 
 import configService from '../services/configService';
 
+export const listPosts = (database: firebase.database.Database) => () => {
+  return database
+    .ref(`${configService.config.post.namespace}/posts`)
+    .once('value')
+    .then(snapshot => snapshot.val());
+};
+
 export const writePost = (database: firebase.database.Database) => (postData: object): Promise<object> => {
   const postId = database.ref(`${configService.config.post.namespace}/posts`).push().key;
   if (!postId) {
