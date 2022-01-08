@@ -1,13 +1,11 @@
-import React, { useState, useMemo, ChangeEventHandler, FormEventHandler } from 'react';
-import { range } from '../utils/range';
+import React, { useState, ChangeEventHandler, FormEventHandler, useEffect } from 'react';
 import uuid from 'uuid';
 import './greeting.scss';
 
 import configService from '../services/configService';
 import { combinationList } from '../utils/random';
-import { getImageUrl } from '../images';
 import loadingIcon from '../images/uploadLoading.svg';
-import { uploadImage, writePost } from '../api';
+import { listAllImages, uploadImage, writePost } from '../api';
 import { useDatabase, useStorage } from '../Provider/FirebaseApp';
 import { ImagePicker } from './ImagePicker';
 import { ImageUploader } from './ImageUploader';
@@ -24,14 +22,21 @@ export const GreetingForm = ({ onSubmit }: Props) => {
     greetings: '',
   });
   const [isUploadPage, setIsUploadPage] = useState(false);
-  const allImgUrls = useMemo(() => range(configService.config.img.totalImgs).map(k => getImageUrl(k)), []);
-  const fmImgsShouldBePicked = configService.config.img.fmImgsShouldBePicked;
-  const imgUrls = useMemo(() => combinationList(allImgUrls, fmImgsShouldBePicked), [allImgUrls, fmImgsShouldBePicked]);
-  const [pickedImg, setPickedImg] = useState(imgUrls[0]);
+
+  const [imgUrls, setImgUrls] = useState<string[]>([]);
+  const [pickedImg, setPickedImg] = useState('');
   const [uploadImg, setUploadImg] = useState<Blob | null>(null);
 
   const database = useDatabase();
   const storage = useStorage();
+
+  useEffect(() => {
+    listAllImages(storage)().then(imageUrls => {
+      const imgCandidates = combinationList(imageUrls, configService.config.img.fmImgsShouldBePicked);
+      setImgUrls(imgCandidates);
+      setPickedImg(imgCandidates[0]);
+    });
+  }, [storage]);
 
   const onTextChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
     const key = event.target.name;
