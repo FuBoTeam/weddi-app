@@ -31,7 +31,6 @@ declare namespace ConfigService {
   interface ImageConfig {
     namespace: string;
     endpoint: string;
-    totalImgs: number;
     bgImgsShouldBePicked: number;
     fmImgsShouldBePicked: number;
   }

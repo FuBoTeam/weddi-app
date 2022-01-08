@@ -17,7 +17,6 @@ const CHYY_CONFIG: ConfigService.Config = {
   img: {
     namespace: "chyy",
     endpoint: "https://storage.googleapis.com/image.weddi.app/",
-    totalImgs: 114,
     bgImgsShouldBePicked: 40,
     fmImgsShouldBePicked: 5
   }
@@ -42,7 +41,6 @@ const TLTY_CONFIG: ConfigService.Config = {
   img: {
     namespace: "tlty",
     endpoint: "https://storage.googleapis.com/image.weddi.app/",
-    totalImgs: 30,
     bgImgsShouldBePicked: 30,
     fmImgsShouldBePicked: 5
   }
@@ -67,7 +65,6 @@ const YKYL_CONFIG: ConfigService.Config = {
   img: {
     namespace: "ykyl",
     endpoint: "https://storage.googleapis.com/image.weddi.app/",
-    totalImgs: 28,
     bgImgsShouldBePicked: 28,
     fmImgsShouldBePicked: 5
   }
@@ -92,7 +89,6 @@ const TEST_CONFIG: ConfigService.Config = {
   img: {
     namespace: "chyy",
     endpoint: "https://storage.googleapis.com/image.weddi.app/",
-    totalImgs: 114,
     bgImgsShouldBePicked: 40,
     fmImgsShouldBePicked: 5
   }
