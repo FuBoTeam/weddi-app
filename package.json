@@ -20,7 +20,7 @@
     "build": "react-scripts build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src/",
     "test": "react-scripts test --env=jsdom",
-    "predeploy": "npm run build",
+    "predeploy": "yarn run build",
     "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
