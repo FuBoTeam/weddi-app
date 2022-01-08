@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { RouteComponentProps } from 'react-router';
 import { useDatabase } from '../Provider/FirebaseApp';
 import './board.scss';
 import Dialog from './Dialog';
 import { Background } from './Background';
 import { subscribePost } from './subscribePost';
 
-const Board = (props) => {
+const Board: React.FC<RouteComponentProps> = (props) => {
   const [modalDisplay, setModalDisplay] = useState(false);
   const [user, setUser] = useState({});
   const database = useDatabase();
