@@ -36,21 +36,18 @@ const heap = newHeap<HeapNode>((node1, node2) => {
   return false;
 });
 
-interface Post {
-  id: string;
-}
-
+type PostListener = (post: WeddiApp.Post.Data) => any;
 type UnsubscribeFn = () => void;
 
-export const subscribePost = (database: firebase.database.Database) => (listener: (post: Post) => any): UnsubscribeFn => {
-  const postsPool: {[timestampId: string]: Post} = {};
+export const subscribePost = (database: firebase.database.Database) => (listener: PostListener): UnsubscribeFn => {
+  const postsPool: {[timestampId: string]: WeddiApp.Post.Data} = {};
   let feeds: HeapNode[] = [];
   listPosts(database)().then(posts => {
     Object.keys(posts).forEach(id => {
       postsPool[id] = posts[id];
     });
   }).then(() => {
-    onNewPost(database)((post: Post) => {
+    onNewPost(database)((post: WeddiApp.Post.Data) => {
       if (!postsPool[post.id]) {
         postsPool[post.id] = post;
         heap.push(feeds, newHeapNode(0, post.id));

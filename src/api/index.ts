@@ -2,19 +2,20 @@ import firebase from 'firebase/app';
 
 import configService from '../services/configService';
 
-export const listPosts = (database: firebase.database.Database) => () => {
+export const listPosts = (database: firebase.database.Database) => (): Promise<{[id: string]: WeddiApp.Post.Data}> => {
   return database
     .ref(`${configService.config.post.namespace}/posts`)
+    // .orderByChild('joinedGames').equalTo(true)
     .once('value')
     .then(snapshot => snapshot.val());
 };
 
-export const writePost = (database: firebase.database.Database) => (postData: object): Promise<object> => {
+export const writePost = (database: firebase.database.Database) => (postData: WeddiApp.Post.UserInput): Promise<WeddiApp.Post.Data> => {
   const postId = database.ref(`${configService.config.post.namespace}/posts`).push().key;
   if (!postId) {
     throw new Error('post id is empty');
   }
-  const wrappedPostData = {
+  const wrappedPostData: WeddiApp.Post.Data = {
     ...postData,
     modifiedTime: new Date().toISOString(),
     userAgent: navigator.userAgent,
@@ -26,7 +27,7 @@ export const writePost = (database: firebase.database.Database) => (postData: ob
     .set(wrappedPostData);
 };
 
-export const onNewPost = (database: firebase.database.Database) => (callback: Function): void => {
+export const onNewPost = (database: firebase.database.Database) => (callback: (post: WeddiApp.Post.Data) => any): void => {
   const postRef = database.ref(`${configService.config.post.namespace}/posts`);
   postRef.on('child_added', (data: firebase.database.DataSnapshot) => {
     callback(data.val());

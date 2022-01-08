@@ -11,10 +11,10 @@ import { ImagePicker } from './ImagePicker';
 import { ImageUploader } from './ImageUploader';
 
 interface Props {
-  onSubmit?: (formData: {name: string; greetings: string; imgUrl: string}) => void;
+  onSubmit?: (formData: WeddiApp.Post.UserInput) => void;
 }
 
-export const GreetingForm = ({ onSubmit }: Props) => {
+export const GreetingForm: React.FC<Props> = ({ onSubmit }) => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const [form, setForm] = useState({
@@ -59,21 +59,21 @@ export const GreetingForm = ({ onSubmit }: Props) => {
           const uploadProc = await uploadImage(storage)(imgName, uploadImg);
           imgUrl = await uploadProc.ref.getDownloadURL();
         }
-        await writePost(database)({
+
+        const input: WeddiApp.Post.UserInput = {
           name: form.name,
           greetings: form.greetings,
+          joinedGame: true,
           imgUrl,
-        });
+        };
+
+        await writePost(database)(input);
 
         setPickedImg(imgUrl);
         setIsProcessing(false);
 
         if (onSubmit) {
-          onSubmit({
-            name: form.name,
-            greetings: form.greetings,
-            imgUrl
-          });
+          onSubmit(input);
         }
       };
       return uploadFlow();
