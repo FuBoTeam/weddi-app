@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import './greeting.scss';
 
 import { GreetingForm } from './GreetingForm';
 import Dialog from '../Board/Dialog';
 import { getUpperUrl } from '../utils/urlHelpers';
+import { RouteComponentProps } from 'react-router-dom';
 
-const Greeting = (props) => {
+export const Greeting: React.FC<RouteComponentProps> = (props) => {
   const [modalDisplay, setModalDisplay] = useState(false);
 
   const [user, setUser] = useState({ name: '', greetings: '', imgUrl: '' });
-  const onSubmit = (formData) => {
+  const onSubmit = useCallback((formData: WeddiApp.Post.UserInput) => {
     setUser(formData);
     setModalDisplay(true);
-    setTimeout(() => { props.history.push(getUpperUrl()); }, 5000);
-  };
+    setTimeout(() => { props.history.push(getUpperUrl(props.match.url)); }, 5000);
+  }, [setUser, setModalDisplay, props.history, props.match.url]);
 
   return (
     <div className="greeting">
@@ -26,5 +27,3 @@ const Greeting = (props) => {
     </div>
   );
 };
-
-export default Greeting;

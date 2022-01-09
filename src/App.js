@@ -1,6 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Greeting from './Greeting';
+
+import { Greeting } from './Greeting/Greeting';
 import Board from './Board';
 import { Lottery } from './Lottery/Lottery';
 import configService from './services/configService';
