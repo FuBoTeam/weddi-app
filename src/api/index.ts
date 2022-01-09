@@ -2,10 +2,12 @@ import firebase from 'firebase/app';
 
 import configService from '../services/configService';
 
-export const listPosts = (database: firebase.database.Database) => (): Promise<{[id: string]: WeddiApp.Post.Data}> => {
-  return database
-    .ref(`${configService.config.post.namespace}/posts`)
-    // .orderByChild('joinedGames').equalTo(true)
+export const listPosts = (database: firebase.database.Database) => (joinedGame = false): Promise<{[id: string]: WeddiApp.Post.Data} | null> => {
+  let postRef: firebase.database.Query = database.ref(`${configService.config.post.namespace}/posts`);
+  if (joinedGame) {
+    postRef = postRef.orderByChild('joinedGame').equalTo(true);
+  }
+  return postRef
     .once('value')
     .then(snapshot => snapshot.val());
 };

@@ -43,6 +43,9 @@ export const subscribePost = (database: firebase.database.Database) => (listener
   const postsPool: {[timestampId: string]: WeddiApp.Post.Data} = {};
   let feeds: HeapNode[] = [];
   listPosts(database)().then(posts => {
+    if (posts === null) {
+      return;
+    }
     Object.keys(posts).forEach(id => {
       postsPool[id] = posts[id];
     });

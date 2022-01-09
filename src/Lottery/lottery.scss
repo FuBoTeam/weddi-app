@@ -1,0 +1,179 @@
+// https://codepen.io/chrishutchinson/pen/nafEp?editors=0100
+ul.card-stacks {
+  list-style-type: none;
+  padding: 0;
+  position: relative;
+  cursor: pointer;
+  li.title{ margin: 0 0 20px;
+    h2 { font-weight: 700; }
+  }
+  li.stack {
+    position: absolute;
+    left: 0px;
+    transition: all 0.4s cubic-bezier(.63,.15,.03,1.02);
+    ul.cards-down {
+      position: relative;
+      margin: 0 0 20px; padding: 20px;
+      list-style-type: none; margin: 0; padding: 0;
+      li.card {
+        transition: all 0.4s cubic-bezier(.63,.15,.03,1.22);
+        left: 0px;
+        transition-delay: 0.4s;
+        background-color: transparent;
+        // background: #FFF; overflow: hidden;
+        height: 100px; width: 100px;
+        position: absolute; top: 0px;
+        // overflow: hidden;
+        // border-radius: 10px;
+        // box-shadow: 1px 2px 2px 0 #aaa;
+        perspective: 100px;
+        transform-style: preserve-3d;
+        img{
+           max-width: 100%; height: auto;
+        }
+        div.inner {
+          // overflow: hidden;
+          // border-radius: 10px;
+          // box-shadow: 1px 2px 2px 0 #aaa;
+          // perspective: 1000px;
+          position: relative;
+          height: 100%; width: 100%;
+          // transform: rotate(0);
+          transition: transform 0.4s;
+          // transition: all 0.4s;
+          // transform-style: preserve-3d;
+          // backface-visibility: hidden;
+          // -webkit-backface-visibility: hidden;
+          // -moz-backface-visibility: hidden;
+          div.front, div.back {
+            border-radius: 10px;
+            box-shadow: 1px 2px 2px 0 #aaa;
+            padding: 5px 10px;
+            position: absolute;
+            height: 100%; width: 100%;
+            // transition: transform 0.4s;
+            // transform-style: preserve-3d;
+            // -webkit-perspective: 0;
+            // -webkit-transform: translate3d(0, 0, 0);
+            // visibility: visible;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+          }
+          div.front {
+            background: #FFF;
+            h1{
+
+            }
+            p{
+
+            }
+          }
+          div.back {
+            // backface-visibility: hidden;
+            background-color: chocolate;
+            transform: rotateY(180deg);
+          }
+          // @keyframes flipperBack {
+          //   0% { transform: rotateY(180deg); }
+          //   100% { transform: rotate(0); }
+          // }
+          // @keyframes flipper {
+          //   0% { transform: rotate(0); }
+          //   100% { transform: rotateY(180deg); }
+          // }
+          // animation: flipperBack 0.4s forwards;
+          &.flip-transition {
+            // animation: flipper 0.4s forwards;
+            transform: rotateY(180deg);
+            // div.front {
+            //   transform: rotateY(180deg);
+            // }
+            // div.back {
+            //   transform: none;
+            // }
+          }
+        }
+        @for $i from 1 to 10 {
+          &.card-k:nth-of-type(#{$i}) {
+            z-index: $i + 2;
+            transform: rotateZ((random(20) - 10) + deg);
+          }
+        }
+      }
+    }
+  }
+
+  &.expand-transition{
+    li.stack {
+      @for $i from 1 to 10 {
+        &.stack-k:nth-of-type(#{$i}) {
+          left: (($i - 1) * 110) + px;
+        }
+      }
+      ul.cards-down {
+        li.card {
+          @for $i from 1 to 10 {
+            &.card-k:nth-of-type(#{$i}) {
+              transform: rotateZ(0deg);
+              top: (($i - 1) * 110) + px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.shuffle-transition {
+    li.stack {
+      @for $i from 1 to 10 {
+        &.stack-k:nth-of-type(#{$i}) {
+          z-index: random(10) + 2;
+        }
+
+        ul.cards-down {
+          li.card {
+            @for $j from 1 to 10 {
+              @keyframes card_#{$i}_#{$j}_animation {
+                0% { left: 0px; }
+                50% { left: ($j%3)*55+random(10)+px; }
+                60% { left: ($j%3)*55+random(10)+px; z-index: ($j%3 + 2); }
+                100% { left: 0px; }
+              }
+              &.card-k:nth-of-type(#{$j}) {
+                animation: card_#{$i}_#{$j}_animation 1s;
+              }
+            }
+          }
+        }
+
+      } // end $i
+    }
+  }
+}
+
+// .card {
+//   background-repeat: no-repeat;
+//   background-position: center center;
+//   // padding: 20px;
+//   background-color: white;
+//   border-radius: 10px;
+//   top: 0;
+//   left: 0;
+//   border: 1px solid silver;
+//   transform: rotate(0);
+// }
+
+// /* Position the front and back side */
+// .flip-card-front, .flip-card-back {
+//   position: absolute;
+//   width: 100%;
+//   height: 100%;
+//   -webkit-backface-visibility: hidden; /* Safari */
+//   backface-visibility: hidden;
+//   border-radius: 10px;
+// }
+
+// .card-deck {
+//   position: absolute;
+// }
