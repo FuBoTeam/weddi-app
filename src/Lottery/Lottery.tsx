@@ -6,6 +6,7 @@ import { permutationList } from '../utils/random';
 import './lottery.scss';
 
 enum Stage {
+  Init,
   Loaded,
   Start,
   Flipped,
@@ -13,6 +14,7 @@ enum Stage {
   Shuffling,
   Shuffled,
   Ready,
+  Error,
 }
 
 const getUpperUrl = (matchUrl: string): string => {
@@ -24,16 +26,19 @@ const getUpperUrl = (matchUrl: string): string => {
 export const Lottery: React.FC<RouteComponentProps> = (props) => {
   const database = useDatabase();
   const [posts, setPosts] = useState<WeddiApp.Post.Data[]>([]);
+  const [stage, setStage] = useState<Stage>(Stage.Init);
 
   useEffect(() => {
     listPosts(database)(true).then(postsDictionary => {
       if (postsDictionary === null) {
         // TODO: enable retry
+        setStage(Stage.Error);
         return;
       }
       const posts = Object.keys(postsDictionary).map(key => postsDictionary[key]);
       const shuffledPosts = permutationList(posts);
       setPosts(shuffledPosts);
+      setStage(Stage.Loaded);
     });
   }, [database]);
 
@@ -71,7 +76,6 @@ export const Lottery: React.FC<RouteComponentProps> = (props) => {
     }, 1200 * 3);
   }, []);
 
-  const [stage, setStage] = useState<Stage>(Stage.Loaded);
   useEffect(() => {
     switch(stage) {
       case Stage.Start: {
@@ -135,9 +139,13 @@ export const Lottery: React.FC<RouteComponentProps> = (props) => {
 
   return (
     <div className="container">
+      <div className="message">
+        { stage === Stage.Init ? 'Loading...' : '' }
+        { stage === Stage.Error ? '現在還沒有玩家喔！' : '' }
+      </div>
       <div className="lottery-btns">
-        <button onClick={onGoBtnClick}>洗牌</button>
-        <button onClick={onResetBtnClick}>重置</button>
+        <button className={stage === Stage.Loaded ? 'show' : 'hide'} onClick={onGoBtnClick}>洗牌</button>
+        <button className={stage === Stage.Ready ? 'show' : 'hide' } onClick={onResetBtnClick}>重置</button>
       </div>
       <ul className={`card-stacks ${isExpanding ? 'expand-transition' : ''} ${isShuffling ? 'shuffle-transition' : ''}`}>{stacks}</ul>
       <a className="home-link" href={getUpperUrl(props.match.url)}>回首頁</a>
