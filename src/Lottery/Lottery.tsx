@@ -135,7 +135,7 @@ export const Lottery: React.FC<RouteComponentProps> = (props) => {
 
   return (
     <div className="container">
-      <div className="message">
+      <div className="system-message">
         { stage === Stage.Init ? 'Loading...' : '' }
         { stage === Stage.Error ? '現在還沒有玩家喔！' : '' }
       </div>
