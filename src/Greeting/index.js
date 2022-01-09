@@ -6,8 +6,7 @@ import Dialog from '../Board/Dialog';
 
 const Greeting = (props) => {
   const [modalDisplay, setModalDisplay] = useState(false);
-  const getUpperUrl = () => {
-    const matchUrl = props.match.url;
+  const getUpperUrl = (matchUrl) => {
     const paths = matchUrl.split('/');
     paths.pop();
     return paths.join('/');
@@ -26,7 +25,7 @@ const Greeting = (props) => {
         <h1 className="greeting-title orange-font">祝福留言版</h1>
       </header>
       {!modalDisplay && <GreetingForm onSubmit={onSubmit} />}
-      {!modalDisplay && <a className="link orange-font" href={getUpperUrl()}>去照片牆瞧瞧</a>}
+      {!modalDisplay && <a className="link orange-font" href={getUpperUrl(props.match.url)}>去照片牆瞧瞧</a>}
       <Dialog user={user} show={modalDisplay} />
     </div>
   );

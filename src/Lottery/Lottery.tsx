@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { listPosts } from '../api';
 import { useDatabase } from '../Provider/FirebaseApp';
 import { permutationList } from '../utils/random';
@@ -14,7 +15,13 @@ enum Stage {
   Ready,
 }
 
-export const Lottery: React.FC = () => {
+const getUpperUrl = (matchUrl: string): string => {
+  const paths = matchUrl.split('/');
+  paths.pop();
+  return paths.join('/');
+};
+
+export const Lottery: React.FC<RouteComponentProps> = (props) => {
   const database = useDatabase();
   const [posts, setPosts] = useState<WeddiApp.Post.Data[]>([]);
 
@@ -133,6 +140,7 @@ export const Lottery: React.FC = () => {
         <button onClick={onResetBtnClick}>重置</button>
       </div>
       <ul className={`card-stacks ${isExpanding ? 'expand-transition' : ''} ${isShuffling ? 'shuffle-transition' : ''}`}>{stacks}</ul>
+      <a className="home-link" href={getUpperUrl(props.match.url)}>回首頁</a>
     </div>
   );
 };

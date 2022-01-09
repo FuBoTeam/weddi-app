@@ -4,7 +4,7 @@
  */
 ul.card-stacks {
   list-style-type: none;
-  padding: 0;
+  padding: 0; margin: 20px;
   position: relative;
   cursor: pointer;
   li.title{ margin: 0 0 20px;
@@ -111,4 +111,47 @@ ul.card-stacks {
       }
     }
   }
+}
+
+.message {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  color: white;
+  font-size: larger;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+}
+
+button {
+  position: fixed;
+  right: 50px;
+  bottom: 50px;
+  padding: 15px;
+  background: $orange;
+  display: inline-block;
+  border: 4px double $orange;
+  border-radius: 50px;
+  font-size: larger;
+  color: white;
+  cursor: pointer;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  &.hide {
+    display: none;
+  }
+}
+
+.home-link {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  background: black;
+  text-decoration: none;
+  cursor: pointer;
+  color: white;
+  justify-content: center;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  z-index: 10;
 }

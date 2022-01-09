@@ -37,6 +37,7 @@ const Board: React.FC<RouteComponentProps> = (props) => {
       <Background />
       <Dialog user={user} show={modalDisplay} />
       <a className="message-link" href={`${props.match.url}/greetings`}>&lt;&lt; 留下你的祝福</a>
+      <a className="game-link" href={`${props.match.url}/lottery`}>去遊戲頁</a>
     </React.Fragment>
   );
 };

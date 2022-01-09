@@ -167,6 +167,22 @@
   border-radius: 0 3px 3px 0;
   cursor: pointer;
   font-family: 'Noto Sans Kannada', sans-serif;
+  z-index: 10;
+}
+
+.game-link {
+  position: relative;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  background: black;
+  text-decoration: none;
+  cursor: pointer;
+  color: white;
+  justify-content: center;
+  font-family: 'Noto Sans Kannada', sans-serif;
+  z-index: 10;
 }
 
 @media screen and (max-width: 576px) {
