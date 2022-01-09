@@ -1,6 +1,6 @@
-import firebase from 'firebase/app';
-import 'firebase/storage';
-import 'firebase/database';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/storage';
+import 'firebase/compat/database';
 import React, { useMemo } from 'react';
 import { FirebaseContext } from './context';
 export interface Props {

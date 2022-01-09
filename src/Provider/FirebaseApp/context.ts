@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import firebase from 'firebase';
+import firebase from 'firebase/compat/app';
 
 export interface FirebaseContextType {
   app: firebase.app.App;

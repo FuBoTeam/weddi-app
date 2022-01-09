@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase from 'firebase/compat/app';
 import { listPosts, onNewPost } from '../api';
 import { newHeap } from '../utils/priorityQueue';
 
