@@ -4,6 +4,16 @@ import { useDatabase } from '../Provider/FirebaseApp';
 import { permutationList } from '../utils/random';
 import './lottery.scss';
 
+enum Stage {
+  Loaded,
+  Start,
+  Flipped,
+  Stacked,
+  Shuffling,
+  Shuffled,
+  Ready,
+}
+
 export const Lottery: React.FC = () => {
   const database = useDatabase();
   const [posts, setPosts] = useState<WeddiApp.Post.Data[]>([]);
@@ -54,15 +64,6 @@ export const Lottery: React.FC = () => {
     }, 1200 * 3);
   }, []);
 
-  enum Stage {
-    Loaded,
-    Start,
-    Flipped,
-    Stacked,
-    Shuffling,
-    Shuffled,
-    Ready,
-  }
   const [stage, setStage] = useState<Stage>(Stage.Loaded);
   useEffect(() => {
     switch(stage) {
@@ -87,7 +88,7 @@ export const Lottery: React.FC = () => {
         return;
       }
     }
-  }, [stage]);
+  }, [stage, onToggleFlipAll, onToggleExpand, onToggleShuffle]);
 
   const onGoBtnClick = useCallback(() => {
     if (stage === Stage.Loaded) {
@@ -100,7 +101,7 @@ export const Lottery: React.FC = () => {
     setIsShuffling(false);
     setRevealedIds({ '*': true });
     setStage(Stage.Loaded);
-  }, []);
+  }, [setIsExpanding, setIsShuffling, setRevealedIds, setStage]);
 
   const allCards = posts.map((post, index) => (
     <li key={post.id} className="card" onClick={() => onFlipOne(index)}>
