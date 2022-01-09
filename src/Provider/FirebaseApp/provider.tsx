@@ -1,6 +1,6 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/storage';
-import 'firebase/compat/database';
+import { getApps, initializeApp } from 'firebase/app';
+import { getStorage } from 'firebase/storage';
+import { getDatabase } from 'firebase/database';
 import React, { useMemo } from 'react';
 import { FirebaseContext } from './context';
 export interface Props {
@@ -19,18 +19,18 @@ export const FirebaseAppProvider = (props: Props & { [key: string]: unknown }) =
     if (!firebaseConfig) {
       throw new Error('No config provided');
     }
-    const existingApp = firebase.apps.find(app => app.name === (appName || DEFAULT_APP_NAME));
+    const existingApp = getApps().find(app => app.name === (appName || DEFAULT_APP_NAME));
     if (existingApp && shallowEqual(existingApp.options, firebaseConfig)) {
       return {
         app: existingApp,
-        storage: firebase.storage(existingApp),
-        database: firebase.database(existingApp),
+        storage: getStorage(existingApp),
+        database: getDatabase(existingApp),
       };
     }
 
-    const app = firebase.initializeApp(firebaseConfig, appName);
-    const storage = firebase.storage();
-    const database = firebase.database();
+    const app = initializeApp(firebaseConfig, appName);
+    const storage = getStorage(app);
+    const database = getDatabase(app);
     return {
       app,
       storage,

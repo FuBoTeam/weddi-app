@@ -56,8 +56,7 @@ export const GreetingForm: React.FC<Props> = ({ onSubmit }) => {
         let imgUrl = pickedImg;
         if (isUploadPage && uploadImg) {
           const imgName = uuid.v4();
-          const uploadProc = await uploadImage(storage)(imgName, uploadImg);
-          imgUrl = await uploadProc.ref.getDownloadURL();
+          imgUrl = await uploadImage(storage)(imgName, uploadImg);
         }
 
         const input: WeddiApp.Post.UserInput = {

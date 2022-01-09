@@ -1,4 +1,4 @@
-import firebase from 'firebase/compat/app';
+import { Database } from 'firebase/database';
 import { listPosts, onNewPost } from '../api';
 import { newHeap } from '../utils/priorityQueue';
 
@@ -39,7 +39,7 @@ const heap = newHeap<HeapNode>((node1, node2) => {
 type PostListener = (post: WeddiApp.Post.Data) => any;
 type UnsubscribeFn = () => void;
 
-export const subscribePost = (database: firebase.database.Database) => (listener: PostListener): UnsubscribeFn => {
+export const subscribePost = (database: Database) => (listener: PostListener): UnsubscribeFn => {
   const postsPool: {[timestampId: string]: WeddiApp.Post.Data} = {};
   let feeds: HeapNode[] = [];
   listPosts(database)().then(posts => {

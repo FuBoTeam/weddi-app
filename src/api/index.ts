@@ -1,19 +1,37 @@
-import firebase from 'firebase/compat/app';
+import {
+  Database, Query,
+  ref as databaseRef,
+  set,
+  push,
+  query,
+  orderByChild,
+  equalTo,
+  onValue,
+  onChildAdded,
+} from 'firebase/database';
+import {
+  FirebaseStorage,
+  ref as storageRef,
+  uploadBytes,
+  listAll,
+  getDownloadURL,
+} from 'firebase/storage';
 
 import configService from '../services/configService';
 
-export const listPosts = (database: firebase.database.Database) => (joinedGame = false): Promise<{[id: string]: WeddiApp.Post.Data} | null> => {
-  let postRef: firebase.database.Query = database.ref(`${configService.config.post.namespace}/posts`);
+export const listPosts = (database: Database) => (joinedGame = false): Promise<{[id: string]: WeddiApp.Post.Data} | null> => {
+  let postRef: Query = databaseRef(database, `${configService.config.post.namespace}/posts`);
   if (joinedGame) {
-    postRef = postRef.orderByChild('joinedGame').equalTo(true);
+    postRef = query(postRef, orderByChild('joinedGame'), equalTo(true));
   }
-  return postRef
-    .once('value')
-    .then(snapshot => snapshot.val());
+  return new Promise(resolve =>
+    onValue(postRef, (snapshot => {
+      resolve(snapshot.val());
+    }), { onlyOnce: true }));
 };
 
-export const writePost = (database: firebase.database.Database) => (postData: WeddiApp.Post.UserInput): Promise<WeddiApp.Post.Data> => {
-  const postId = database.ref(`${configService.config.post.namespace}/posts`).push().key;
+export const writePost = (database: Database) => (postData: WeddiApp.Post.UserInput): Promise<void> => {
+  const postId = push(databaseRef(database, `${configService.config.post.namespace}/posts`)).key;
   if (!postId) {
     throw new Error('post id is empty');
   }
@@ -23,28 +41,22 @@ export const writePost = (database: firebase.database.Database) => (postData: We
     userAgent: navigator.userAgent,
     id: postId
   };
-  return database
-    .ref(`${configService.config.post.namespace}/posts`)
-    .child(postId)
-    .set(wrappedPostData);
+  return set(databaseRef(database, `${configService.config.post.namespace}/posts/${postId}}`), wrappedPostData);
 };
 
-export const onNewPost = (database: firebase.database.Database) => (callback: (post: WeddiApp.Post.Data) => any): void => {
-  const postRef = database.ref(`${configService.config.post.namespace}/posts`);
-  postRef.on('child_added', (data: firebase.database.DataSnapshot) => {
-    callback(data.val());
-  });
+export const onNewPost = (database: Database) => (callback: (post: WeddiApp.Post.Data) => any): void => {
+  const postRef = databaseRef(database, `${configService.config.post.namespace}/posts`);
+  onChildAdded(postRef, (snapshot => {
+    callback(snapshot.val());
+  }));
 };
 
-export const listAllImages = (storage: firebase.storage.Storage) => (size: 'small' | 'regular' = 'small') => {
-  return storage.ref(configService.config.img.namespace).child(size).listAll()
-    .then(listResult => Promise.all(listResult.items.map(item => item.getDownloadURL())));
+export const listAllImages = (storage: FirebaseStorage) => (size: 'small' | 'regular' = 'small'): Promise<string[]> => {
+  return listAll(storageRef(storage, `${configService.config.img.namespace}/${size}`))
+    .then(listResult => Promise.all(listResult.items.map(getDownloadURL)));
 };
 
-export const uploadImage = (storage: firebase.storage.Storage) => (imgName: string, image: Blob): firebase.storage.UploadTask => {
-  return storage
-    .ref(configService.config.img.namespace)
-    .child('public_upload')
-    .child(imgName)
-    .put(image);
+export const uploadImage = (storage: FirebaseStorage) => (imgName: string, image: Blob): Promise<string> => {
+  return uploadBytes(storageRef(storage, `${configService.config.img.namespace}/public_upload/${imgName}`), image)
+    .then(result => getDownloadURL(result.ref));
 };

@@ -1,10 +1,12 @@
 import { createContext } from 'react';
-import firebase from 'firebase/compat/app';
+import { FirebaseApp } from 'firebase/app';
+import { FirebaseStorage } from 'firebase/storage';
+import { Database } from 'firebase/database';
 
 export interface FirebaseContextType {
-  app: firebase.app.App;
-  database: firebase.database.Database;
-  storage: firebase.storage.Storage;
+  app: FirebaseApp;
+  database: Database;
+  storage: FirebaseStorage;
 }
 
 export const FirebaseContext = createContext<FirebaseContextType>({} as FirebaseContextType);
