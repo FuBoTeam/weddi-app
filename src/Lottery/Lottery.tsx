@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
-import { listPosts } from '../api';
-import { useDatabase } from '../Provider/FirebaseApp';
-import { permutationList } from '../utils/random';
 import './lottery.scss';
+
+import { useDatabase } from '../Provider/FirebaseApp';
+import { listPosts } from '../api';
+import { permutationList } from '../utils/random';
+import { getUpperUrl } from '../utils/urlHelpers';
 
 enum Stage {
   Init,
@@ -16,12 +18,6 @@ enum Stage {
   Ready,
   Error,
 }
-
-const getUpperUrl = (matchUrl: string): string => {
-  const paths = matchUrl.split('/');
-  paths.pop();
-  return paths.join('/');
-};
 
 export const Lottery: React.FC<RouteComponentProps> = (props) => {
   const database = useDatabase();

@@ -3,14 +3,10 @@ import './greeting.scss';
 
 import { GreetingForm } from './GreetingForm';
 import Dialog from '../Board/Dialog';
+import { getUpperUrl } from '../utils/urlHelpers';
 
 const Greeting = (props) => {
   const [modalDisplay, setModalDisplay] = useState(false);
-  const getUpperUrl = (matchUrl) => {
-    const paths = matchUrl.split('/');
-    paths.pop();
-    return paths.join('/');
-  };
 
   const [user, setUser] = useState({ name: '', greetings: '', imgUrl: '' });
   const onSubmit = (formData) => {
