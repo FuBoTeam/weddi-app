@@ -91,6 +91,7 @@ ul.card-stacks {
     }
   }
 
+  // inspired by https://vineetgarg90.github.io/playing-cards/
   &.shuffle-transition {
     li.stack:first-of-type {
       ul.cards-down:first-of-type {
