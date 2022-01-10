@@ -28,7 +28,7 @@ export const Background = () => {
 
   useEffect(() => {
     if (isLoading) {
-      listAllImages(storage)().then(imgUrls => {
+      listAllImages(storage).then(imgUrls => {
         Promise.all(
           imgUrls.map(preloadImageAsync)
         ).then(() => setIsLoading(false));

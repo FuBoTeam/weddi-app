@@ -31,7 +31,7 @@ export const GreetingForm: React.FC<Props> = ({ onSubmit }) => {
   const storage = useStorage();
 
   useEffect(() => {
-    listAllImages(storage)().then(imageUrls => {
+    listAllImages(storage).then(imageUrls => {
       const imgCandidates = combinationList(imageUrls, configService.config.img.fmImgsShouldBePicked);
       setImgUrls(imgCandidates);
       setPickedImg(imgCandidates[0]);
@@ -56,8 +56,7 @@ export const GreetingForm: React.FC<Props> = ({ onSubmit }) => {
         let imgUrl = pickedImg;
         if (isUploadPage && uploadImg) {
           const imgName = uuid.v4();
-          const uploadProc = await uploadImage(storage)(imgName, uploadImg);
-          imgUrl = await uploadProc.ref.getDownloadURL();
+          imgUrl = await uploadImage(storage, imgName, uploadImg);
         }
 
         const input: WeddiApp.Post.UserInput = {
@@ -67,7 +66,7 @@ export const GreetingForm: React.FC<Props> = ({ onSubmit }) => {
           imgUrl,
         };
 
-        await writePost(database)(input);
+        await writePost(database, input);
 
         setPickedImg(imgUrl);
         setIsProcessing(false);
