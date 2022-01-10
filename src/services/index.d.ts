@@ -23,6 +23,7 @@ declare namespace ConfigService {
     storageBucket: string;
     messagingSenderId: string;
     appId: string;
+    measurementId?: string;
   }
 
   interface PostConfig {

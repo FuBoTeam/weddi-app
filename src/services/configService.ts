@@ -9,7 +9,8 @@ const CHYY_CONFIG: ConfigService.Config = {
     projectId: "weddi-app",
     storageBucket: "image.weddi.app",
     messagingSenderId: "324415165027",
-    appId: "1:324415165027:web:76b8291835ef32c5c75e56"
+    appId: "1:324415165027:web:76b8291835ef32c5c75e56",
+    measurementId: "G-SD1QTLYR15",
   },
   post: {
     namespace: "chyy",
@@ -32,7 +33,8 @@ const TLTY_CONFIG: ConfigService.Config = {
     projectId: "weddi-app",
     storageBucket: "image.weddi.app",
     messagingSenderId: "324415165027",
-    appId: "1:324415165027:web:76b8291835ef32c5c75e56"
+    appId: "1:324415165027:web:76b8291835ef32c5c75e56",
+    measurementId: "G-SD1QTLYR15",
   },
   post: {
     namespace: "tlty",
@@ -55,7 +57,8 @@ const YKYL_CONFIG: ConfigService.Config = {
     projectId: "weddi-app",
     storageBucket: "image.weddi.app",
     messagingSenderId: "324415165027",
-    appId: "1:324415165027:web:76b8291835ef32c5c75e56"
+    appId: "1:324415165027:web:76b8291835ef32c5c75e56",
+    measurementId: "G-SD1QTLYR15",
   },
   post: {
     namespace: "ykyl",
@@ -78,7 +81,8 @@ const TEST_CONFIG: ConfigService.Config = {
     projectId: "weddi-app",
     storageBucket: "image.weddi.app",
     messagingSenderId: "324415165027",
-    appId: "1:324415165027:web:76b8291835ef32c5c75e56"
+    appId: "1:324415165027:web:76b8291835ef32c5c75e56",
+    measurementId: "G-SD1QTLYR15",
   },
   post: {
     namespace: "test",
