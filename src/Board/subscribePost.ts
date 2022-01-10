@@ -42,7 +42,7 @@ type UnsubscribeFn = () => void;
 export const subscribePost = (database: Database) => (listener: PostListener): UnsubscribeFn => {
   const postsPool: {[timestampId: string]: WeddiApp.Post.Data} = {};
   let feeds: HeapNode[] = [];
-  listPosts(database)().then(posts => {
+  listPosts(database).then(posts => {
     if (posts === null) {
       return;
     }
@@ -50,7 +50,7 @@ export const subscribePost = (database: Database) => (listener: PostListener): U
       postsPool[id] = posts[id];
     });
   }).then(() => {
-    onNewPost(database)((post: WeddiApp.Post.Data) => {
+    onNewPost(database, (post: WeddiApp.Post.Data) => {
       if (!postsPool[post.id]) {
         postsPool[post.id] = post;
         heap.push(feeds, newHeapNode(0, post.id));

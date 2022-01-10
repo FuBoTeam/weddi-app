@@ -25,7 +25,7 @@ export const Lottery: React.FC<RouteComponentProps> = (props) => {
   const [stage, setStage] = useState<Stage>(Stage.Init);
 
   useEffect(() => {
-    listPosts(database)(true).then(postsDictionary => {
+    listPosts(database, { joinedGame: true }).then(postsDictionary => {
       if (postsDictionary === null) {
         // TODO: enable retry
         setStage(Stage.Error);

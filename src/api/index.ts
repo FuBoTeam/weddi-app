@@ -19,8 +19,16 @@ import {
 
 import configService from '../services/configService';
 
-export const listPosts = (database: Database) => (joinedGame = false): Promise<{[id: string]: WeddiApp.Post.Data} | null> => {
+interface ListPostsOptions {
+  readonly joinedGame?: boolean;
+}
+
+export const listPosts = (
+  database: Database,
+  options: ListPostsOptions = { joinedGame: false },
+): Promise<{[id: string]: WeddiApp.Post.Data} | null> => {
   let postRef: Query = databaseRef(database, `${configService.config.post.namespace}/posts`);
+  const joinedGame = options.joinedGame ?? false;
   if (joinedGame) {
     postRef = query(postRef, orderByChild('joinedGame'), equalTo(true));
   }
@@ -30,7 +38,7 @@ export const listPosts = (database: Database) => (joinedGame = false): Promise<{
     }), { onlyOnce: true }));
 };
 
-export const writePost = (database: Database) => (postData: WeddiApp.Post.UserInput): Promise<void> => {
+export const writePost = (database: Database, postData: WeddiApp.Post.UserInput): Promise<void> => {
   const postId = push(databaseRef(database, `${configService.config.post.namespace}/posts`)).key;
   if (!postId) {
     throw new Error('post id is empty');
@@ -44,19 +52,24 @@ export const writePost = (database: Database) => (postData: WeddiApp.Post.UserIn
   return set(databaseRef(database, `${configService.config.post.namespace}/posts/${postId}}`), wrappedPostData);
 };
 
-export const onNewPost = (database: Database) => (callback: (post: WeddiApp.Post.Data) => any): void => {
+export const onNewPost = (database: Database, callback: (post: WeddiApp.Post.Data) => any): void => {
   const postRef = databaseRef(database, `${configService.config.post.namespace}/posts`);
   onChildAdded(postRef, (snapshot => {
     callback(snapshot.val());
   }));
 };
 
-export const listAllImages = (storage: FirebaseStorage) => (size: 'small' | 'regular' = 'small'): Promise<string[]> => {
+interface ListImagesOptions {
+  readonly size?: 'small' | 'regular';
+}
+
+export const listAllImages = (storage: FirebaseStorage, options: ListImagesOptions = { size: 'small' }): Promise<string[]> => {
+  const size = options.size ?? 'small';
   return listAll(storageRef(storage, `${configService.config.img.namespace}/${size}`))
     .then(listResult => Promise.all(listResult.items.map(getDownloadURL)));
 };
 
-export const uploadImage = (storage: FirebaseStorage) => (imgName: string, image: Blob): Promise<string> => {
+export const uploadImage = (storage: FirebaseStorage, imgName: string, image: Blob): Promise<string> => {
   return uploadBytes(storageRef(storage, `${configService.config.img.namespace}/public_upload/${imgName}`), image)
     .then(result => getDownloadURL(result.ref));
 };
