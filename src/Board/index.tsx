@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { useDatabase } from '../Provider/FirebaseApp';
+import { logEvent } from 'firebase/analytics';
 import './board.scss';
+
+import { useAnalytics, useDatabase } from '../Provider/FirebaseApp';
 import Dialog from './Dialog';
 import { Background } from './Background';
 import { subscribePost } from './subscribePost';
 
 const Board: React.FC<RouteComponentProps> = (props) => {
+  // TODO: remove this and find a proper filter way on GA
+  const analytics = useAnalytics();
+  useEffect(() => {
+    logEvent(analytics, 'board_page_landed');
+  }, [analytics]);
+
   const [modalDisplay, setModalDisplay] = useState(false);
   const [user, setUser] = useState({});
   const database = useDatabase();

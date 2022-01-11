@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
+import { logEvent } from 'firebase/analytics';
 import './lottery.scss';
 
-import { useDatabase } from '../Provider/FirebaseApp';
+import { useAnalytics, useDatabase } from '../Provider/FirebaseApp';
 import { listPosts } from '../api';
 import { permutationList } from '../utils/random';
 import { getUpperUrl } from '../utils/urlHelpers';
@@ -20,6 +21,12 @@ enum Stage {
 }
 
 export const Lottery: React.FC<RouteComponentProps> = (props) => {
+  // TODO: remove this and find a proper filter way on GA
+  const analytics = useAnalytics();
+  useEffect(() => {
+    logEvent(analytics, 'lottery_page_landed');
+  }, [analytics]);
+
   const database = useDatabase();
   const [posts, setPosts] = useState<WeddiApp.Post.Data[]>([]);
   const [stage, setStage] = useState<Stage>(Stage.Init);
