@@ -29,8 +29,13 @@ export const Greeting: React.FC<RouteComponentProps> = (props) => {
       <header className="greeting-header">
         <h1 className="greeting-title orange-font">祝福留言版</h1>
       </header>
-      {!modalDisplay && <GreetingForm onSubmit={onSubmit} />}
-      {!modalDisplay && <a className="link orange-font" href={getUpperUrl(props.match.url)}>去照片牆瞧瞧</a>}
+      { !modalDisplay &&
+        <>
+          <GreetingForm onSubmit={onSubmit} />
+          <a className="link orange-font" href={getUpperUrl(props.match.url)}>去照片牆瞧瞧</a>
+          <a className="link gray-font" href="mailto:contact@weddi.app">聯絡我們 contact@weddi.app</a>
+        </>
+      }
       <Dialog user={user} show={modalDisplay} />
     </div>
   );
