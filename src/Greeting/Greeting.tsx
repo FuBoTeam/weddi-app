@@ -1,12 +1,20 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+import { logEvent } from 'firebase/analytics';
 import './greeting.scss';
 
+import { useAnalytics } from '../Provider/FirebaseApp';
 import { GreetingForm } from './GreetingForm';
 import Dialog from '../Board/Dialog';
 import { getUpperUrl } from '../utils/urlHelpers';
-import { RouteComponentProps } from 'react-router-dom';
 
 export const Greeting: React.FC<RouteComponentProps> = (props) => {
+  // TODO: remove this and find a proper filter way on GA
+  const analytics = useAnalytics();
+  useEffect(() => {
+    logEvent(analytics, 'greeting_page_landed');
+  }, [analytics]);
+
   const [modalDisplay, setModalDisplay] = useState(false);
 
   const [user, setUser] = useState({ name: '', greetings: '', imgUrl: '' });

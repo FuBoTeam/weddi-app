@@ -8,3 +8,7 @@ export const useDatabase = (): FirebaseContextType['database'] => {
 export const useStorage = (): FirebaseContextType['storage'] => {
   return useContext(FirebaseContext).storage;
 };
+
+export const useAnalytics = (): FirebaseContextType['analytics'] => {
+  return useContext(FirebaseContext).analytics;
+};
