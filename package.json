@@ -6,13 +6,13 @@
   "dependencies": {
     "blueimp-load-image": "^2.24.0",
     "firebase": "^9.6.2",
-    "node-sass": "^4.13.0",
+    "node-sass": "^7.0.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "^3.2.0",
+    "react-scripts": "^5.0.0",
     "source-map-explorer": "^2.5.2",
-    "typescript": "3.8.3"
+    "typescript": "^4.5.4"
   },
   "scripts": {
     "analyze": "source-map-explorer build/static/js/main.*",
@@ -30,14 +30,14 @@
     "@types/react": "^17.0.2",
     "@types/react-router-dom": "^5.1.7",
     "@types/uuid": "^8.3.0",
-    "@typescript-eslint/eslint-plugin": "^2.18.0",
-    "@typescript-eslint/parser": "^2.18.0",
-    "eslint": "^6.8.0",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
+    "eslint": "^8.6.0",
     "eslint-plugin-react": "^7.25.0",
     "gh-pages": "^2.1.1"
   },
   "engines": {
-    "node": "^13.0.0"
+    "node": "^16.13.0"
   },
   "browserslist": {
     "production": [
