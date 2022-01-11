@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useStorage } from '../Provider/FirebaseApp';
-import configService from '../services/configService';
-import { listAllImages } from '../api';
-import { combinationList, permutationList } from '../utils/random';
-import { preloadImageAsync } from '../images/preloadImage';
-
 import loadingIcon from '../images/loading.gif';
 import './board.scss';
+
+import { useStorage } from '../Provider/FirebaseApp';
+import configService from '../services/configService';
+import { listRandomKImages } from '../api';
+import { permutationList } from '../utils/random';
+import { preloadImageAsync } from '../images/preloadImage';
 
 const TIME_FADE_OUT = 1000;
 const TIME_FADE_IN = 1000;
@@ -28,15 +28,9 @@ export const Background = () => {
 
   useEffect(() => {
     if (isLoading) {
-      listAllImages(storage).then(imgUrls => {
-        Promise.all(
-          imgUrls.map(preloadImageAsync)
-        ).then(() => setIsLoading(false));
-        setPermutation(
-          permutationList(
-            combinationList(imgUrls, configService.config.img.bgImgsShouldBePicked)
-          )
-        );
+      listRandomKImages(storage, configService.config.img.bgImgsShouldBePicked).then(imgUrls => {
+        Promise.all(imgUrls.map(preloadImageAsync)).then(() => setIsLoading(false));
+        setPermutation(permutationList(imgUrls));
       });
     }
   }, [storage, isLoading]);

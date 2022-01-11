@@ -1,12 +1,11 @@
 import React, { useState, ChangeEventHandler, FormEventHandler, useEffect } from 'react';
 import uuid from 'uuid';
+import loadingIcon from '../images/uploadLoading.svg';
 import './greeting.scss';
 
-import configService from '../services/configService';
-import { combinationList } from '../utils/random';
-import loadingIcon from '../images/uploadLoading.svg';
-import { listAllImages, uploadImage, writePost } from '../api';
 import { useDatabase, useStorage } from '../Provider/FirebaseApp';
+import { listRandomKImages, uploadImage, writePost } from '../api';
+import configService from '../services/configService';
 import { ImagePicker } from './ImagePicker';
 import { ImageUploader } from './ImageUploader';
 
@@ -31,10 +30,9 @@ export const GreetingForm: React.FC<Props> = ({ onSubmit }) => {
   const storage = useStorage();
 
   useEffect(() => {
-    listAllImages(storage).then(imageUrls => {
-      const imgCandidates = combinationList(imageUrls, configService.config.img.fmImgsShouldBePicked);
-      setImgUrls(imgCandidates);
-      setPickedImg(imgCandidates[0]);
+    listRandomKImages(storage, configService.config.img.fmImgsShouldBePicked).then(imgUrls => {
+      setImgUrls(imgUrls);
+      setPickedImg(imgUrls[0]);
     });
   }, [storage]);
 
