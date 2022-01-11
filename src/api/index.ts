@@ -15,9 +15,11 @@ import {
   uploadBytes,
   listAll,
   getDownloadURL,
+  StorageReference,
 } from 'firebase/storage';
 
 import configService from '../services/configService';
+import { combinationList } from '../utils/random';
 
 interface ListPostsOptions {
   readonly joinedGame?: boolean;
@@ -63,10 +65,16 @@ interface ListImagesOptions {
   readonly size?: 'small' | 'regular';
 }
 
-export const listAllImages = (storage: FirebaseStorage, options: ListImagesOptions = { size: 'small' }): Promise<string[]> => {
+export const listImageRefs = (storage: FirebaseStorage, options: ListImagesOptions = { size: 'small' }): Promise<StorageReference[]> => {
   const size = options.size ?? 'small';
   return listAll(storageRef(storage, `${configService.config.img.namespace}/${size}`))
-    .then(listResult => Promise.all(listResult.items.map(getDownloadURL)));
+    .then(listResult => listResult.items);
+};
+
+export const listRandomKImages = async (storage: FirebaseStorage, k: number, options?: ListImagesOptions): Promise<string[]> => {
+  const imageRefs = await listImageRefs(storage, options);
+  const kImageRefs = combinationList(imageRefs, k);
+  return Promise.all(kImageRefs.map(getDownloadURL));
 };
 
 export const uploadImage = (storage: FirebaseStorage, imgName: string, image: Blob): Promise<string> => {
