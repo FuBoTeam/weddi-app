@@ -27,7 +27,7 @@ const Dialog = ({ user, show }) => {
           <img ref={imgRef} className="user-image" src={user.imgUrl} alt="images" onLoad={onLoad} />
         </div>
         <div className="message">
-          <h2>@ {user.name}</h2>
+          <h2>From {user.name}:</h2>
           <p>{user.greetings}</p>
         </div>
       </div>

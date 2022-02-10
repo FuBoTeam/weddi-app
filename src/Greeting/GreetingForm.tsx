@@ -123,8 +123,8 @@ export const GreetingForm: React.FC<Props> = ({ onSubmit }) => {
       </div>
       <div className="greeting-message-block">
         <label className="input">
-          <h2>@</h2>
-          <input type="text" name="name" placeholder="姓名" onChange={onTextChangeHandler} required disabled={isProcessing} />
+          <h2>From</h2>
+          <input type="text" name="name" placeholder="你的姓名/綽號" onChange={onTextChangeHandler} required disabled={isProcessing} />
         </label>
         <label className="input">
           <textarea name="greetings" placeholder="祝賀詞" onChange={onTextChangeHandler} required disabled={isProcessing} />
