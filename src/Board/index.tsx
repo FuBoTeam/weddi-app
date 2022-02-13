@@ -7,6 +7,7 @@ import { useAnalytics, useDatabase } from '../Provider/FirebaseApp';
 import Dialog from './Dialog';
 import { Background } from './Background';
 import { subscribePost } from './subscribePost';
+import { estimateReadingTime } from '../utils/estimateReadingTime';
 
 const Board: React.FC<RouteComponentProps> = (props) => {
   // TODO: remove this and find a proper filter way on GA
@@ -31,7 +32,10 @@ const Board: React.FC<RouteComponentProps> = (props) => {
     const unsubscribe = subscribePost(database)((newPost) => {
       if (newPost) {
         setPost(newPost);
-        openModalAndClose();
+        estimateReadingTime(newPost.greetings, (estimatedSecond) => {
+          const timeout = Math.max(estimatedSecond * 1000, 5000);
+          openModalAndClose(timeout);
+        });
       }
     });
     return () => {
