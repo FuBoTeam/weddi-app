@@ -51,7 +51,7 @@ export const writePost = (database: Database, postData: WeddiApp.Post.UserInput)
     userAgent: navigator.userAgent,
     id: postId
   };
-  return set(databaseRef(database, `${configService.config.post.namespace}/posts/${postId}}`), wrappedPostData);
+  return set(databaseRef(database, `${configService.config.post.namespace}/posts/${postId}`), wrappedPostData);
 };
 
 export const onNewPost = (database: Database, callback: (post: WeddiApp.Post.Data) => any): void => {

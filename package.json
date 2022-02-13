@@ -6,6 +6,7 @@
   "dependencies": {
     "blueimp-load-image": "^2.24.0",
     "firebase": "^9.6.2",
+    "guesslanguage": "^0.2.0",
     "node-sass": "^4.13.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
