@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { logEvent } from 'firebase/analytics';
 import './board.scss';
@@ -17,32 +17,35 @@ const Board: React.FC<RouteComponentProps> = (props) => {
   }, [analytics]);
 
   const [modalDisplay, setModalDisplay] = useState(false);
-  const openModalAndClose = useCallback<(timeout?: number) => void>((timeout = 5000) => {
+  const openModalAndClose = useCallback<(onClose: () => any, timeout?: number) => void>((onClose, timeout = 5000) => {
     setModalDisplay(true);
     setTimeout(() => {
       setModalDisplay(false);
+      onClose();
     }, timeout);
   }, [setModalDisplay]);
 
   const [post, setPost] = useState({});
   const database = useDatabase();
+  const { next, unsubscribe } = useMemo(() => subscribePost(database), [database]);
+  const getNextPost = useCallback(() => {
+    setTimeout(() => {
+      const newPost = next();
+      setPost(newPost);
+      estimateReadingTime(newPost.greetings, (estimatedSecond) => {
+        const timeout = Math.max(estimatedSecond * 1000, 5000);
+        openModalAndClose(getNextPost, timeout);
+      });
+    }, 3000);
+  }, [openModalAndClose, next]);
 
   useEffect(() => {
-    // subscribe post while component did mount
-    const unsubscribe = subscribePost(database)((newPost) => {
-      if (newPost) {
-        setPost(newPost);
-        estimateReadingTime(newPost.greetings, (estimatedSecond) => {
-          const timeout = Math.max(estimatedSecond * 1000, 5000);
-          openModalAndClose(timeout);
-        });
-      }
-    });
+    getNextPost();
     return () => {
       // unsubscribe post while component will unmount
       unsubscribe();
     };
-  }, [database, openModalAndClose]);
+  }, [getNextPost, unsubscribe]);
 
   return (
     <React.Fragment>

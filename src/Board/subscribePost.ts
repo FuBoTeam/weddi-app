@@ -36,10 +36,10 @@ const heap = newHeap<HeapNode>((node1, node2) => {
   return false;
 });
 
-type PostListener = (post: WeddiApp.Post.Data) => any;
+type NextFn = () => WeddiApp.Post.Data;
 type UnsubscribeFn = () => void;
 
-export const subscribePost = (database: Database) => (listener: PostListener): UnsubscribeFn => {
+export const subscribePost = (database: Database): { unsubscribe: UnsubscribeFn; next: NextFn } => {
   const postsPool: {[timestampId: string]: WeddiApp.Post.Data} = {};
   let feeds: HeapNode[] = [];
   listPosts(database).then(posts => {
@@ -58,7 +58,7 @@ export const subscribePost = (database: Database) => (listener: PostListener): U
     });
   });
 
-  const interval = setInterval(() => {
+  const next: NextFn = () => {
     if (feeds.length === 0) {
       // refill feeds with pool feeds
       feeds = Object.keys(postsPool).map(postId => newHeapNode(1, postId));
@@ -66,13 +66,16 @@ export const subscribePost = (database: Database) => (listener: PostListener): U
     }
     const nextFeed = heap.pop(feeds);
     if (nextFeed) {
-      listener(postsPool[nextFeed.timestampId]);
+      return postsPool[nextFeed.timestampId];
     }
-  }, 8000);
+    throw new Error('queue is empty');
+  };
 
   const unsubscribe: UnsubscribeFn = () => {
-    clearInterval(interval);
     // TODO: unsub API
   };
-  return unsubscribe;
+  return {
+    unsubscribe,
+    next,
+  };
 };
