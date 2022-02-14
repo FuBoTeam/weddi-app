@@ -6,6 +6,7 @@ import { useStorage } from '../Provider/FirebaseApp';
 import configService from '../services/configService';
 import { listRandomKImages } from '../api';
 import { permutationList } from '../utils/random';
+import { sleep } from '../utils/sleep';
 import { preloadImageAsync } from '../images/preloadImage';
 
 const TIME_FADE_OUT = 1000;
@@ -38,28 +39,28 @@ export const Background = () => {
   useEffect(() => {
     switch(bgState) {
       case BG_STATE.BG_FADE_OUT: {
-        setTimeout(() => {
+        sleep(TIME_FADE_OUT).then(() => {
           setBgState(BG_STATE.BG_HIDDEN);
           setPermutation((permutation) => permutationList(permutation));
-        }, TIME_FADE_OUT);
+        });
         break;
       }
       case BG_STATE.BG_HIDDEN: {
-        setTimeout(() => {
+        sleep(TIME_HIDDEN).then(() => {
           setBgState(BG_STATE.BG_FADE_IN);
-        }, TIME_HIDDEN);
+        });
         break;
       }
       case BG_STATE.BG_FADE_IN: {
-        setTimeout(() => {
+        sleep(TIME_FADE_IN).then(() => {
           setBgState(BG_STATE.BG_VISIBLE);
-        }, TIME_FADE_IN);
+        });
         break;
       }
       case BG_STATE.BG_VISIBLE: {
-        setTimeout(() => {
+        sleep(TIME_UPDATE_BACKGROUND).then(() => {
           setBgState(BG_STATE.BG_FADE_OUT);
-        }, TIME_UPDATE_BACKGROUND);
+        });
         break;
       }
       default: {
