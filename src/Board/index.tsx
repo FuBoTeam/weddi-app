@@ -8,6 +8,7 @@ import Dialog from './Dialog';
 import { Background } from './Background';
 import { subscribePost } from './subscribePost';
 import { estimateReadingTime } from '../utils/estimateReadingTime';
+import { sleep } from '../utils/sleep';
 
 const Board: React.FC<RouteComponentProps> = (props) => {
   // TODO: remove this and find a proper filter way on GA
@@ -17,27 +18,30 @@ const Board: React.FC<RouteComponentProps> = (props) => {
   }, [analytics]);
 
   const [modalDisplay, setModalDisplay] = useState(false);
-  const openModalAndClose = useCallback<(onClose: () => any, timeout?: number) => void>((onClose, timeout = 5000) => {
-    setModalDisplay(true);
-    setTimeout(() => {
-      setModalDisplay(false);
-      onClose();
-    }, timeout);
-  }, [setModalDisplay]);
-
   const [post, setPost] = useState({});
   const database = useDatabase();
   const { next, unsubscribe } = useMemo(() => subscribePost(database), [database]);
-  const getNextPost = useCallback(() => {
-    setTimeout(() => {
-      const newPost = next();
-      setPost(newPost);
-      estimateReadingTime(newPost.greetings, (estimatedSecond) => {
-        const timeout = Math.max(estimatedSecond * 1000, 5000);
-        openModalAndClose(getNextPost, timeout);
-      });
-    }, 3000);
-  }, [openModalAndClose, next]);
+  const getNextPost = useCallback(async () => {
+    let newPost: WeddiApp.Post.Data | null = null;
+    while (newPost === null)
+    {
+      try {
+        newPost = next();
+      } catch (err) {
+        await sleep(1000);
+      }
+    }
+    setPost(newPost);
+    const estimatedSecond = await estimateReadingTime(newPost.greetings);
+    const timeout = Math.max(estimatedSecond * 1000, 5000);
+    // show the modal and auto hide
+    setModalDisplay(true);
+    await sleep(timeout);
+    setModalDisplay(false);
+    // after modal hide wait a bit to get next post
+    await sleep(3000);
+    getNextPost();
+  }, [next]);
 
   useEffect(() => {
     getNextPost();
