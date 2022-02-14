@@ -7,6 +7,7 @@ import { useAnalytics, useDatabase } from '../Provider/FirebaseApp';
 import { listPosts } from '../api';
 import { permutationList } from '../utils/random';
 import { getUpperUrl } from '../utils/urlHelpers';
+import { sleep } from '../utils/sleep';
 
 enum Stage {
   Init,
@@ -67,16 +68,14 @@ export const Lottery: React.FC<RouteComponentProps> = (props) => {
   const onToggleExpand = useCallback(() => {
     setIsExpanding(expanding => !expanding);
   }, []);
-  const onToggleShuffle = useCallback((callback = null) => {
+  const onToggleShuffle = useCallback(async (callback = null) => {
     setIsShuffling(true);
-    const timeout = setTimeout(() => {
-      setPosts(posts => permutationList(posts));
-      setIsShuffling(false);
-      clearTimeout(timeout);
-      if (callback) {
-        callback();
-      }
-    }, 1200 * 3);
+    await sleep(1200 * 3);
+    setPosts(posts => permutationList(posts));
+    setIsShuffling(false);
+    if (callback) {
+      callback();
+    }
   }, []);
 
   useEffect(() => {

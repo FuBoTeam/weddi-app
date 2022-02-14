@@ -7,6 +7,7 @@ import { useAnalytics } from '../Provider/FirebaseApp';
 import { GreetingForm } from './GreetingForm';
 import Dialog from '../Board/Dialog';
 import { getUpperUrl } from '../utils/urlHelpers';
+import { sleep } from '../utils/sleep';
 
 export const Greeting: React.FC<RouteComponentProps> = (props) => {
   // TODO: remove this and find a proper filter way on GA
@@ -18,10 +19,12 @@ export const Greeting: React.FC<RouteComponentProps> = (props) => {
   const [modalDisplay, setModalDisplay] = useState(false);
 
   const [user, setUser] = useState({ name: '', greetings: '', imgUrl: '' });
-  const onSubmit = useCallback((formData: WeddiApp.Post.UserInput) => {
+  const onSubmit = useCallback(async (formData: WeddiApp.Post.UserInput) => {
     setUser(formData);
     setModalDisplay(true);
-    setTimeout(() => { props.history.push(getUpperUrl(props.match.url)); }, 5000);
+    // redirect to home page
+    await sleep(5000);
+    props.history.push(getUpperUrl(props.match.url));
   }, [setUser, setModalDisplay, props.history, props.match.url]);
 
   return (

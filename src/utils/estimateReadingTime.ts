@@ -22,13 +22,15 @@ const CharactersPerMin = {
   Turkish: 1054,
 };
 
-export function estimateReadingTime(paragraph: string, callback: (estimatedSecond: number) => any): void {
-  guessLanguage.guessLanguage.name(paragraph, (languageName: string) => {
-    const readingSpeedCharPerMin = languageName in CharactersPerMin ?
-      CharactersPerMin[languageName as keyof typeof CharactersPerMin] :
-      CharactersPerMin.default;
+const guessLanguageNameAsync = (paragraph: string): Promise<string> =>
+  new Promise(resolve => guessLanguage.guessLanguage.name(paragraph, resolve));
 
-    const second = Math.floor(paragraph.length / readingSpeedCharPerMin * 60);
-    callback(second);
-  });
+export async function estimateReadingTime(paragraph: string): Promise<number> {
+  const languageName: string = await guessLanguageNameAsync(paragraph);
+  const readingSpeedCharPerMin = languageName in CharactersPerMin ?
+    CharactersPerMin[languageName as keyof typeof CharactersPerMin] :
+    CharactersPerMin.default;
+
+  const second = Math.floor(paragraph.length / readingSpeedCharPerMin * 60);
+  return second;
 }
