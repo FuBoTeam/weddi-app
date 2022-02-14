@@ -21,6 +21,12 @@ const Board: React.FC<RouteComponentProps> = (props) => {
   const [post, setPost] = useState({});
   const database = useDatabase();
   const { next, unsubscribe } = useMemo(() => subscribePost(database), [database]);
+  // show the modal and auto hide after timeout
+  const openAndCloseModal = useCallback(async (timeout: number)=> {
+    setModalDisplay(true);
+    await sleep(timeout);
+    setModalDisplay(false);
+  }, []);
   const getNextPost = useCallback(async () => {
     let newPost: WeddiApp.Post.Data | null = null;
     while (newPost === null)
@@ -34,14 +40,11 @@ const Board: React.FC<RouteComponentProps> = (props) => {
     setPost(newPost);
     const estimatedSecond = await estimateReadingTime(newPost.greetings);
     const timeout = Math.max(estimatedSecond * 1000, 5000);
-    // show the modal and auto hide
-    setModalDisplay(true);
-    await sleep(timeout);
-    setModalDisplay(false);
+    await openAndCloseModal(timeout);
     // after modal hide wait a bit to get next post
     await sleep(3000);
     getNextPost();
-  }, [next]);
+  }, [next, openAndCloseModal]);
 
   useEffect(() => {
     getNextPost();
