@@ -1,27 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { preloadImageAsync } from '../images/preloadImage';
 import './board.scss';
 
 const Dialog = ({ user, show }) => {
   const [loaded, setLoaded] = useState(false);
-  const imgRef = useRef();
+  const [imageDimension, setImageDimension] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     // while image url changes set to loading
     if (user.imgUrl) {
-      setLoaded(false);
+      preloadImageAsync(user.imgUrl).then((img) => {
+        setLoaded(true);
+        setImageDimension({ width: img.width, height: img.height });
+      });
     }
   }, [user.imgUrl]);
 
-  const onLoad = () => {
-    setLoaded(true);
-  };
-
-  const portraitImage = loaded && imgRef.current && imgRef.current.clientWidth < imgRef.current.clientHeight;
+  const portraitImage = loaded && imageDimension.width < imageDimension.height;
+  console.log(imageDimension);
 
   return (
     <div className={`dialog ${(show && loaded) ? 'show-dialog' : ''}`}>
-      <div className={`image-container ${portraitImage ? 'portrait' : ''}`}>
-        <img ref={imgRef} className="user-image" src={user.imgUrl} alt="images" onLoad={onLoad} />
+      <div className={`image-container ${portraitImage ? 'portrait' : 'landscape'}`}>
+        <img src={user.imgUrl} alt="images" />
       </div>
       <div className="message">
         <h2>From {user.name}:</h2>
