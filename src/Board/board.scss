@@ -95,18 +95,16 @@
 .dialog {
   position: absolute;
   display: none;
-  overflow: auto;
   top: 20%;
-  left: 0;
-  right: 0;
+  left: 25%;
   z-index: 5;
   margin: auto;
-  border-radius: 3px;
 
   &.show-dialog {
     display: block;
     text-align: center;
     animation: dialog-scale-start .3s ease-in-out forwards;
+    overflow-x: hidden;
   }
 
   .image-container, .message {
@@ -118,8 +116,19 @@
     padding: 10px;
     background: white;
     box-shadow: 0 0 8px rgba(0, 0, 0, .3);
-    .user-image {
+    border-radius: 3px;
+
+    &.landscape {
       height: 300px;
+    }
+
+    &.portrait {
+      height: 450px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
     }
   }
 
@@ -149,17 +158,26 @@
 }
 
 @media screen and (max-width: 576px) {
-  .image-container .user-image {
-    width: 100%;
-    height: auto;
-  }
+  .dialog {
+    top: 0;
+    left: 0;
 
-  .dialog .message {
-    width: 100%;
-  }
+    .image-container {
+      &.landscape {
+        width: 100%;
+        height: auto !important;
+      }
 
-  .dialog .modal-sm {
-    flex-direction: column;
+      &.portrait {
+        width: 66.6%;
+        height: auto !important;
+      }
+    }
+
+    .message {
+      margin-left: 0;
+      width: 100%;
+    }
   }
 }
 
