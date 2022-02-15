@@ -1,0 +1,114 @@
+@keyframes dialog-scale-start {
+  0% {
+    opacity: .5;
+    transform: scale(1.15);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes message-move-in {
+  0% {
+    left: -500px;
+  }
+
+  25% {
+    left: -500px;
+  }
+
+  100% {
+    left: 0;
+  }
+}
+
+.dialog {
+  position: absolute;
+  display: none;
+  top: 20%;
+  left: 25%;
+  z-index: 5;
+  margin: auto;
+
+  &.show-dialog {
+    display: block;
+    text-align: center;
+    animation: dialog-scale-start .3s ease-in-out forwards;
+    overflow-x: hidden;
+  }
+
+  .image-container, .message {
+    vertical-align: middle;
+    display: inline-block;
+  }
+
+  .image-container {
+    padding: 10px;
+    background: white;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .3);
+    border-radius: 3px;
+
+    &.landscape {
+      height: 300px;
+    }
+
+    &.portrait {
+      height: 450px;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .message {
+    background: rgba(255, 255, 255, .9);
+    padding: 30px;
+    box-sizing: border-box;
+    width: 500px;
+    color: #444;
+    text-align: left;
+    margin-left: -10px;
+    z-index: -1;
+    position: relative;
+    animation: message-move-in 1s ease-in-out forwards;
+
+    h2 {
+      margin: 0;
+      font-size: 2em;
+    }
+
+    p {
+      margin: 10px 0 0;
+      font-weight: 500;
+      font-size: 1.5em;
+    }
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .dialog {
+    top: 0;
+    left: 0;
+
+    .image-container {
+      &.landscape {
+        width: 100%;
+        height: auto !important;
+      }
+
+      &.portrait {
+        width: 66.6%;
+        height: auto !important;
+      }
+    }
+
+    .message {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+}

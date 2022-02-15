@@ -66,100 +66,6 @@
   opacity: 0;
 }
 
-@keyframes dialog-scale-start {
-  0% {
-    opacity: .5;
-    transform: scale(1.15);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes message-move-in {
-  0% {
-    left: -500px;
-  }
-
-  25% {
-    left: -500px;
-  }
-
-  100% {
-    left: 0;
-  }
-}
-
-.dialog {
-  position: fixed;
-  display: none;
-  overflow: auto;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  z-index: 5;
-}
-
-.dialog .modal-sm {
-  right: 0;
-  left: 0;
-  margin: 10% auto 50px;
-  padding: 0;
-  z-index: 100;
-  border-radius: 3px;
-  display: inline-block;
-  overflow-x: hidden;
-}
-
-.show-dialog {
-  display: block;
-  text-align: center;
-}
-
-.dialog .modal-sm {
-  animation: dialog-scale-start .3s ease-in-out forwards;
-}
-
-.dialog .image-container {
-  padding: 10px;
-  background: white;
-  display: inline-block;
-  box-shadow: 0 0 8px rgba(0, 0, 0, .3);
-  vertical-align: middle;
-}
-
-.image-container .user-image {
-  height: 300px;
-}
-
-.dialog .message {
-  display: inline-block;
-  background: rgba(255, 255, 255, .9);
-  padding: 30px;
-  box-sizing: border-box;
-  width: 500px;
-  color: #444;
-  text-align: left;
-  margin-left: -10px;
-  z-index: -1;
-  position: relative;
-  animation: message-move-in 1s ease-in-out forwards;
-}
-
-.message h2 {
-  margin: 0;
-  font-size: 2em;
-}
-
-.message p {
-  margin: 10px 0 0;
-  font-weight: 500;
-  font-size: 1.5em;
-}
-
 .message-link {
   position: fixed;
   bottom: 50px;
@@ -188,15 +94,4 @@
   justify-content: center;
   font-family: 'Noto Sans Kannada', sans-serif;
   z-index: 10;
-}
-
-@media screen and (max-width: 576px) {
-  .image-container .user-image {
-    width: 100%;
-    height: auto;
-  }
-
-  .dialog .message {
-    width: 100%;
-  }
 }

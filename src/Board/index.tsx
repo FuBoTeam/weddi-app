@@ -4,7 +4,7 @@ import { logEvent } from 'firebase/analytics';
 import './board.scss';
 
 import { useAnalytics, useDatabase } from '../Provider/FirebaseApp';
-import Dialog from './Dialog';
+import Dialog from './Dialog/Dialog';
 import { Background } from './Background';
 import { subscribePost } from './subscribePost';
 import { estimateReadingTime } from '../utils/estimateReadingTime';
@@ -18,7 +18,7 @@ const Board: React.FC<RouteComponentProps> = (props) => {
   }, [analytics]);
 
   const [modalDisplay, setModalDisplay] = useState(false);
-  const [post, setPost] = useState({});
+  const [post, setPost] = useState<WeddiApp.Post.UserInput>({ name: '', greetings: '', imgUrl: '', joinedGame: false });
   const database = useDatabase();
   const { next, unsubscribe } = useMemo(() => subscribePost(database), [database]);
   // show the modal and auto hide after timeout
