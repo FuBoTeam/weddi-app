@@ -39,7 +39,7 @@ export const Greeting: React.FC<RouteComponentProps> = (props) => {
           <a className="link gray-font" href="mailto:contact@weddi.app">聯絡我們 contact@weddi.app</a>
         </>
       }
-      <Dialog user={user} show={modalDisplay} />
+      <Dialog post={user} show={modalDisplay} />
     </div>
   );
 };
