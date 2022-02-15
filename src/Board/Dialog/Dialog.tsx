@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { preloadImageAsync } from '../images/preloadImage';
-import './board.scss';
+import { preloadImageAsync } from '../../images/preloadImage';
+import './dialog.scss';
 
-const Dialog = ({ user, show }) => {
+interface Props {
+  user: WeddiApp.Post.UserInput;
+  show: boolean;
+}
+
+const Dialog: React.FC<Props> = ({ user, show }) => {
   const [loaded, setLoaded] = useState(false);
   const [imageDimension, setImageDimension] = useState({ width: 0, height: 0 });
 

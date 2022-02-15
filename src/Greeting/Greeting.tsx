@@ -5,7 +5,7 @@ import './greeting.scss';
 
 import { useAnalytics } from '../Provider/FirebaseApp';
 import { GreetingForm } from './GreetingForm';
-import Dialog from '../Board/Dialog';
+import Dialog from '../Board/Dialog/Dialog';
 import { getUpperUrl } from '../utils/urlHelpers';
 import { sleep } from '../utils/sleep';
 
@@ -18,7 +18,7 @@ export const Greeting: React.FC<RouteComponentProps> = (props) => {
 
   const [modalDisplay, setModalDisplay] = useState(false);
 
-  const [user, setUser] = useState({ name: '', greetings: '', imgUrl: '' });
+  const [user, setUser] = useState<WeddiApp.Post.UserInput>({ name: '', greetings: '', imgUrl: '', joinedGame: false });
   const onSubmit = useCallback(async (formData: WeddiApp.Post.UserInput) => {
     setUser(formData);
     setModalDisplay(true);
