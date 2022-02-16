@@ -5,7 +5,7 @@ import './board.scss';
 
 import { useAnalytics, useDatabase } from '../Provider/FirebaseApp';
 import Dialog from './Dialog/Dialog';
-import { Background } from './Background';
+import Background from './Background/Background';
 import { subscribePost } from './subscribePost';
 import { estimateReadingTime } from '../utils/estimateReadingTime';
 import { sleep } from '../utils/sleep';

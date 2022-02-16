@@ -1,0 +1,67 @@
+@import '../../stylesheets/vars.scss';
+
+.orange-font {
+  color: $orange;
+}
+
+.gray-font {
+  color: #333;
+  font-size: small;
+}
+
+.container {
+  background: black;
+  min-height: 100%;
+  overflow-x: hidden;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.container .loading {
+  text-align: center;
+  color: white;
+  font-size: 25px;
+  position: absolute;
+  top: 300px;
+  width: 100%;
+}
+
+.loading img {
+  width: 100px;
+  margin: 0 20px 0 0;
+  vertical-align: middle;
+}
+
+.container img {
+  flex-grow: 1;
+  margin: 2px;
+  object-fit: cover;
+  max-width: 100%;
+  max-height: 200px;
+  filter: grayscale(70%);
+}
+
+.fade-in {
+  animation: fadeIn ease 1s;
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0;}
+  100% {opacity: 1;}
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
+.fade-out {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 1s, opacity 1s linear;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}

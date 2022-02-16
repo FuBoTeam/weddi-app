@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import loadingIcon from '../images/loading.gif';
-import './board.scss';
+import loadingIcon from '../../images/loading.gif';
+import './background.scss';
 
-import { useStorage } from '../Provider/FirebaseApp';
-import configService from '../services/configService';
-import { listRandomKImages } from '../api';
-import { permutationList } from '../utils/random';
-import { sleep } from '../utils/sleep';
-import { preloadImageAsync } from '../images/preloadImage';
+import { useStorage } from '../../Provider/FirebaseApp';
+import configService from '../../services/configService';
+import { listRandomKImages } from '../../api';
+import { permutationList } from '../../utils/random';
+import { sleep } from '../../utils/sleep';
+import { preloadImageAsync } from '../../images/preloadImage';
 
 const TIME_FADE_OUT = 1000;
 const TIME_FADE_IN = 1000;
@@ -21,7 +21,7 @@ enum BG_STATE {
   BG_VISIBLE = 'BG_VISIBLE',
 }
 
-export const Background = () => {
+const Background: React.FC = () => {
   const storage = useStorage();
   const [isLoading, setIsLoading] = useState(true);
   const [bgState, setBgState] = useState(BG_STATE.BG_HIDDEN);
@@ -98,3 +98,5 @@ export const Background = () => {
     </div>
   );
 };
+
+export default Background;
