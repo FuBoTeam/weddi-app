@@ -1,6 +1,19 @@
 
+# Install 
 
-#Usage
+`pip3 install requests`
+`pip3 install json`
+`pip3 install csv`
 
-dump data
+# Usage
+
+## modify variables
+output_file = "data_file.csv"
+database = "weddi-app"
+posts_path = "ykyl/posts"
+
+## dump data
 `python3 firebase_data_exporter.py`
+
+
+
