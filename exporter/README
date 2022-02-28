@@ -1,0 +1,6 @@
+
+
+#Usage
+
+dump data
+`python3 firebase_data_exporter.py`
