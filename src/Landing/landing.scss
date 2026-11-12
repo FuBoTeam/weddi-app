@@ -102,6 +102,8 @@ $paper: #FBF8F7;
     color: $ink-soft;
   }
 
+  &__steps,
+  &__faq,
   &__features {
     padding: 2.5rem 0 3rem;
     border-bottom: 1px solid $background;
@@ -111,6 +113,20 @@ $paper: #FBF8F7;
     margin: 0 0 1.25rem;
     font-size: 1.5rem;
     line-height: 1.25;
+  }
+
+  &__step-list {
+    margin: 0;
+    padding-left: 1.5rem;
+  }
+
+  &__step-list li,
+  &__faq-item {
+    margin-bottom: 1.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   &__list {
