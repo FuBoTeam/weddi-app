@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { act } from 'react-dom/test-utils';
+import { act, Simulate } from 'react-dom/test-utils';
 import { Lottery } from './Lottery';
 import { subscribePosts } from '../api';
 import { visiblePosts } from '../api/postVisibility';
@@ -40,4 +40,34 @@ it('keeps pending greetings out of the live lottery and updates on approval/togg
   expect(container.textContent).toContain('現在還沒有玩家喔');
   act(() => { ReactDOM.unmountComponentAtNode(container); });
   expect(stop).toHaveBeenCalledTimes(1);
+});
+
+it('does not reshuffle or reveal an active draw when a new greeting arrives', () => {
+  let receive;
+  subscribePosts.mockImplementation((database, callback, options) => {
+    receive = event => callback(visiblePosts(event, options));
+    return jest.fn();
+  });
+  const container = document.createElement('div');
+  const posts = {
+    old: { id: 'old', name: 'Historical Guest', joinedGame: true },
+    approved: { id: 'approved', name: 'Approved Guest', joinedGame: true, status: 'approved' },
+  };
+  act(() => { ReactDOM.render(<Lottery match={{ url: '/test/lottery' }} />, container); });
+  act(() => receive({ posts }));
+  const namesBefore = [...container.querySelectorAll('.front')].map(node => node.textContent);
+  expect(namesBefore).toEqual(['Historical Guest', 'Approved Guest']);
+  act(() => Simulate.click(container.querySelector('.lottery-btns button.show')));
+  expect(container.querySelector('.inner.flip-transition')).not.toBeNull();
+  act(() => receive({
+    posts: {
+      ...posts,
+      late: { id: 'late', name: 'Late Guest', joinedGame: true },
+    },
+  }));
+  const namesAfter = [...container.querySelectorAll('.front')].map(node => node.textContent);
+  expect(namesAfter).toEqual(['Historical Guest', 'Approved Guest']);
+  expect(container.textContent).not.toContain('Late Guest');
+  expect(container.querySelector('.inner.flip-transition')).not.toBeNull();
+  act(() => { ReactDOM.unmountComponentAtNode(container); });
 });

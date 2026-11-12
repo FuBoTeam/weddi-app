@@ -8,18 +8,7 @@ import { subscribePosts } from '../api';
 import { permutationList } from '../utils/random';
 import { getUpperUrl } from '../utils/urlHelpers';
 import { sleep } from '../utils/sleep';
-
-enum Stage {
-  Init,
-  Loaded,
-  Start,
-  Flipped,
-  Stacked,
-  Shuffling,
-  Shuffled,
-  Ready,
-  Error,
-}
+import { applyEligiblePosts, isLotteryRoundActive, Stage } from './lotteryDeck';
 
 export const Lottery: React.FC<RouteComponentProps> = (props) => {
   // TODO: remove this and find a proper filter way on GA
@@ -35,15 +24,33 @@ export const Lottery: React.FC<RouteComponentProps> = (props) => {
   const [isExpanding, setIsExpanding] = useState(true);
   const [isShuffling, setIsShuffling] = useState(false);
   const [revealedIds, setRevealedIds] = useState<Record<string, boolean>>({ '*': true });
+  const postsRef = React.useRef(posts);
+  const stageRef = React.useRef(stage);
+  const revealedIdsRef = React.useRef(revealedIds);
+  const latestEligibleRef = React.useRef<WeddiApp.Post.Data[]>([]);
+  postsRef.current = posts;
+  stageRef.current = stage;
+  revealedIdsRef.current = revealedIds;
+
+  const applyDeck = (next: ReturnType<typeof applyEligiblePosts>, shuffle = false) => {
+    setPosts(shuffle ? permutationList(next.posts) : next.posts);
+    setStage(next.stage);
+    setRevealedIds(next.revealedIds);
+    if (next.resetPresentation) {
+      setIsExpanding(true);
+      setIsShuffling(false);
+    }
+  };
 
   useEffect(() => subscribePosts(database, postsDictionary => {
-    const posts = Object.values(postsDictionary || {});
-    setPosts(permutationList(posts));
-    setIsExpanding(true);
-    setIsShuffling(false);
-    setRevealedIds({ '*': true });
-    setStage(posts.length ? Stage.Loaded : Stage.Error);
+    const incoming = Object.values(postsDictionary || {});
+    latestEligibleRef.current = incoming;
+    applyDeck(
+      applyEligiblePosts(postsRef.current, incoming, stageRef.current, revealedIdsRef.current),
+      !isLotteryRoundActive(stageRef.current),
+    );
   }, { joinedGame: true }, () => {
+    latestEligibleRef.current = [];
     setPosts([]);
     setStage(Stage.Error);
   }), [database]);
@@ -108,11 +115,9 @@ export const Lottery: React.FC<RouteComponentProps> = (props) => {
   }, [stage]);
 
   const onResetBtnClick = useCallback(() => {
-    setIsExpanding(true);
-    setIsShuffling(false);
-    setRevealedIds({ '*': true });
-    setStage(Stage.Loaded);
-  }, [setIsExpanding, setIsShuffling, setRevealedIds, setStage]);
+    const incoming = latestEligibleRef.current;
+    applyDeck(applyEligiblePosts([], incoming, Stage.Loaded, { '*': true }), true);
+  }, []);
 
   const allCards = posts.map((post, index) => (
     <li key={post.id} className="card" onClick={() => onFlipOne(index)}>
