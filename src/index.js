@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './index.css';
 import App from './App';
+import { Landing } from './Landing/Landing';
 import registerServiceWorker from './registerServiceWorker';
 
-const Home = () => (<div>Weddi App <a href="mailto:contact@weddi.app">聯絡我們 contact@weddi.app</a></div>);
+const Home = Landing;
 
 const Root = () => {
   return (
