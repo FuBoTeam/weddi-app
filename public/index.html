@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#E26870">
     <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
@@ -49,22 +49,220 @@
       }(window.location))
     </script>
     <!-- End Single Page Apps for GitHub Pages -->
-    <title>Weddi App</title>
+    <title>Weddi – Live Wedding Greeting Wall &amp; Guest Lottery App</title>
+    <meta name="description" content="Guests send wishes and photos from their phones, with no app to install, and every greeting appears live on the venue screen. Then draw lottery winners from the greetings.">
+    <link rel="canonical" href="https://weddi.app/">
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Weddi">
+    <meta property="og:url" content="https://weddi.app/">
+    <meta property="og:title" content="Weddi – Live Wedding Greeting Wall &amp; Guest Lottery">
+    <meta property="og:description" content="Guests send wishes and photos from their phones, and every greeting appears live on the venue screen. Then draw lottery winners from the greetings.">
+    <meta property="og:image" content="https://weddi.app/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Weddi&#x27;s live greeting wall: a guest&#x27;s message and photo over a collage of the couple&#x27;s photos.">
+    <meta property="og:locale" content="en_US">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Weddi – Live Wedding Greeting Wall &amp; Guest Lottery">
+    <meta name="twitter:description" content="Guests send wishes and photos from their phones, and every greeting appears live on the venue screen. Then draw lottery winners from the greetings.">
+    <meta name="twitter:image" content="https://weddi.app/og-image.jpg">
+    <meta name="twitter:image:alt" content="Weddi&#x27;s live greeting wall: a guest&#x27;s message and photo over a collage of the couple&#x27;s photos.">
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://weddi.app/#org",
+      "name": "Weddi",
+      "url": "https://weddi.app/",
+      "email": "contact@weddi.app",
+      "founder": {
+        "@type": "Person",
+        "name": "Ben Liu",
+        "url": "https://benliu.dev"
+      },
+      "sameAs": [
+        "https://github.com/FuBoTeam/weddi-app"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://weddi.app/#website",
+      "url": "https://weddi.app/",
+      "name": "Weddi",
+      "inLanguage": "en",
+      "publisher": {
+        "@id": "https://weddi.app/#org"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://weddi.app/#app",
+      "name": "Weddi",
+      "url": "https://weddi.app/",
+      "description": "Weddi is a wedding-greeting web app. Guests send a message and a photo to the couple from their phone, each greeting appears live on a photo wall on the venue screen, and the couple can draw lottery winners from everyone who sent a greeting.",
+      "applicationCategory": "LifestyleApplication",
+      "operatingSystem": "Any (web browser)",
+      "browserRequirements": "Requires JavaScript. Works in modern mobile and desktop browsers.",
+      "inLanguage": [
+        "zh-Hant",
+        "en"
+      ],
+      "featureList": [
+        "A live greeting wall on the venue screen",
+        "Greetings from any phone, no app to install",
+        "Pick a photo or upload one",
+        "Paced for reading",
+        "A wedding lottery drawn from the greetings",
+        "Made for your day"
+      ],
+      "screenshot": "https://weddi.app/og-image.jpg",
+      "publisher": {
+        "@id": "https://weddi.app/#org"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://weddi.app/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Weddi?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Weddi is a wedding-greeting web app. Guests send a message and a photo to the couple from their phone, each greeting appears live on a photo wall on the venue screen, and the couple can draw lottery winners from everyone who sent a greeting."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do guests need to download an app or create an account?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Guests scan the event QR code (which is basically a link) or open the event link in their phone's web browser, type a name and a message, choose a photo, and send it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What appears on the big screen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A live wall that shows each greeting with its photo over a collage of the couple's pictures. New greetings are shown first, and in quieter moments the wall cycles back through earlier ones."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does each greeting stay on screen?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Long enough to read it. Weddi estimates the reading time from the message's length and language, with a minimum of about five seconds, so short notes and long messages both get their moment."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can guests add photos?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Every greeting comes with a picture: guests pick one of the couple's photos or upload their own, and uploads are resized on the phone before sending."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the wedding lottery work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Everyone who sends a greeting gets a card in the draw. On the big screen you shuffle the deck, then flip cards to reveal the winners."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the app in English or Chinese?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "This page is in English. The greeting form, wall, and lottery screens are mostly in Traditional Chinese, and guests can write greetings in any language."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do we get Weddi for our wedding?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Each event is set up with its own page, title, and photos. Contact us first at contact@weddi.app; the price is not decided yet."
+          }
+        }
+      ]
+    }
+  ]
+}
+    </script>
+    <style>
+      /* The static page remains readable before JS and when JS is disabled. */
+      .static-landing { background: #FBF8F7; color: #2B2224; font: 1rem/1.6 system-ui, sans-serif; padding: 1.25rem; }
+      .static-landing header, .static-landing main, .static-landing footer { max-width: 60rem; margin: auto; }
+      .static-landing .landing__brand { color: #A63B45; font-size: 1.25rem; font-weight: 700; }
+      .static-landing section { padding: 2rem 0; border-bottom: 1px solid #EDE3E1; }
+      .static-landing h1 { max-width: 24ch; font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.15; }
+      .static-landing .landing__lead { max-width: 38rem; font-size: 1.125rem; }
+      .static-landing a { color: #A63B45; }
+      .static-landing a:focus-visible { outline: 3px solid #2B2224; outline-offset: 3px; }
+      .static-landing .landing__cta { display: inline-block; padding: .75rem 1.75rem; border-radius: 999px; background: #A63B45; color: white; text-decoration: none; font-weight: 600; }
+      .static-landing .landing__list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 1rem; padding: 0; list-style: none; }
+      .static-landing .landing__card { background: white; border: 1px solid #EDE3E1; border-top: 4px solid #E26870; border-radius: 12px; padding: 1.25rem; }
+      .static-landing h3 { font-size: 1.125rem; margin-bottom: .5rem; }
+      .static-landing .landing__card-body { margin-top: .5rem; }
+      .static-landing .landing__step-list li, .static-landing .landing__faq-item { margin-bottom: 1.5rem; }
+      .static-landing footer { padding: 1.5rem 0; }
+    </style>
   </head>
   <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <div id="root">
+      <!-- ReactDOM.render replaces this static landing; keep it in sync with src/Landing/Landing.tsx. -->
+      <div class="landing static-landing">
+        <header class="landing__header"><span class="landing__brand">Weddi</span></header>
+        <main class="landing__main">
+          <section class="landing__hero" aria-labelledby="landing-title">
+            <h1 id="landing-title" class="landing__title">A live wedding greeting wall your guests post to from their phones</h1>
+            <p class="landing__lead">Weddi is a wedding-greeting web app. Guests send messages and a photo to the bride and groom from their phone browser, and every greeting shows up live on a photo wall on the venue screen. When it&#x27;s time, draw lottery winners from everyone who sent a greeting.</p>
+            <a class="landing__cta" href="%PUBLIC_URL%/test/?v=dashboard">See a demo</a>
+            <p class="landing__note">The demo opens a sample event. The in-app interface is mostly in Chinese.</p>
+          </section>
+          <section class="landing__steps" aria-labelledby="landing-steps">
+            <h2 id="landing-steps" class="landing__subtitle">How it works</h2>
+            <ol class="landing__step-list">
+              <li><h3 class="landing__card-title">Share your event QR code (or link)</h3><p class="landing__card-body">Guests scan the event QR code, which is basically a link, and open it in their phone browser. There is no app to install and no account to create.</p></li>
+              <li><h3 class="landing__card-title">Guests write a greeting</h3><p class="landing__card-body">Guests enter a name or nickname, a message, and a photo (pick one of the couple&#x27;s or upload their own).</p></li>
+              <li><h3 class="landing__card-title">It appears on the big screen</h3><p class="landing__card-body">The wall shows new greetings first, each for as long as it takes to read.</p></li>
+            </ol>
+          </section>
+          <section class="landing__features" aria-labelledby="landing-features">
+            <h2 id="landing-features" class="landing__subtitle">Features</h2>
+            <ul class="landing__list">
+              <li class="landing__card"><h3 class="landing__card-title">A live greeting wall on the venue screen</h3><p class="landing__card-body">Every greeting appears on the venue screen with its photo, over a collage of your pictures. New greetings go up first; in quieter moments the wall cycles back through earlier ones.</p></li>
+              <li class="landing__card"><h3 class="landing__card-title">Greetings from any phone, no app to install</h3><p class="landing__card-body">Guests open your event link in their phone browser, type their name and a message, and send it. There is no app to install.</p></li>
+              <li class="landing__card"><h3 class="landing__card-title">Pick a photo or upload one</h3><p class="landing__card-body">Each greeting comes with a picture: guests choose one of your photos or upload their own, which is resized on the phone before it is sent.</p></li>
+              <li class="landing__card"><h3 class="landing__card-title">Paced for reading</h3><p class="landing__card-body">Each greeting stays on screen for as long as it takes to read, based on its length and language, so short notes and long messages both get their moment.</p></li>
+              <li class="landing__card"><h3 class="landing__card-title">A wedding lottery drawn from the greetings</h3><p class="landing__card-body">Everyone who sends a greeting gets a card in the draw. Shuffle the deck on the big screen, then flip cards to reveal the winners.</p></li>
+              <li class="landing__card"><h3 class="landing__card-title">Made for your day</h3><p class="landing__card-body">Your event gets its own page with your names in the title and your photos throughout the form and the wall.</p></li>
+            </ul>
+          </section>
+          <section class="landing__faq" aria-labelledby="landing-faq">
+            <h2 id="landing-faq" class="landing__subtitle">Frequently asked questions</h2>
+            <div class="landing__faq-item"><h3 class="landing__card-title">What is Weddi?</h3><p class="landing__card-body">Weddi is a wedding-greeting web app. Guests send a message and a photo to the couple from their phone, each greeting appears live on a photo wall on the venue screen, and the couple can draw lottery winners from everyone who sent a greeting.</p></div>
+            <div class="landing__faq-item"><h3 class="landing__card-title">Do guests need to download an app or create an account?</h3><p class="landing__card-body">No. Guests scan the event QR code (which is basically a link) or open the event link in their phone&#x27;s web browser, type a name and a message, choose a photo, and send it.</p></div>
+            <div class="landing__faq-item"><h3 class="landing__card-title">What appears on the big screen?</h3><p class="landing__card-body">A live wall that shows each greeting with its photo over a collage of the couple&#x27;s pictures. New greetings are shown first, and in quieter moments the wall cycles back through earlier ones.</p></div>
+            <div class="landing__faq-item"><h3 class="landing__card-title">How long does each greeting stay on screen?</h3><p class="landing__card-body">Long enough to read it. Weddi estimates the reading time from the message&#x27;s length and language, with a minimum of about five seconds, so short notes and long messages both get their moment.</p></div>
+            <div class="landing__faq-item"><h3 class="landing__card-title">Can guests add photos?</h3><p class="landing__card-body">Yes. Every greeting comes with a picture: guests pick one of the couple&#x27;s photos or upload their own, and uploads are resized on the phone before sending.</p></div>
+            <div class="landing__faq-item"><h3 class="landing__card-title">How does the wedding lottery work?</h3><p class="landing__card-body">Everyone who sends a greeting gets a card in the draw. On the big screen you shuffle the deck, then flip cards to reveal the winners.</p></div>
+            <div class="landing__faq-item"><h3 class="landing__card-title">Is the app in English or Chinese?</h3><p class="landing__card-body">This page is in English. The greeting form, wall, and lottery screens are mostly in Traditional Chinese, and guests can write greetings in any language.</p></div>
+            <div class="landing__faq-item"><h3 class="landing__card-title">How do we get Weddi for our wedding?</h3><p class="landing__card-body">Each event is set up with its own page, title, and photos. Contact us first at contact@weddi.app; the price is not decided yet.</p></div>
+          </section>
+        </main>
+        <footer class="landing__footer">
+          <p>Built by Ben with FuboTeam.</p>
+          <p><a class="landing__contact" href="https://benliu.dev">Get in touch at benliu.dev</a> · <a class="landing__email" href="mailto:contact@weddi.app">contact@weddi.app</a></p>
+        </footer>
+      </div>
+    </div>
   </body>
 </html>
