@@ -1,0 +1,35 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "$event": {
+      ".read": true,
+      "settings": {
+        "approvalEnabled": {
+          ".write": "newData.isBoolean()",
+          ".validate": "newData.isBoolean()"
+        },
+        "$other": { ".validate": false }
+      },
+      "posts": {
+        ".indexOn": ["joinedGame", "status"],
+        "$postId": {
+          ".write": "!data.exists() && newData.exists() && (root.child($event).child('settings/approvalEnabled').val() === true ? newData.child('status').val() === 'pending' : (!newData.child('status').exists() || newData.child('status').val() === 'approved'))",
+          ".validate": "newData.hasChildren(['id', 'name', 'greetings', 'imgUrl', 'joinedGame', 'modifiedTime', 'userAgent'])",
+          "id": { ".validate": "newData.isString() && newData.val() === $postId" },
+          "name": { ".validate": "newData.isString() && newData.val().length > 0" },
+          "greetings": { ".validate": "newData.isString() && newData.val().length > 0" },
+          "imgUrl": { ".validate": "newData.isString()" },
+          "joinedGame": { ".validate": "newData.isBoolean()" },
+          "modifiedTime": { ".validate": "newData.isString()" },
+          "userAgent": { ".validate": "newData.isString()" },
+          "status": {
+            ".write": "data.parent().exists() && newData.val() === 'approved'",
+            ".validate": "newData.val() === 'pending' || newData.val() === 'approved'"
+          },
+          "$other": { ".validate": false }
+        }
+      }
+    }
+  }
+}

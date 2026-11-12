@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { RouteComponentProps } from 'react-router';
 import { logEvent } from 'firebase/analytics';
 import './board.scss';
@@ -18,51 +18,62 @@ const Board: React.FC<RouteComponentProps> = (props) => {
   }, [analytics]);
 
   const [modalDisplay, setModalDisplay] = useState(false);
-  const [post, setPost] = useState<WeddiApp.Post.UserInput>({ name: '', greetings: '', imgUrl: '', joinedGame: false });
+  const [post, setPost] = useState<WeddiApp.Post.Data | null>(null);
+  const [ready, setReady] = useState(false);
+  const [queue, setQueue] = useState<ReturnType<typeof subscribePost> | null>(null);
   const database = useDatabase();
-  const { next, unsubscribe } = useMemo(() => subscribePost(database), [database]);
-
-  const getNextPost = useCallback(async () => {
-    let newPost: WeddiApp.Post.Data | null = null;
-    while (newPost === null)
-    {
-      try {
-        newPost = next();
-      } catch (err) {
-        await sleep(1000);
-      }
-    }
-    setPost(newPost);
-    // open modal
-    setModalDisplay(true);
-  }, [next]);
-
-  const autoCloseModal = useCallback(async () => {
-    if (modalDisplay) {
-      const estimatedSecond = await estimateReadingTime(post.greetings);
-      const timeout = Math.max(estimatedSecond * 1000, 5000);
-      await sleep(timeout);
-      setModalDisplay(false);
-      // after modal hide wait a bit to get next post
-      await sleep(3000);
-      getNextPost();
-    }
-  }, [modalDisplay, post.greetings, getNextPost]);
+  const eventUrl = props.match.url.replace(/\/$/, '');
 
   useEffect(() => {
-    getNextPost();
-    return () => {
-      // unsubscribe post while component will unmount
-      unsubscribe();
+    const subscription = subscribePost(database, id => {
+      setPost(current => current?.id === id ? null : current);
+    });
+    setQueue(subscription);
+    return subscription.unsubscribe;
+  }, [database]);
+
+  useEffect(() => {
+    if (!queue || post) return;
+    let active = true;
+    const showNext = async () => {
+      while (active) {
+        try {
+          const nextPost = queue.next();
+          setReady(false);
+          setModalDisplay(true);
+          setPost(nextPost);
+          return;
+        } catch (err) {
+          await sleep(1000);
+        }
+      }
     };
-  }, [getNextPost, unsubscribe]);
+    showNext();
+    return () => { active = false; };
+  }, [queue, post]);
+
+  const onReady = useCallback(() => setReady(true), []);
+  useEffect(() => {
+    if (!post || !ready) return;
+    let active = true;
+    const advance = async () => {
+      const estimatedSecond = await estimateReadingTime(post.greetings);
+      await sleep(Math.max(estimatedSecond * 1000, 5000));
+      if (!active) return;
+      setModalDisplay(false);
+      await sleep(3000);
+      if (active) setPost(null);
+    };
+    advance();
+    return () => { active = false; };
+  }, [post, ready]);
 
   return (
     <React.Fragment>
       <Background />
-      <Dialog post={post} show={modalDisplay} onReady={autoCloseModal} />
-      <a className="message-link" href={`${props.match.url}/greetings`}>&lt;&lt; 留下你的祝福</a>
-      <a className="game-link" href={`${props.match.url}/lottery`}>去遊戲頁</a>
+      {post && <Dialog post={post} show={modalDisplay} onReady={onReady} />}
+      <a className="message-link" href={`${eventUrl}/greetings`}>&lt;&lt; 留下你的祝福</a>
+      <a className="game-link" href={`${eventUrl}/lottery`}>去遊戲頁</a>
     </React.Fragment>
   );
 };

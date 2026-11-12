@@ -15,6 +15,7 @@ interface Props {
 
 export const GreetingForm: React.FC<Props> = ({ onSubmit }) => {
   const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState('');
 
   const [form, setForm] = useState({
     name: '',
@@ -73,7 +74,11 @@ export const GreetingForm: React.FC<Props> = ({ onSubmit }) => {
           onSubmit(input);
         }
       };
-      return uploadFlow();
+      setError('');
+      return uploadFlow().catch(() => {
+        setError('Your greeting could not be sent. Please try again.');
+        setIsProcessing(false);
+      });
     }
   };
 
@@ -130,6 +135,7 @@ export const GreetingForm: React.FC<Props> = ({ onSubmit }) => {
           <textarea name="greetings" placeholder="祝賀詞" onChange={onTextChangeHandler} required disabled={isProcessing} />
         </label>
       </div>
+      {error && <p role="alert">{error}</p>}
       <button className="btn" type="submit" disabled={isProcessing}>
         {isProcessing && <img className="loading-img" src={loadingIcon} alt="" />}
         留言

@@ -1,5 +1,6 @@
 declare namespace WeddiApp {
   namespace Post {
+    type Status = 'pending' | 'approved';
     type Data = UserInput & SystemInput
 
     interface UserInput {
@@ -10,6 +11,7 @@ declare namespace WeddiApp {
     }
 
     interface SystemInput {
+      status?: Status;
       userAgent: string;
       modifiedTime: string;
       id: string;
