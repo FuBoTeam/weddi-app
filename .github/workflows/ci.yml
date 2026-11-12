@@ -12,12 +12,12 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node_version }}
-      - uses: c-hive/gha-yarn-cache@v1
+          cache: yarn
       - name: Install JS dependencies
         run: yarn install
       - name: Lint
@@ -25,12 +25,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node_version }}
-      - uses: c-hive/gha-yarn-cache@v1
+          cache: yarn
       - name: Install JS dependencies
         run: yarn install
       - name: Test
@@ -38,12 +38,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node_version }}
-      - uses: c-hive/gha-yarn-cache@v1
+          cache: yarn
       - name: Install JS dependencies
         run: yarn install
       - name: build
