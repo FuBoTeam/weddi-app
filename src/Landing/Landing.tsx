@@ -9,7 +9,11 @@ const DEMO_URL = `${process.env.PUBLIC_URL}/test/?v=dashboard`;
 const features = [
   {
     title: 'A live greeting wall',
-    body: 'Every greeting appears on the venue screen with its photo, over a collage of your pictures. New greetings go up first; in quieter moments the wall cycles back through earlier ones.',
+    body: 'Visible greetings appear on the venue screen with their photos, over a collage of your pictures. New greetings go up first; in quieter moments the wall cycles back through earlier ones.',
+  },
+  {
+    title: 'Screen greetings before they go live',
+    body: 'Turn on message approval so you can review new greetings together and approve them before they appear on the live wall.',
   },
   {
     title: 'Greetings from any phone',
@@ -25,7 +29,7 @@ const features = [
   },
   {
     title: 'An in-ceremony lottery game',
-    body: 'Everyone who sends a greeting gets a card in the draw. Shuffle the deck on the big screen, then flip cards to reveal the winners.',
+    body: 'Guests who send a greeting get a card in the draw; with message approval on, only approved greetings enter. Shuffle the deck on the big screen, then flip cards to reveal the winners.',
   },
   {
     title: 'Made for your day',
@@ -92,7 +96,7 @@ export const Landing: React.FC = () => {
           </h1>
           <p className="landing__lead">
             Weddi is a wedding-greeting web app. Guests send messages to the bride and groom in real time,
-            and every greeting shows up on a live photo wall.
+            and greetings show up on a live photo wall.
           </p>
           <a className="landing__cta" href={DEMO_URL}>See a demo</a>
           <p className="landing__note">The demo opens a sample event. The in-app interface is mostly in Chinese.</p>

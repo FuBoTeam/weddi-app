@@ -119,7 +119,7 @@ async function main() {
 
   // 2. Live wall on a projector-sized screen, entered through 404.html like GitHub Pages.
   await viewport(1280, 720, 1, false);
-  await go(`${origin}/test/?v=dashboard`);
+  await go(`${origin}/test/`);
   await waitFor('!!document.querySelector(".dialog.show-dialog")', 45000);
   await waitFor('!!document.querySelector(".container img.visible")', 45000);
   await sleep(1500);

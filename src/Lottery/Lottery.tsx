@@ -4,7 +4,7 @@ import { logEvent } from 'firebase/analytics';
 import './lottery.scss';
 
 import { useAnalytics, useDatabase } from '../Provider/FirebaseApp';
-import { listPosts } from '../api';
+import { subscribePosts } from '../api';
 import { permutationList } from '../utils/random';
 import { getUpperUrl } from '../utils/urlHelpers';
 import { sleep } from '../utils/sleep';
@@ -32,23 +32,21 @@ export const Lottery: React.FC<RouteComponentProps> = (props) => {
   const [posts, setPosts] = useState<WeddiApp.Post.Data[]>([]);
   const [stage, setStage] = useState<Stage>(Stage.Init);
 
-  useEffect(() => {
-    listPosts(database, { joinedGame: true }).then(postsDictionary => {
-      if (postsDictionary === null) {
-        // TODO: enable retry
-        setStage(Stage.Error);
-        return;
-      }
-      const posts = Object.keys(postsDictionary).map(key => postsDictionary[key]);
-      const shuffledPosts = permutationList(posts);
-      setPosts(shuffledPosts);
-      setStage(Stage.Loaded);
-    });
-  }, [database]);
-
   const [isExpanding, setIsExpanding] = useState(true);
   const [isShuffling, setIsShuffling] = useState(false);
   const [revealedIds, setRevealedIds] = useState<Record<string, boolean>>({ '*': true });
+
+  useEffect(() => subscribePosts(database, postsDictionary => {
+    const posts = Object.values(postsDictionary || {});
+    setPosts(permutationList(posts));
+    setIsExpanding(true);
+    setIsShuffling(false);
+    setRevealedIds({ '*': true });
+    setStage(posts.length ? Stage.Loaded : Stage.Error);
+  }, { joinedGame: true }, () => {
+    setPosts([]);
+    setStage(Stage.Error);
+  }), [database]);
 
   const onToggleFlipAll = useCallback(() => {
     setRevealedIds(ids => {

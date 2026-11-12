@@ -1,5 +1,5 @@
 import { Database } from 'firebase/database';
-import { listPosts, onNewPost } from '../api';
+import { subscribePosts } from '../api';
 import { newHeap } from '../utils/priorityQueue';
 
 interface HeapNode {
@@ -39,23 +39,31 @@ const heap = newHeap<HeapNode>((node1, node2) => {
 type NextFn = () => WeddiApp.Post.Data;
 type UnsubscribeFn = () => void;
 
-export const subscribePost = (database: Database): { unsubscribe: UnsubscribeFn; next: NextFn } => {
-  const postsPool: {[timestampId: string]: WeddiApp.Post.Data} = {};
+export const subscribePost = (
+  database: Database,
+  onHidden?: (id: string) => void,
+): { unsubscribe: UnsubscribeFn; next: NextFn } => {
+  let postsPool: {[timestampId: string]: WeddiApp.Post.Data} = {};
   let feeds: HeapNode[] = [];
-  listPosts(database).then(posts => {
-    if (posts === null) {
-      return;
-    }
-    Object.keys(posts).forEach(id => {
-      postsPool[id] = posts[id];
-    });
-  }).then(() => {
-    onNewPost(database, (post: WeddiApp.Post.Data) => {
-      if (!postsPool[post.id]) {
-        postsPool[post.id] = post;
-        heap.push(feeds, newHeapNode(0, post.id));
+  let initialized = false;
+  const unsubscribe = subscribePosts(database, posts => {
+    const nextPool = posts || {};
+    const removed = Object.keys(postsPool).filter(id => !nextPool[id]);
+    feeds = feeds.filter(feed => !!nextPool[feed.timestampId]);
+    heap.init(feeds);
+    Object.keys(nextPool).forEach(id => {
+      if (initialized && !postsPool[id]) {
+        heap.push(feeds, newHeapNode(0, id));
       }
     });
+    postsPool = nextPool;
+    initialized = true;
+    removed.forEach(id => { if (onHidden) onHidden(id); });
+  }, {}, () => {
+    const removed = Object.keys(postsPool);
+    postsPool = {};
+    feeds = [];
+    removed.forEach(id => { if (onHidden) onHidden(id); });
   });
 
   const next: NextFn = () => {
@@ -71,9 +79,6 @@ export const subscribePost = (database: Database): { unsubscribe: UnsubscribeFn;
     throw new Error('queue is empty');
   };
 
-  const unsubscribe: UnsubscribeFn = () => {
-    // TODO: unsub API
-  };
   return {
     unsubscribe,
     next,

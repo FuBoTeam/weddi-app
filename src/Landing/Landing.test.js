@@ -15,6 +15,9 @@ describe('Landing', () => {
   it('lists features without exposing route paths', () => {
     expect(html).toContain('>Features</h2>');
     expect(html).toContain('A live greeting wall');
+    expect(html).toContain('Screen greetings before they go live');
+    expect(html).toContain('approve them before they appear on the live wall');
+    expect(html).toContain('only approved greetings enter');
     expect(html).toContain('An in-ceremony lottery game');
     expect(html).not.toMatch(/&lt;event&gt;|\/greetings|\/lottery/);
   });

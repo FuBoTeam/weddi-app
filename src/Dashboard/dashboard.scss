@@ -1,0 +1,40 @@
+.dashboard {
+  min-height: 100%;
+  background: #faf7f3;
+  color: #302b29;
+  padding: 48px 24px;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+
+  > * { max-width: 1000px; margin-left: auto; margin-right: auto; }
+  h1 { max-width: 650px; font-size: 36px; line-height: 1.2; }
+  h2 { font-size: 22px; }
+  h3 { margin: 8px 0; }
+  nav { display: flex; flex-wrap: wrap; gap: 24px; margin: 24px 0; }
+  a { color: #874328; }
+  button { background: #874328; color: white; border: 0; border-radius: 6px; padding: 12px 20px; font-size: 16px; cursor: pointer; }
+  button:disabled { opacity: .5; cursor: wait; }
+  p { overflow-wrap: anywhere; white-space: pre-wrap; }
+  [role=alert] { color: #9c2121; }
+  &__brand { color: #874328; font-weight: bold; }
+  &__settings { background: white; padding: 24px; border: 1px solid #e5dcd2; border-radius: 12px; }
+  &__settings h2 { margin-top: 0; }
+  &__toggle { display: flex; align-items: center; gap: 12px; font-weight: bold; cursor: pointer; }
+  &__toggle input { width: 24px; height: 24px; flex-shrink: 0; accent-color: #874328; }
+  &__access { color: #665b54; font-size: 14px; }
+  &__queue { display: grid; gap: 20px; }
+  &__post { display: grid; grid-template-columns: 160px 1fr; gap: 24px; background: white; padding: 24px; border: 1px solid #e5dcd2; border-radius: 12px; }
+  &__post img { width: 160px; height: 160px; object-fit: cover; border-radius: 6px; }
+  &__badge { font-size: 12px; color: #874328; background: #f9ecdc; padding: 4px 10px; border-radius: 16px; }
+}
+
+@media (max-width: 576px) {
+  .dashboard {
+    padding: 24px 20px;
+    h1 { font-size: 28px; }
+    nav { gap: 16px; }
+    &__post { grid-template-columns: 72px 1fr; gap: 16px; padding: 16px; }
+    &__post img { width: 72px; height: 96px; }
+    &__settings { padding: 20px; }
+  }
+}
